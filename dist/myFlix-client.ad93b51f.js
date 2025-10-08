@@ -721,46 +721,222 @@ var prevRefreshSig = globalThis.$RefreshSig$;
 $parcel$ReactRefreshHelpers$ca65.prelude(module);
 
 try {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _jsxDevRuntime = require("react/jsx-dev-runtime");
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
 var _client = require("react-dom/client");
-// Import statement to indicate that you need to bundle `./index.scss`
 var _indexScss = require("./index.scss");
-// Main component (will eventually use all the others)
+var _s = $RefreshSig$();
+const movies = [
+    {
+        id: 1,
+        title: "The Matrix",
+        description: "A computer hacker learns about the true nature of his reality.",
+        image: "https://upload.wikimedia.org/wikipedia/en/c/c1/The_Matrix_Poster.jpg",
+        genre: "Sci-Fi",
+        director: "The Wachowskis"
+    },
+    {
+        id: 2,
+        title: "Inception",
+        description: "A thief steals corporate secrets through dream-sharing technology.",
+        image: "http://www.impawards.com/2010/posters/inception_ver2.jpg",
+        genre: "Sci-Fi",
+        director: "Christopher Nolan"
+    },
+    {
+        id: 3,
+        title: "Interstellar",
+        description: "A team travels through a wormhole in space to ensure humanity's survival.",
+        image: "https://upload.wikimedia.org/wikipedia/en/b/bc/Interstellar_film_poster.jpg",
+        genre: "Sci-Fi",
+        director: "Christopher Nolan"
+    }
+];
+const MovieCard = ({ movie, onMovieClick })=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        style: {
+            border: '1px solid #ccc',
+            padding: '10px',
+            margin: '10px',
+            cursor: 'pointer',
+            borderRadius: '5px',
+            boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
+        },
+        onClick: ()=>onMovieClick(movie),
+        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
+            children: movie.title
+        }, void 0, false, {
+            fileName: "src/index.jsx",
+            lineNumber: 44,
+            columnNumber: 5
+        }, undefined)
+    }, void 0, false, {
+        fileName: "src/index.jsx",
+        lineNumber: 33,
+        columnNumber: 3
+    }, undefined);
+_c = MovieCard;
+const MovieView = ({ movie, onBackClick })=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        style: {
+            padding: '20px'
+        },
+        children: [
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
+                children: movie.title
+            }, void 0, false, {
+                fileName: "src/index.jsx",
+                lineNumber: 50,
+                columnNumber: 5
+            }, undefined),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
+                src: movie.image,
+                alt: movie.title,
+                style: {
+                    width: '200px',
+                    borderRadius: '8px'
+                }
+            }, void 0, false, {
+                fileName: "src/index.jsx",
+                lineNumber: 51,
+                columnNumber: 5
+            }, undefined),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                children: [
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("strong", {
+                        children: "Description:"
+                    }, void 0, false, {
+                        fileName: "src/index.jsx",
+                        lineNumber: 52,
+                        columnNumber: 8
+                    }, undefined),
+                    " ",
+                    movie.description
+                ]
+            }, void 0, true, {
+                fileName: "src/index.jsx",
+                lineNumber: 52,
+                columnNumber: 5
+            }, undefined),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                children: [
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("strong", {
+                        children: "Genre:"
+                    }, void 0, false, {
+                        fileName: "src/index.jsx",
+                        lineNumber: 53,
+                        columnNumber: 8
+                    }, undefined),
+                    " ",
+                    movie.genre
+                ]
+            }, void 0, true, {
+                fileName: "src/index.jsx",
+                lineNumber: 53,
+                columnNumber: 5
+            }, undefined),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                children: [
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("strong", {
+                        children: "Director:"
+                    }, void 0, false, {
+                        fileName: "src/index.jsx",
+                        lineNumber: 54,
+                        columnNumber: 8
+                    }, undefined),
+                    " ",
+                    movie.director
+                ]
+            }, void 0, true, {
+                fileName: "src/index.jsx",
+                lineNumber: 54,
+                columnNumber: 5
+            }, undefined),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
+                onClick: onBackClick,
+                children: "Back"
+            }, void 0, false, {
+                fileName: "src/index.jsx",
+                lineNumber: 55,
+                columnNumber: 5
+            }, undefined)
+        ]
+    }, void 0, true, {
+        fileName: "src/index.jsx",
+        lineNumber: 49,
+        columnNumber: 3
+    }, undefined);
+_c1 = MovieView;
+const MainView = ()=>{
+    _s();
+    const [selectedMovie, setSelectedMovie] = (0, _react.useState)(null);
+    return selectedMovie ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(MovieView, {
+        movie: selectedMovie,
+        onBackClick: ()=>setSelectedMovie(null)
+    }, void 0, false, {
+        fileName: "src/index.jsx",
+        lineNumber: 63,
+        columnNumber: 5
+    }, undefined) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        children: [
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h1", {
+                children: "MyFlix Movie List"
+            }, void 0, false, {
+                fileName: "src/index.jsx",
+                lineNumber: 66,
+                columnNumber: 7
+            }, undefined),
+            movies.map((movie)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(MovieCard, {
+                    movie: movie,
+                    onMovieClick: setSelectedMovie
+                }, movie.id, false, {
+                    fileName: "src/index.jsx",
+                    lineNumber: 68,
+                    columnNumber: 9
+                }, undefined))
+        ]
+    }, void 0, true, {
+        fileName: "src/index.jsx",
+        lineNumber: 65,
+        columnNumber: 5
+    }, undefined);
+};
+_s(MainView, "JhENnUjtiZQlPFLMQh6kL0r4AXc=");
+_c2 = MainView;
 const MyFlixApplication = ()=>{
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
         className: "my-flix",
-        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-            children: "Good morning"
-        }, void 0, false, {
+        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(MainView, {}, void 0, false, {
             fileName: "src/index.jsx",
-            lineNumber: 10,
+            lineNumber: 77,
             columnNumber: 7
         }, undefined)
     }, void 0, false, {
         fileName: "src/index.jsx",
-        lineNumber: 9,
+        lineNumber: 76,
         columnNumber: 5
     }, undefined);
 };
-_c = MyFlixApplication;
-// Finds the root of your app
+_c3 = MyFlixApplication;
 const container = document.querySelector("#root");
 const root = (0, _client.createRoot)(container);
-// Tells React to render your app in the root DOM element
 root.render(/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(MyFlixApplication, {}, void 0, false, {
     fileName: "src/index.jsx",
-    lineNumber: 20,
+    lineNumber: 84,
     columnNumber: 13
 }, undefined));
-var _c;
-$RefreshReg$(_c, "MyFlixApplication");
+var _c, _c1, _c2, _c3;
+$RefreshReg$(_c, "MovieCard");
+$RefreshReg$(_c1, "MovieView");
+$RefreshReg$(_c2, "MainView");
+$RefreshReg$(_c3, "MyFlixApplication");
 
   $parcel$ReactRefreshHelpers$ca65.postlude(module);
 } finally {
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","react-dom/client":"hrvwu","./index.scss":"lJZlQ","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5xBQD"}],"dVPUn":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","react-dom/client":"hrvwu","./index.scss":"lJZlQ","@parcel/transformer-js/src/esmodule-helpers.js":"dDFok","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5xBQD"}],"dVPUn":[function(require,module,exports,__globalThis) {
 'use strict';
 module.exports = require("ee51401569654d91");
 
@@ -17414,7 +17590,37 @@ module.exports = require("b0f0e6b9e8349dac");
     "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(Error());
 })();
 
-},{"6f0162e9ab224cd4":"jMk1U"}],"lJZlQ":[function() {},{}],"5xBQD":[function(require,module,exports,__globalThis) {
+},{"6f0162e9ab224cd4":"jMk1U"}],"lJZlQ":[function() {},{}],"dDFok":[function(require,module,exports,__globalThis) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, '__esModule', {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === 'default' || key === '__esModule' || Object.prototype.hasOwnProperty.call(dest, key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
+},{}],"5xBQD":[function(require,module,exports,__globalThis) {
 "use strict";
 var Refresh = require("35204116619074dc");
 function debounce(func, delay) {
@@ -19692,36 +19898,6 @@ function $da9882e673ac146b$var$ErrorOverlay() {
     return null;
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"dDFok"}],"dDFok":[function(require,module,exports,__globalThis) {
-exports.interopDefault = function(a) {
-    return a && a.__esModule ? a : {
-        default: a
-    };
-};
-exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, '__esModule', {
-        value: true
-    });
-};
-exports.exportAll = function(source, dest) {
-    Object.keys(source).forEach(function(key) {
-        if (key === 'default' || key === '__esModule' || Object.prototype.hasOwnProperty.call(dest, key)) return;
-        Object.defineProperty(dest, key, {
-            enumerable: true,
-            get: function() {
-                return source[key];
-            }
-        });
-    });
-    return dest;
-};
-exports.export = function(dest, destName, get) {
-    Object.defineProperty(dest, destName, {
-        enumerable: true,
-        get: get
-    });
-};
-
-},{}]},["bmUyg","gYcKb"], "gYcKb", "parcelRequireaec4", {}, null, null, "http://localhost:1234")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"dDFok"}]},["bmUyg","gYcKb"], "gYcKb", "parcelRequireaec4", {}, null, null, "http://localhost:1234")
 
 //# sourceMappingURL=myFlix-client.ad93b51f.js.map
