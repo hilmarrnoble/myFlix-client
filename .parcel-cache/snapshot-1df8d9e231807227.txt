@@ -18,7 +18,7 @@
 79C:\Users\hilma\documents\GitHub\myFlix-client\node_modules\@swc\core\binding.js134043221990801636 0
 83C:\Users\hilma\documents\GitHub\myFlix-client\node_modules\escalade\sync\index.d.ts134043221991741605 0
 68C:\Users\hilma\documents\GitHub\myFlix-client\node_modules\is-number134043221990072040 1
-50C:\Users\hilma\documents\GitHub\myFlix-client\dist134044262880742134 1
+50C:\Users\hilma\documents\GitHub\myFlix-client\dist134044267332450238 1
 67C:\Users\hilma\documents\GitHub\myFlix-client\node_modules\escalade134043221991581609 1
 90C:\Users\hilma\documents\GitHub\myFlix-client\node_modules\@parcel\utils\test\input\config134043221996051583 1
 126C:\Users\hilma\documents\GitHub\myFlix-client\node_modules\msgpackr-extract\node_modules\.bin\node-gyp-build-optional-packages134043222009811476 0
@@ -57,7 +57,7 @@
 109C:\Users\hilma\documents\GitHub\myFlix-client\node_modules\react-dom\cjs\react-dom-server.edge.development.js134043156359573204 0
 90C:\Users\hilma\documents\GitHub\myFlix-client\node_modules\sass\types\legacy\importer.d.ts134043221997122139 0
 83C:\Users\hilma\documents\GitHub\myFlix-client\node_modules\supports-color\readme.md134043221990411642 0
-59C:\Users\hilma\documents\GitHub\myFlix-client\src\index.jsx134044262878899610 0
+59C:\Users\hilma\documents\GitHub\myFlix-client\src\index.jsx134044267316239430 0
 103C:\Users\hilma\documents\GitHub\myFlix-client\node_modules\lmdb\node_modules\node-addon-api\common.gypi134043221989891605 0
 102C:\Users\hilma\documents\GitHub\myFlix-client\node_modules\caniuse-lite\data\features\css-when-else.js134043221998641588 0
 67C:\Users\hilma\documents\GitHub\myFlix-client\node_modules\chokidar134043221992491615 1
@@ -594,7 +594,7 @@
 104C:\Users\hilma\documents\GitHub\myFlix-client\node_modules\caniuse-lite\data\features\wasm-tail-calls.js134043222008191509 0
 96C:\Users\hilma\documents\GitHub\myFlix-client\node_modules\@parcel\types-internal\lib\index.d.ts134043221993121596 0
 79C:\Users\hilma\documents\GitHub\myFlix-client\node_modules\semver\bin\semver.js134043221993931604 0
-80C:\Users\hilma\documents\GitHub\myFlix-client\dist\myFlix-client.ad93b51f.js.map134044262880732135 0
+80C:\Users\hilma\documents\GitHub\myFlix-client\dist\myFlix-client.ad93b51f.js.map134044267332430205 0
 72C:\Users\hilma\documents\GitHub\myFlix-client\node_modules\scheduler\cjs134043156348336475 1
 112C:\Users\hilma\documents\GitHub\myFlix-client\node_modules\lmdb\dependencies\lmdb\libraries\liblmdb\mtest_enc2.c134043221995331614 0
 77C:\Users\hilma\documents\GitHub\myFlix-client\node_modules\scheduler\index.js134043156348066145 0
@@ -1862,7 +1862,7 @@
 110C:\Users\hilma\documents\GitHub\myFlix-client\node_modules\caniuse-lite\data\features\getboundingclientrect.js134043222000241541 0
 105C:\Users\hilma\documents\GitHub\myFlix-client\node_modules\caniuse-lite\data\features\getcomputedstyle.js134043222000253276 0
 111C:\Users\hilma\documents\GitHub\myFlix-client\node_modules\caniuse-lite\data\features\getelementsbyclassname.js134043222000271553 0
-77C:\Users\hilma\documents\GitHub\myFlix-client\dist\myFlix-client.9f367d21.css134044261081082871 0
+77C:\Users\hilma\documents\GitHub\myFlix-client\dist\myFlix-client.9f367d21.css134044267330800006 0
 104C:\Users\hilma\documents\GitHub\myFlix-client\node_modules\caniuse-lite\data\features\getrandomvalues.js134043222000281546 0
 101C:\Users\hilma\documents\GitHub\myFlix-client\node_modules\caniuse-lite\data\features\input-search.js134043222001285853 0
 108C:\Users\hilma\documents\GitHub\myFlix-client\node_modules\caniuse-lite\data\features\hardwareconcurrency.js134043222000551585 0
@@ -2603,6 +2603,6 @@
 74C:\Users\hilma\documents\GitHub\myFlix-client\node_modules\.bin\semver.cmd134043222009831485 0
 74C:\Users\hilma\documents\GitHub\myFlix-client\node_modules\.bin\semver.ps1134043222009831485 0
 90C:\Users\hilma\documents\GitHub\myFlix-client\node_modules\.bin\update-browserslist-db.cmd134043222009831485 0
-61C:\Users\hilma\documents\GitHub\myFlix-client\dist\index.html134044261081082871 0
-81C:\Users\hilma\documents\GitHub\myFlix-client\dist\myFlix-client.9f367d21.css.map134044261081532935 0
-76C:\Users\hilma\documents\GitHub\myFlix-client\dist\myFlix-client.ad93b51f.js134044262880602465 0
+61C:\Users\hilma\documents\GitHub\myFlix-client\dist\index.html134044267330794143 0
+81C:\Users\hilma\documents\GitHub\myFlix-client\dist\myFlix-client.9f367d21.css.map134044267331837270 0
+76C:\Users\hilma\documents\GitHub\myFlix-client\dist\myFlix-client.ad93b51f.js134044267332320168 0

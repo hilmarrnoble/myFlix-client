@@ -1,83 +1,119 @@
-import React, { useState } from 'react';
-import { createRoot } from 'react-dom/client';
-import './index.scss';
+import React, { useState, useEffect } from "react";
+import { createRoot } from "react-dom/client";
+import axios from "axios";
+import PropTypes from "prop-types";
+import "./index.scss";
 
-const movies = [
-  {
-    id: 1,
-    title: "The Matrix",
-    description: "A computer hacker learns about the true nature of his reality.",
-    image: "https://upload.wikimedia.org/wikipedia/en/c/c1/The_Matrix_Poster.jpg",
-    genre: "Sci-Fi",
-    director: "The Wachowskis"
-  },
-  {
-    id: 2,
-    title: "Inception",
-    description: "A thief steals corporate secrets through dream-sharing technology.",
-    image: "http://www.impawards.com/2010/posters/inception_ver2.jpg",
-    genre: "Sci-Fi",
-    director: "Christopher Nolan"
-  },
-  {
-    id: 3,
-    title: "Interstellar",
-    description: "A team travels through a wormhole in space to ensure humanity's survival.",
-    image: "https://upload.wikimedia.org/wikipedia/en/b/bc/Interstellar_film_poster.jpg",
-    genre: "Sci-Fi",
-    director: "Christopher Nolan"
-  }
-];
-
+// 🎬 MovieCard component
 const MovieCard = ({ movie, onMovieClick }) => (
   <div
     style={{
-      border: '1px solid #ccc',
-      padding: '10px',
-      margin: '10px',
-      cursor: 'pointer',
-      borderRadius: '5px',
-      boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
+      border: "1px solid #ccc",
+      padding: "10px",
+      margin: "10px",
+      cursor: "pointer",
+      borderRadius: "5px",
+      boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
     }}
     onClick={() => onMovieClick(movie)}
   >
-    <h3>{movie.title}</h3>
+    <h3>{movie.Title}</h3>
   </div>
 );
 
+MovieCard.propTypes = {
+  movie: PropTypes.shape({
+    Title: PropTypes.string.isRequired,
+    Description: PropTypes.string,
+    ImagePath: PropTypes.string,
+    Genre: PropTypes.shape({
+      Name: PropTypes.string,
+      Description: PropTypes.string,
+    }),
+    Director: PropTypes.shape({
+      Name: PropTypes.string,
+      Bio: PropTypes.string,
+      Birth: PropTypes.string,
+    }),
+  }).isRequired,
+  onMovieClick: PropTypes.func.isRequired,
+};
+
+// 🎥 MovieView component
 const MovieView = ({ movie, onBackClick }) => (
-  <div style={{ padding: '20px' }}>
-    <h2>{movie.title}</h2>
-    <img src={movie.image} alt={movie.title} style={{ width: '200px', borderRadius: '8px' }} />
-    <p><strong>Description:</strong> {movie.description}</p>
-    <p><strong>Genre:</strong> {movie.genre}</p>
-    <p><strong>Director:</strong> {movie.director}</p>
+  <div style={{ padding: "20px" }}>
+    <h2>{movie.Title}</h2>
+    <img
+      src={movie.ImagePath}
+      alt={movie.Title}
+      style={{ width: "200px", borderRadius: "8px" }}
+    />
+    <p>
+      <strong>Description:</strong> {movie.Description}
+    </p>
+    <p>
+      <strong>Genre:</strong> {movie.Genre?.Name}
+    </p>
+    <p>
+      <strong>Director:</strong> {movie.Director?.Name}
+    </p>
     <button onClick={onBackClick}>Back</button>
   </div>
 );
 
+MovieView.propTypes = {
+  movie: PropTypes.shape({
+    Title: PropTypes.string.isRequired,
+    Description: PropTypes.string,
+    ImagePath: PropTypes.string,
+    Genre: PropTypes.object,
+    Director: PropTypes.object,
+  }).isRequired,
+  onBackClick: PropTypes.func.isRequired,
+};
+
+// 🧭 MainView — fetches movie data from the API
 const MainView = () => {
+  const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
 
-  return selectedMovie ? (
-    <MovieView movie={selectedMovie} onBackClick={() => setSelectedMovie(null)} />
-  ) : (
+  useEffect(() => {
+    // Replace with your deployed Heroku API endpoint
+    axios
+      .get("https://YOUR-HEROKU-APP-NAME.herokuapp.com/api/movies")
+      .then((response) => {
+        setMovies(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching movies:", error);
+      });
+  }, []);
+
+  if (selectedMovie)
+    return (
+      <MovieView movie={selectedMovie} onBackClick={() => setSelectedMovie(null)} />
+    );
+
+  return (
     <div>
       <h1>MyFlix Movie List</h1>
-      {movies.map(movie => (
-        <MovieCard key={movie.id} movie={movie} onMovieClick={setSelectedMovie} />
-      ))}
+      {movies.length === 0 ? (
+        <p>Loading movies...</p>
+      ) : (
+        movies.map((movie) => (
+          <MovieCard key={movie._id} movie={movie} onMovieClick={setSelectedMovie} />
+        ))
+      )}
     </div>
   );
 };
 
-const MyFlixApplication = () => {
-  return (
-    <div className="my-flix">
-      <MainView />
-    </div>
-  );
-};
+// 💡 Root Application
+const MyFlixApplication = () => (
+  <div className="my-flix">
+    <MainView />
+  </div>
+);
 
 const container = document.querySelector("#root");
 const root = createRoot(container);
