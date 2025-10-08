@@ -17,6 +17,8 @@
   "homepage": "https://github.com/hilmarrnoble/myFlix-client#readme",
   "description": "",
   "dependencies": {
+    "axios": "^1.12.2",
+    "prop-types": "^15.8.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
