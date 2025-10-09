@@ -1,120 +1,519 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { createRoot } from "react-dom/client";
 import axios from "axios";
 import PropTypes from "prop-types";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  Link,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.scss";
 
-// 🎬 MovieCard component
-const MovieCard = ({ movie, onMovieClick }) => (
-  <div
-    style={{
-      border: "1px solid #ccc",
-      padding: "10px",
-      margin: "10px",
-      cursor: "pointer",
-      borderRadius: "5px",
-      boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-    }}
-    onClick={() => onMovieClick(movie)}
-  >
-    <h3>{movie.Title}</h3>
-  </div>
-);
+/** =======================
+ *  Config
+ *  ======================= */
+const API_BASE = "https://YOUR-HEROKU-APP-NAME.herokuapp.com"; // <- change me
 
-MovieCard.propTypes = {
-  movie: PropTypes.shape({
-    Title: PropTypes.string.isRequired,
-    Description: PropTypes.string,
-    ImagePath: PropTypes.string,
-    Genre: PropTypes.shape({
-      Name: PropTypes.string,
-      Description: PropTypes.string,
-    }),
-    Director: PropTypes.shape({
-      Name: PropTypes.string,
-      Bio: PropTypes.string,
-      Birth: PropTypes.string,
-    }),
-  }).isRequired,
-  onMovieClick: PropTypes.func.isRequired,
+const api = axios.create({
+  baseURL: API_BASE,
+});
+
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
+/** =======================
+ *  UI Bits
+ *  ======================= */
+const NavBar = ({ isAuthed, onLogout, username }) => (
+  <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div className="container">
+      <Link className="navbar-brand" to="/">
+        myFlix
+      </Link>
+      <div className="collapse navbar-collapse show">
+        <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+          {isAuthed && (
+            <>
+              <li className="nav-item">
+                <Link className="nav-link" to="/">
+                  Movies
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/profile">
+                  Profile
+                </Link>
+              </li>
+            </>
+          )}
+        </ul>
+        <ul className="navbar-nav ms-auto">
+          {!isAuthed ? (
+            <>
+              <li className="nav-item">
+                <Link className="nav-link" to="/login">
+                  Log in
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/signup">
+                  Sign up
+                </Link>
+              </li>
+            </>
+          ) : (
+            <>
+              <li className="nav-item">
+                <span className="navbar-text me-3">Hi, {username}</span>
+              </li>
+              <li className="nav-item">
+                <button className="btn btn-outline-light btn-sm" onClick={onLogout}>
+                  Log out
+                </button>
+              </li>
+            </>
+          )}
+        </ul>
+      </div>
+    </div>
+  </nav>
+);
+NavBar.propTypes = {
+  isAuthed: PropTypes.bool.isRequired,
+  onLogout: PropTypes.func.isRequired,
+  username: PropTypes.string,
 };
 
-// 🎥 MovieView component
-const MovieView = ({ movie, onBackClick }) => (
-  <div style={{ padding: "20px" }}>
-    <h2>{movie.Title}</h2>
-    <img
-      src={movie.ImagePath}
-      alt={movie.Title}
-      style={{ width: "200px", borderRadius: "8px" }}
-    />
-    <p>
-      <strong>Description:</strong> {movie.Description}
-    </p>
-    <p>
-      <strong>Genre:</strong> {movie.Genre?.Name}
-    </p>
-    <p>
-      <strong>Director:</strong> {movie.Director?.Name}
-    </p>
-    <button onClick={onBackClick}>Back</button>
-  </div>
-);
+/** =======================
+ *  Auth Views
+ *  ======================= */
+const LoginView = ({ onLoggedIn }) => {
+  const [username, setU] = useState("");
+  const [password, setP] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState("");
+  const nav = useNavigate();
 
-MovieView.propTypes = {
-  movie: PropTypes.shape({
-    Title: PropTypes.string.isRequired,
-    Description: PropTypes.string,
-    ImagePath: PropTypes.string,
-    Genre: PropTypes.object,
-    Director: PropTypes.object,
-  }).isRequired,
-  onBackClick: PropTypes.func.isRequired,
-};
-
-// 🧭 MainView — fetches movie data from the API
-const MainView = () => {
-  const [movies, setMovies] = useState([]);
-  const [selectedMovie, setSelectedMovie] = useState(null);
-
-  useEffect(() => {
-    // Replace with your deployed Heroku API endpoint
-    axios
-      .get("https://YOUR-HEROKU-APP-NAME.herokuapp.com/api/movies")
-      .then((response) => {
-        setMovies(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching movies:", error);
-      });
-  }, []);
-
-  if (selectedMovie)
-    return (
-      <MovieView movie={selectedMovie} onBackClick={() => setSelectedMovie(null)} />
-    );
+  const submit = async (e) => {
+    e.preventDefault();
+    setErr("");
+    setLoading(true);
+    try {
+      const { data } = await api.post("/login", { Username: username, Password: password });
+      const { token, user } = data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+      onLoggedIn(user);
+      nav("/");
+    } catch (e) {
+      setErr("Invalid credentials or server error.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div>
-      <h1>MyFlix Movie List</h1>
-      {movies.length === 0 ? (
-        <p>Loading movies...</p>
-      ) : (
-        movies.map((movie) => (
-          <MovieCard key={movie._id} movie={movie} onMovieClick={setSelectedMovie} />
-        ))
-      )}
+    <div className="container py-4">
+      <div className="row justify-content-center">
+        <div className="col-sm-10 col-md-6 col-lg-4">
+          <h2 className="mb-3">Log in</h2>
+          <form onSubmit={submit} className="card card-body">
+            <div className="mb-3">
+              <label className="form-label">Username</label>
+              <input className="form-control" value={username} onChange={(e) => setU(e.target.value)} required />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Password</label>
+              <input type="password" className="form-control" value={password} onChange={(e) => setP(e.target.value)} required />
+            </div>
+            {err && <div className="alert alert-danger">{err}</div>}
+            <button className="btn btn-primary" disabled={loading}>
+              {loading ? "Logging in..." : "Log in"}
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+LoginView.propTypes = { onLoggedIn: PropTypes.func.isRequired };
+
+const SignupView = () => {
+  const [form, setForm] = useState({ Username: "", Password: "", Email: "", Birthday: "" });
+  const [ok, setOk] = useState("");
+  const [err, setErr] = useState("");
+
+  const submit = async (e) => {
+    e.preventDefault();
+    setErr("");
+    setOk("");
+    try {
+      await api.post("/users", form);
+      setOk("Account created! You can now log in.");
+    } catch (e) {
+      setErr("Signup failed. Check your inputs.");
+    }
+  };
+
+  return (
+    <div className="container py-4">
+      <div className="row justify-content-center">
+        <div className="col-sm-10 col-md-6 col-lg-5">
+          <h2 className="mb-3">Sign up</h2>
+          <form onSubmit={submit} className="card card-body">
+            {["Username", "Password", "Email", "Birthday"].map((field) => (
+              <div className="mb-3" key={field}>
+                <label className="form-label">{field}</label>
+                <input
+                  type={field === "Password" ? "password" : field === "Birthday" ? "date" : "text"}
+                  className="form-control"
+                  value={form[field]}
+                  onChange={(e) => setForm((f) => ({ ...f, [field]: e.target.value }))}
+                  required={field !== "Birthday"}
+                />
+              </div>
+            ))}
+            {ok && <div className="alert alert-success">{ok}</div>}
+            {err && <div className="alert alert-danger">{err}</div>}
+            <button className="btn btn-success">Create account</button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };
 
-// 💡 Root Application
-const MyFlixApplication = () => (
-  <div className="my-flix">
-    <MainView />
-  </div>
-);
+/** =======================
+ *  Movies
+ *  ======================= */
+const MovieCard = ({ movie }) => {
+  const poster = movie.ImagePath || "https://via.placeholder.com/300x450?text=No+Image";
+  return (
+    <div className="col-sm-6 col-md-4 col-lg-3 d-flex">
+      <Link to={`/movies/${movie._id}`} className="card mb-4 text-decoration-none flex-fill shadow-sm">
+        <img src={poster} className="card-img-top" alt={movie.Title} />
+        <div className="card-body">
+          <h5 className="card-title">{movie.Title}</h5>
+          <p className="card-text small text-muted mb-0">{movie.Genre?.Name}</p>
+        </div>
+      </Link>
+    </div>
+  );
+};
+MovieCard.propTypes = {
+  movie: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    Title: PropTypes.string.isRequired,
+    Description: PropTypes.string,
+    ImagePath: PropTypes.string,
+    Genre: PropTypes.shape({ Name: PropTypes.string, Description: PropTypes.string }),
+    Director: PropTypes.shape({ Name: PropTypes.string, Bio: PropTypes.string, Birth: PropTypes.string }),
+  }).isRequired,
+};
 
+const MovieView = ({ movies, onAddFavorite }) => {
+  const { id } = useParams();
+  const movie = movies.find((m) => m._id === id);
+
+  if (!movie)
+    return (
+      <div className="container py-4">
+        <div className="alert alert-warning">Movie not found.</div>
+        <Link to="/" className="btn btn-outline-secondary">Back</Link>
+      </div>
+    );
+
+  return (
+    <div className="container py-4">
+      <div className="row g-4">
+        <div className="col-md-4">
+          <img
+            src={movie.ImagePath || "https://via.placeholder.com/500x750?text=No+Image"}
+            alt={movie.Title}
+            className="img-fluid rounded shadow-sm"
+          />
+        </div>
+        <div className="col-md-8">
+          <h2 className="mb-3">{movie.Title}</h2>
+          <p>{movie.Description}</p>
+          <div className="mb-2">
+            <span className="badge text-bg-primary me-2">{movie.Genre?.Name || "Genre"}</span>
+            <span className="badge text-bg-secondary">{movie.Director?.Name || "Director"}</span>
+          </div>
+          <button className="btn btn-primary me-2" onClick={() => onAddFavorite(movie._id)}>
+            + Add to Favorites
+          </button>
+          <Link to="/" className="btn btn-outline-secondary">Back</Link>
+        </div>
+      </div>
+    </div>
+  );
+};
+MovieView.propTypes = {
+  movies: PropTypes.arrayOf(MovieCard.propTypes.movie).isRequired,
+  onAddFavorite: PropTypes.func.isRequired,
+};
+
+const MoviesMain = ({ movies, onQuery, query }) => {
+  return (
+    <div className="container py-4">
+      <div className="d-flex align-items-center justify-content-between mb-3">
+        <h1 className="h3 mb-0">Movies</h1>
+        <input
+          className="form-control w-auto"
+          style={{ minWidth: 260 }}
+          placeholder="Search by title or genre…"
+          value={query}
+          onChange={(e) => onQuery(e.target.value)}
+        />
+      </div>
+      {movies.length === 0 ? (
+        <div className="text-muted">Loading movies…</div>
+      ) : (
+        <div className="row">
+          {movies.map((m) => (
+            <MovieCard key={m._id} movie={m} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+MoviesMain.propTypes = {
+  movies: PropTypes.arrayOf(MovieCard.propTypes.movie).isRequired,
+  onQuery: PropTypes.func.isRequired,
+  query: PropTypes.string.isRequired,
+};
+
+/** =======================
+ *  Profile
+ *  ======================= */
+const ProfileView = ({ user, movies, refreshUser, onRemoveFavorite, onUpdateUser, onDeleteUser }) => {
+  const favIds = new Set(user?.FavoriteMovies || []);
+  const favorites = movies.filter((m) => favIds.has(m._id));
+
+  const [form, setForm] = useState({
+    Username: user?.Username || "",
+    Email: user?.Email || "",
+    Birthday: user?.Birthday?.slice(0, 10) || "",
+    Password: "",
+  });
+  const [ok, setOk] = useState("");
+  const [err, setErr] = useState("");
+
+  const save = async (e) => {
+    e.preventDefault();
+    setOk("");
+    setErr("");
+    try {
+      await onUpdateUser(form);
+      setOk("Profile updated.");
+      await refreshUser();
+    } catch (e) {
+      setErr("Update failed.");
+    }
+  };
+
+  return (
+    <div className="container py-4">
+      <h2 className="mb-3">Profile</h2>
+      <div className="row g-4">
+        <div className="col-lg-5">
+          <div className="card">
+            <div className="card-body">
+              <h5>Details</h5>
+              <form onSubmit={save}>
+                <div className="mb-2">
+                  <label className="form-label">Username</label>
+                  <input className="form-control" value={form.Username} onChange={(e) => setForm((f) => ({ ...f, Username: e.target.value }))} required />
+                </div>
+                <div className="mb-2">
+                  <label className="form-label">Email</label>
+                  <input type="email" className="form-control" value={form.Email} onChange={(e) => setForm((f) => ({ ...f, Email: e.target.value }))} required />
+                </div>
+                <div className="mb-2">
+                  <label className="form-label">Birthday</label>
+                  <input type="date" className="form-control" value={form.Birthday} onChange={(e) => setForm((f) => ({ ...f, Birthday: e.target.value }))} />
+                </div>
+                <div className="mb-2">
+                  <label className="form-label">New Password (optional)</label>
+                  <input type="password" className="form-control" value={form.Password} onChange={(e) => setForm((f) => ({ ...f, Password: e.target.value }))} />
+                </div>
+                {ok && <div className="alert alert-success py-1 my-2">{ok}</div>}
+                {err && <div className="alert alert-danger py-1 my-2">{err}</div>}
+                <button className="btn btn-primary me-2">Save</button>
+                <button type="button" className="btn btn-outline-danger" onClick={onDeleteUser}>
+                  Delete account
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div className="col-lg-7">
+          <h5 className="mb-3">Favorite Movies</h5>
+          <div className="row">
+            {favorites.length === 0 ? (
+              <div className="text-muted">No favorites yet.</div>
+            ) : (
+              favorites.map((m) => (
+                <div className="col-sm-6 col-md-4 d-flex" key={m._id}>
+                  <div className="card mb-3 flex-fill">
+                    <img src={m.ImagePath || "https://via.placeholder.com/300x450?text=No+Image"} className="card-img-top" alt={m.Title} />
+                    <div className="card-body">
+                      <h6 className="card-title">{m.Title}</h6>
+                      <button className="btn btn-sm btn-outline-danger" onClick={() => onRemoveFavorite(m._id)}>
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+ProfileView.propTypes = {
+  user: PropTypes.shape({
+    Username: PropTypes.string,
+    Email: PropTypes.string,
+    Birthday: PropTypes.string,
+    FavoriteMovies: PropTypes.arrayOf(PropTypes.string),
+  }),
+  movies: PropTypes.arrayOf(MovieCard.propTypes.movie).isRequired,
+  refreshUser: PropTypes.func.isRequired,
+  onRemoveFavorite: PropTypes.func.isRequired,
+  onUpdateUser: PropTypes.func.isRequired,
+  onDeleteUser: PropTypes.func.isRequired,
+};
+
+/** =======================
+ *  App (routes + fetching)
+ *  ======================= */
+const App = () => {
+  const [user, setUser] = useState(() => {
+    const stored = localStorage.getItem("user");
+    return stored ? JSON.parse(stored) : null;
+  });
+  const [movies, setMovies] = useState([]); // <- initial empty array (requirement 1)
+  const [loading, setLoading] = useState(false);
+  const [query, setQuery] = useState("");
+
+  const isAuthed = !!localStorage.getItem("token");
+
+  const fetchMovies = async () => {
+    setLoading(true);
+    try {
+      const { data } = await api.get("/movies"); // <- populate from API (requirement 2)
+      setMovies(data); // <- feed into components (requirement 3)
+    } catch (e) {
+      console.error("Error fetching movies:", e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const refreshUser = async () => {
+    if (!user?.Username) return;
+    const { data } = await api.get(`/users/${encodeURIComponent(user.Username)}`);
+    localStorage.setItem("user", JSON.stringify(data));
+    setUser(data);
+  };
+
+  const addFavorite = async (movieId) => {
+    if (!user?.Username) return;
+    await api.post(`/users/${encodeURIComponent(user.Username)}/movies/${movieId}`);
+    await refreshUser();
+  };
+
+  const removeFavorite = async (movieId) => {
+    if (!user?.Username) return;
+    await api.delete(`/users/${encodeURIComponent(user.Username)}/movies/${movieId}`);
+    await refreshUser();
+  };
+
+  const updateUser = async (payload) => {
+    if (!user?.Username) return;
+    const { data } = await api.put(`/users/${encodeURIComponent(user.Username)}`, payload);
+    localStorage.setItem("user", JSON.stringify(data));
+    setUser(data);
+  };
+
+  const deleteUser = async () => {
+    if (!user?.Username) return;
+    await api.delete(`/users/${encodeURIComponent(user.Username)}`);
+    handleLogout();
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+    setMovies([]);
+  };
+
+  useEffect(() => {
+    if (isAuthed) fetchMovies();
+  }, [isAuthed]);
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return movies;
+    return movies.filter(
+      (m) =>
+        m.Title?.toLowerCase().includes(q) ||
+        m.Genre?.Name?.toLowerCase().includes(q)
+    );
+  }, [movies, query]);
+
+  return (
+    <BrowserRouter>
+      <NavBar isAuthed={isAuthed} onLogout={handleLogout} username={user?.Username || ""} />
+      {!isAuthed ? (
+        <Routes>
+          <Route path="/login" element={<LoginView onLoggedIn={setUser} />} />
+          <Route path="/signup" element={<SignupView />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
+      ) : (
+        <Routes>
+          <Route
+            path="/"
+            element={<MoviesMain movies={loading ? [] : filtered} onQuery={setQuery} query={query} />}
+          />
+          <Route path="/movies/:id" element={<MovieView movies={movies} onAddFavorite={addFavorite} />} />
+          <Route
+            path="/profile"
+            element={
+              <ProfileView
+                user={user}
+                movies={movies}
+                refreshUser={refreshUser}
+                onRemoveFavorite={removeFavorite}
+                onUpdateUser={updateUser}
+                onDeleteUser={deleteUser}
+              />
+            }
+          />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      )}
+      <footer className="text-center text-muted small py-4">myFlix • MERN</footer>
+    </BrowserRouter>
+  );
+};
+
+/** Root */
 const container = document.querySelector("#root");
 const root = createRoot(container);
-root.render(<MyFlixApplication />);
+root.render(<App />);
