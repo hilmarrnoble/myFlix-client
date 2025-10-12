@@ -732,7 +732,7 @@ var _propTypes = require("prop-types");
 var _propTypesDefault = parcelHelpers.interopDefault(_propTypes);
 var _reactRouterDom = require("react-router-dom");
 var _bootstrapMinCss = require("bootstrap/dist/css/bootstrap.min.css");
-var _indexScss = require("./index.scss");
+var _indexScss = require("./index.scss"); // keep your styling import (scss or css as in your project)
 var _s = $RefreshSig$(), _s1 = $RefreshSig$(), _s2 = $RefreshSig$(), _s3 = $RefreshSig$(), _s4 = $RefreshSig$();
 // Hotfix: if any accidental `sole.error(...)` slipped in, alias it to console so it won't crash
 const sole = {
@@ -740,7 +740,7 @@ const sole = {
 };
 /** =======================
  *  Config
- *  ======================= */ // If your server does NOT use /api, remove it from API_BASE
+ *  ======================= */ // Server base (includes /api because your server mounts routes under /api/*)
 const API_BASE = "https://Hilmarrnoble-movie-api.herokuapp.com/api";
 const api = (0, _axiosDefault.default).create({
     baseURL: API_BASE
@@ -763,7 +763,7 @@ api.interceptors.request.use((config)=>{
                     children: "myFlix"
                 }, void 0, false, {
                     fileName: "src/index.jsx",
-                    lineNumber: 41,
+                    lineNumber: 42,
                     columnNumber: 7
                 }, undefined),
                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -781,12 +781,12 @@ api.interceptors.request.use((config)=>{
                                             children: "Movies"
                                         }, void 0, false, {
                                             fileName: "src/index.jsx",
-                                            lineNumber: 49,
+                                            lineNumber: 50,
                                             columnNumber: 17
                                         }, undefined)
                                     }, void 0, false, {
                                         fileName: "src/index.jsx",
-                                        lineNumber: 48,
+                                        lineNumber: 49,
                                         columnNumber: 15
                                     }, undefined),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("li", {
@@ -797,19 +797,19 @@ api.interceptors.request.use((config)=>{
                                             children: "Profile"
                                         }, void 0, false, {
                                             fileName: "src/index.jsx",
-                                            lineNumber: 54,
+                                            lineNumber: 55,
                                             columnNumber: 17
                                         }, undefined)
                                     }, void 0, false, {
                                         fileName: "src/index.jsx",
-                                        lineNumber: 53,
+                                        lineNumber: 54,
                                         columnNumber: 15
                                     }, undefined)
                                 ]
                             }, void 0, true)
                         }, void 0, false, {
                             fileName: "src/index.jsx",
-                            lineNumber: 45,
+                            lineNumber: 46,
                             columnNumber: 9
                         }, undefined),
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("ul", {
@@ -824,12 +824,12 @@ api.interceptors.request.use((config)=>{
                                             children: "Log in"
                                         }, void 0, false, {
                                             fileName: "src/index.jsx",
-                                            lineNumber: 65,
+                                            lineNumber: 66,
                                             columnNumber: 17
                                         }, undefined)
                                     }, void 0, false, {
                                         fileName: "src/index.jsx",
-                                        lineNumber: 64,
+                                        lineNumber: 65,
                                         columnNumber: 15
                                     }, undefined),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("li", {
@@ -840,12 +840,12 @@ api.interceptors.request.use((config)=>{
                                             children: "Sign up"
                                         }, void 0, false, {
                                             fileName: "src/index.jsx",
-                                            lineNumber: 70,
+                                            lineNumber: 71,
                                             columnNumber: 17
                                         }, undefined)
                                     }, void 0, false, {
                                         fileName: "src/index.jsx",
-                                        lineNumber: 69,
+                                        lineNumber: 70,
                                         columnNumber: 15
                                     }, undefined)
                                 ]
@@ -861,12 +861,12 @@ api.interceptors.request.use((config)=>{
                                             ]
                                         }, void 0, true, {
                                             fileName: "src/index.jsx",
-                                            lineNumber: 78,
+                                            lineNumber: 79,
                                             columnNumber: 17
                                         }, undefined)
                                     }, void 0, false, {
                                         fileName: "src/index.jsx",
-                                        lineNumber: 77,
+                                        lineNumber: 78,
                                         columnNumber: 15
                                     }, undefined),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("li", {
@@ -877,36 +877,36 @@ api.interceptors.request.use((config)=>{
                                             children: "Log out"
                                         }, void 0, false, {
                                             fileName: "src/index.jsx",
-                                            lineNumber: 81,
+                                            lineNumber: 82,
                                             columnNumber: 17
                                         }, undefined)
                                     }, void 0, false, {
                                         fileName: "src/index.jsx",
-                                        lineNumber: 80,
+                                        lineNumber: 81,
                                         columnNumber: 15
                                     }, undefined)
                                 ]
                             }, void 0, true)
                         }, void 0, false, {
                             fileName: "src/index.jsx",
-                            lineNumber: 61,
+                            lineNumber: 62,
                             columnNumber: 9
                         }, undefined)
                     ]
                 }, void 0, true, {
                     fileName: "src/index.jsx",
-                    lineNumber: 44,
+                    lineNumber: 45,
                     columnNumber: 7
                 }, undefined)
             ]
         }, void 0, true, {
             fileName: "src/index.jsx",
-            lineNumber: 40,
+            lineNumber: 41,
             columnNumber: 5
         }, undefined)
     }, void 0, false, {
         fileName: "src/index.jsx",
-        lineNumber: 39,
+        lineNumber: 40,
         columnNumber: 3
     }, undefined);
 _c = NavBar;
@@ -919,8 +919,8 @@ NavBar.propTypes = {
  *  Auth Views
  *  ======================= */ const LoginView = ({ onLoggedIn })=>{
     _s();
-    const [username, setU] = (0, _react.useState)("");
-    const [password, setP] = (0, _react.useState)("");
+    const [email, setEmail] = (0, _react.useState)("");
+    const [password, setPassword] = (0, _react.useState)("");
     const [loading, setLoading] = (0, _react.useState)(false);
     const [err, setErr] = (0, _react.useState)("");
     const nav = (0, _reactRouterDom.useNavigate)();
@@ -929,14 +929,17 @@ NavBar.propTypes = {
         setErr("");
         setLoading(true);
         try {
-            const { data } = await api.post("/login", {
-                Username: username,
-                Password: password
+            // 1) Login against /auth/login (base without /api)
+            const { data } = await (0, _axiosDefault.default).post(API_BASE.replace(/\/api$/, "") + "/auth/login", {
+                email,
+                password
             });
-            const { token, user } = data;
+            const { token } = data;
             localStorage.setItem("token", token);
-            localStorage.setItem("user", JSON.stringify(user));
-            onLoggedIn(user);
+            // 2) Fetch current user
+            const me = await api.get("/users/me");
+            localStorage.setItem("user", JSON.stringify(me.data));
+            onLoggedIn(me.data);
             nav("/");
         } catch (e) {
             const apiMsg = e.response?.data?.message || (typeof e.response?.data === "string" ? e.response.data : null) || e.message;
@@ -958,7 +961,7 @@ NavBar.propTypes = {
                         children: "Log in"
                     }, void 0, false, {
                         fileName: "src/index.jsx",
-                        lineNumber: 138,
+                        lineNumber: 143,
                         columnNumber: 11
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("form", {
@@ -970,26 +973,27 @@ NavBar.propTypes = {
                                 children: [
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
                                         className: "form-label",
-                                        children: "Username"
+                                        children: "Email"
                                     }, void 0, false, {
                                         fileName: "src/index.jsx",
-                                        lineNumber: 141,
+                                        lineNumber: 146,
                                         columnNumber: 15
                                     }, undefined),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
                                         className: "form-control",
-                                        value: username,
-                                        onChange: (e)=>setU(e.target.value),
+                                        type: "email",
+                                        value: email,
+                                        onChange: (e)=>setEmail(e.target.value),
                                         required: true
                                     }, void 0, false, {
                                         fileName: "src/index.jsx",
-                                        lineNumber: 142,
+                                        lineNumber: 147,
                                         columnNumber: 15
                                     }, undefined)
                                 ]
                             }, void 0, true, {
                                 fileName: "src/index.jsx",
-                                lineNumber: 140,
+                                lineNumber: 145,
                                 columnNumber: 13
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -1000,24 +1004,24 @@ NavBar.propTypes = {
                                         children: "Password"
                                     }, void 0, false, {
                                         fileName: "src/index.jsx",
-                                        lineNumber: 150,
+                                        lineNumber: 156,
                                         columnNumber: 15
                                     }, undefined),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
                                         type: "password",
                                         className: "form-control",
                                         value: password,
-                                        onChange: (e)=>setP(e.target.value),
+                                        onChange: (e)=>setPassword(e.target.value),
                                         required: true
                                     }, void 0, false, {
                                         fileName: "src/index.jsx",
-                                        lineNumber: 151,
+                                        lineNumber: 157,
                                         columnNumber: 15
                                     }, undefined)
                                 ]
                             }, void 0, true, {
                                 fileName: "src/index.jsx",
-                                lineNumber: 149,
+                                lineNumber: 155,
                                 columnNumber: 13
                             }, undefined),
                             err && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -1025,7 +1029,7 @@ NavBar.propTypes = {
                                 children: err
                             }, void 0, false, {
                                 fileName: "src/index.jsx",
-                                lineNumber: 159,
+                                lineNumber: 165,
                                 columnNumber: 21
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
@@ -1034,33 +1038,33 @@ NavBar.propTypes = {
                                 children: loading ? "Logging in..." : "Log in"
                             }, void 0, false, {
                                 fileName: "src/index.jsx",
-                                lineNumber: 160,
+                                lineNumber: 166,
                                 columnNumber: 13
                             }, undefined)
                         ]
                     }, void 0, true, {
                         fileName: "src/index.jsx",
-                        lineNumber: 139,
+                        lineNumber: 144,
                         columnNumber: 11
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "src/index.jsx",
-                lineNumber: 137,
+                lineNumber: 142,
                 columnNumber: 9
             }, undefined)
         }, void 0, false, {
             fileName: "src/index.jsx",
-            lineNumber: 136,
+            lineNumber: 141,
             columnNumber: 7
         }, undefined)
     }, void 0, false, {
         fileName: "src/index.jsx",
-        lineNumber: 135,
+        lineNumber: 140,
         columnNumber: 5
     }, undefined);
 };
-_s(LoginView, "I0xVbwx7SCiEGeuRT/DJcGnq8MA=", false, function() {
+_s(LoginView, "2xXwS4f0monA1db5iiuWSBe/cUI=", false, function() {
     return [
         (0, _reactRouterDom.useNavigate)
     ];
@@ -1072,10 +1076,10 @@ LoginView.propTypes = {
 const SignupView = ()=>{
     _s1();
     const [form, setForm] = (0, _react.useState)({
-        Username: "",
-        Password: "",
-        Email: "",
-        Birthday: ""
+        name: "",
+        email: "",
+        password: "",
+        birthday: ""
     });
     const [ok, setOk] = (0, _react.useState)("");
     const [err, setErr] = (0, _react.useState)("");
@@ -1084,14 +1088,37 @@ const SignupView = ()=>{
         setErr("");
         setOk("");
         try {
-            await api.post("/users", form);
+            // POST /auth/register (base without /api)
+            await (0, _axiosDefault.default).post(API_BASE.replace(/\/api$/, "") + "/auth/register", form);
             setOk("Account created! You can now log in.");
         } catch (e) {
-            const apiMsg = e.response?.data?.message || (Array.isArray(e.response?.data?.errors) ? e.response.data.errors.join(", ") : null) || (typeof e.response?.data === "string" ? e.response.data : null) || e.message;
+            const apiMsg = e.response?.data?.message || (Array.isArray(e.response?.data?.errors) ? e.response.data.errors.map((er)=>er.msg || er).join(", ") : null) || (typeof e.response?.data === "string" ? e.response.data : null) || e.message;
             setErr(apiMsg || "Signup failed. Check your inputs.");
             console.warn("Signup error:", e.response?.status, e.response?.data || e);
         }
     };
+    const inputs = [
+        [
+            "name",
+            "Name",
+            "text"
+        ],
+        [
+            "email",
+            "Email",
+            "email"
+        ],
+        [
+            "password",
+            "Password",
+            "password"
+        ],
+        [
+            "birthday",
+            "Birthday",
+            "date"
+        ]
+    ];
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
         className: "container py-4",
         children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -1104,47 +1131,42 @@ const SignupView = ()=>{
                         children: "Sign up"
                     }, void 0, false, {
                         fileName: "src/index.jsx",
-                        lineNumber: 205,
+                        lineNumber: 222,
                         columnNumber: 11
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("form", {
                         onSubmit: submit,
                         className: "card card-body",
                         children: [
-                            [
-                                "Username",
-                                "Password",
-                                "Email",
-                                "Birthday"
-                            ].map((field)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                            inputs.map(([key, label, type])=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
                                     className: "mb-3",
                                     children: [
                                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
                                             className: "form-label",
-                                            children: field
+                                            children: label
                                         }, void 0, false, {
                                             fileName: "src/index.jsx",
-                                            lineNumber: 209,
+                                            lineNumber: 226,
                                             columnNumber: 17
                                         }, undefined),
                                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
-                                            type: field === "Password" ? "password" : field === "Email" ? "email" : field === "Birthday" ? "date" : "text",
+                                            type: type,
                                             className: "form-control",
-                                            value: form[field],
+                                            value: form[key],
                                             onChange: (e)=>setForm((f)=>({
                                                         ...f,
-                                                        [field]: e.target.value
+                                                        [key]: e.target.value
                                                     })),
-                                            required: field !== "Birthday"
+                                            required: key !== "birthday"
                                         }, void 0, false, {
                                             fileName: "src/index.jsx",
-                                            lineNumber: 210,
+                                            lineNumber: 227,
                                             columnNumber: 17
                                         }, undefined)
                                     ]
-                                }, field, true, {
+                                }, key, true, {
                                     fileName: "src/index.jsx",
-                                    lineNumber: 208,
+                                    lineNumber: 225,
                                     columnNumber: 15
                                 }, undefined)),
                             ok && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -1152,7 +1174,7 @@ const SignupView = ()=>{
                                 children: ok
                             }, void 0, false, {
                                 fileName: "src/index.jsx",
-                                lineNumber: 229,
+                                lineNumber: 236,
                                 columnNumber: 20
                             }, undefined),
                             err && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -1160,7 +1182,7 @@ const SignupView = ()=>{
                                 children: err
                             }, void 0, false, {
                                 fileName: "src/index.jsx",
-                                lineNumber: 230,
+                                lineNumber: 237,
                                 columnNumber: 21
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
@@ -1168,38 +1190,38 @@ const SignupView = ()=>{
                                 children: "Create account"
                             }, void 0, false, {
                                 fileName: "src/index.jsx",
-                                lineNumber: 231,
+                                lineNumber: 238,
                                 columnNumber: 13
                             }, undefined)
                         ]
                     }, void 0, true, {
                         fileName: "src/index.jsx",
-                        lineNumber: 206,
+                        lineNumber: 223,
                         columnNumber: 11
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "src/index.jsx",
-                lineNumber: 204,
+                lineNumber: 221,
                 columnNumber: 9
             }, undefined)
         }, void 0, false, {
             fileName: "src/index.jsx",
-            lineNumber: 203,
+            lineNumber: 220,
             columnNumber: 7
         }, undefined)
     }, void 0, false, {
         fileName: "src/index.jsx",
-        lineNumber: 202,
+        lineNumber: 219,
         columnNumber: 5
     }, undefined);
 };
-_s1(SignupView, "AdRr+dG8kUUci80Xbq7/n4bLu7M=");
+_s1(SignupView, "G8WTNMY1WoJ+M4KYFjVb9L01xso=");
 _c2 = SignupView;
 /** =======================
  *  Movies
  *  ======================= */ const MovieCard = ({ movie })=>{
-    const poster = movie.ImagePath || "https://via.placeholder.com/300x450?text=No+Image";
+    const poster = movie.imageURL || "https://via.placeholder.com/300x450?text=No+Image";
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
         className: "col-sm-6 col-md-4 col-lg-3 d-flex",
         children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Link), {
@@ -1209,10 +1231,10 @@ _c2 = SignupView;
                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
                     src: poster,
                     className: "card-img-top",
-                    alt: movie.Title
+                    alt: movie.title
                 }, void 0, false, {
                     fileName: "src/index.jsx",
-                    lineNumber: 250,
+                    lineNumber: 257,
                     columnNumber: 9
                 }, undefined),
                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -1220,35 +1242,35 @@ _c2 = SignupView;
                     children: [
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h5", {
                             className: "card-title",
-                            children: movie.Title
+                            children: movie.title
                         }, void 0, false, {
                             fileName: "src/index.jsx",
-                            lineNumber: 252,
+                            lineNumber: 259,
                             columnNumber: 11
                         }, undefined),
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
                             className: "card-text small text-muted mb-0",
-                            children: movie.Genre?.Name
+                            children: movie.genre?.name
                         }, void 0, false, {
                             fileName: "src/index.jsx",
-                            lineNumber: 253,
+                            lineNumber: 260,
                             columnNumber: 11
                         }, undefined)
                     ]
                 }, void 0, true, {
                     fileName: "src/index.jsx",
-                    lineNumber: 251,
+                    lineNumber: 258,
                     columnNumber: 9
                 }, undefined)
             ]
         }, void 0, true, {
             fileName: "src/index.jsx",
-            lineNumber: 246,
+            lineNumber: 253,
             columnNumber: 7
         }, undefined)
     }, void 0, false, {
         fileName: "src/index.jsx",
-        lineNumber: 245,
+        lineNumber: 252,
         columnNumber: 5
     }, undefined);
 };
@@ -1256,21 +1278,22 @@ _c3 = MovieCard;
 MovieCard.propTypes = {
     movie: (0, _propTypesDefault.default).shape({
         _id: (0, _propTypesDefault.default).string.isRequired,
-        Title: (0, _propTypesDefault.default).string.isRequired,
-        Description: (0, _propTypesDefault.default).string,
-        ImagePath: (0, _propTypesDefault.default).string,
-        Genre: (0, _propTypesDefault.default).shape({
-            Name: (0, _propTypesDefault.default).string,
-            Description: (0, _propTypesDefault.default).string
+        title: (0, _propTypesDefault.default).string.isRequired,
+        description: (0, _propTypesDefault.default).string,
+        imageURL: (0, _propTypesDefault.default).string,
+        genre: (0, _propTypesDefault.default).shape({
+            name: (0, _propTypesDefault.default).string,
+            description: (0, _propTypesDefault.default).string
         }),
-        Director: (0, _propTypesDefault.default).shape({
-            Name: (0, _propTypesDefault.default).string,
-            Bio: (0, _propTypesDefault.default).string,
-            Birth: (0, _propTypesDefault.default).string
-        })
+        director: (0, _propTypesDefault.default).shape({
+            name: (0, _propTypesDefault.default).string,
+            bio: (0, _propTypesDefault.default).string,
+            birthYear: (0, _propTypesDefault.default).number
+        }),
+        releaseYear: (0, _propTypesDefault.default).number
     }).isRequired
 };
-const MovieView = ({ movies, onAddFavorite })=>{
+const MovieView = ({ movies })=>{
     _s2();
     const { id } = (0, _reactRouterDom.useParams)();
     const movie = movies.find((m)=>m._id === id);
@@ -1282,7 +1305,7 @@ const MovieView = ({ movies, onAddFavorite })=>{
                 children: "Movie not found."
             }, void 0, false, {
                 fileName: "src/index.jsx",
-                lineNumber: 286,
+                lineNumber: 294,
                 columnNumber: 9
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Link), {
@@ -1291,13 +1314,13 @@ const MovieView = ({ movies, onAddFavorite })=>{
                 children: "Back"
             }, void 0, false, {
                 fileName: "src/index.jsx",
-                lineNumber: 287,
+                lineNumber: 295,
                 columnNumber: 9
             }, undefined)
         ]
     }, void 0, true, {
         fileName: "src/index.jsx",
-        lineNumber: 285,
+        lineNumber: 293,
         columnNumber: 7
     }, undefined);
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -1308,17 +1331,17 @@ const MovieView = ({ movies, onAddFavorite })=>{
                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
                     className: "col-md-4",
                     children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
-                        src: movie.ImagePath || "https://via.placeholder.com/500x750?text=No+Image",
-                        alt: movie.Title,
+                        src: movie.imageURL || "https://via.placeholder.com/500x750?text=No+Image",
+                        alt: movie.title,
                         className: "img-fluid rounded shadow-sm"
                     }, void 0, false, {
                         fileName: "src/index.jsx",
-                        lineNumber: 297,
+                        lineNumber: 305,
                         columnNumber: 11
                     }, undefined)
                 }, void 0, false, {
                     fileName: "src/index.jsx",
-                    lineNumber: 296,
+                    lineNumber: 304,
                     columnNumber: 9
                 }, undefined),
                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -1326,17 +1349,17 @@ const MovieView = ({ movies, onAddFavorite })=>{
                     children: [
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
                             className: "mb-3",
-                            children: movie.Title
+                            children: movie.title
                         }, void 0, false, {
                             fileName: "src/index.jsx",
-                            lineNumber: 306,
+                            lineNumber: 312,
                             columnNumber: 11
                         }, undefined),
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
-                            children: movie.Description
+                            children: movie.description
                         }, void 0, false, {
                             fileName: "src/index.jsx",
-                            lineNumber: 307,
+                            lineNumber: 313,
                             columnNumber: 11
                         }, undefined),
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -1344,33 +1367,24 @@ const MovieView = ({ movies, onAddFavorite })=>{
                             children: [
                                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
                                     className: "badge text-bg-primary me-2",
-                                    children: movie.Genre?.Name || "Genre"
+                                    children: movie.genre?.name || "Genre"
                                 }, void 0, false, {
                                     fileName: "src/index.jsx",
-                                    lineNumber: 309,
+                                    lineNumber: 315,
                                     columnNumber: 13
                                 }, undefined),
                                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
                                     className: "badge text-bg-secondary",
-                                    children: movie.Director?.Name || "Director"
+                                    children: movie.director?.name || "Director"
                                 }, void 0, false, {
                                     fileName: "src/index.jsx",
-                                    lineNumber: 312,
+                                    lineNumber: 318,
                                     columnNumber: 13
                                 }, undefined)
                             ]
                         }, void 0, true, {
                             fileName: "src/index.jsx",
-                            lineNumber: 308,
-                            columnNumber: 11
-                        }, undefined),
-                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
-                            className: "btn btn-primary me-2",
-                            onClick: ()=>onAddFavorite(movie._id),
-                            children: "+ Add to Favorites"
-                        }, void 0, false, {
-                            fileName: "src/index.jsx",
-                            lineNumber: 316,
+                            lineNumber: 314,
                             columnNumber: 11
                         }, undefined),
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Link), {
@@ -1379,24 +1393,24 @@ const MovieView = ({ movies, onAddFavorite })=>{
                             children: "Back"
                         }, void 0, false, {
                             fileName: "src/index.jsx",
-                            lineNumber: 322,
+                            lineNumber: 323,
                             columnNumber: 11
                         }, undefined)
                     ]
                 }, void 0, true, {
                     fileName: "src/index.jsx",
-                    lineNumber: 305,
+                    lineNumber: 311,
                     columnNumber: 9
                 }, undefined)
             ]
         }, void 0, true, {
             fileName: "src/index.jsx",
-            lineNumber: 295,
+            lineNumber: 303,
             columnNumber: 7
         }, undefined)
     }, void 0, false, {
         fileName: "src/index.jsx",
-        lineNumber: 294,
+        lineNumber: 302,
         columnNumber: 5
     }, undefined);
 };
@@ -1407,8 +1421,7 @@ _s2(MovieView, "yQgCIz/jJfqV1l9s2yoba81MT5A=", false, function() {
 });
 _c4 = MovieView;
 MovieView.propTypes = {
-    movies: (0, _propTypesDefault.default).arrayOf(MovieCard.propTypes.movie).isRequired,
-    onAddFavorite: (0, _propTypesDefault.default).func.isRequired
+    movies: (0, _propTypesDefault.default).arrayOf(MovieCard.propTypes.movie).isRequired
 };
 const MoviesMain = ({ movies, onQuery, query })=>{
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -1480,14 +1493,14 @@ MoviesMain.propTypes = {
 };
 /** =======================
  *  Profile
- *  ======================= */ const ProfileView = ({ user, movies, refreshUser, onRemoveFavorite, onUpdateUser, onDeleteUser })=>{
+ *  ======================= */ const ProfileView = ({ user, movies, refreshUser = ()=>{}, onRemoveFavorite = ()=>{}, onUpdateUser = ()=>{}, onDeleteUser = ()=>{} })=>{
     _s3();
-    const favIds = new Set(user?.FavoriteMovies || []);
+    const favIds = new Set(user?.favoriteMovies || []);
     const favorites = movies.filter((m)=>favIds.has(m._id));
     const [form, setForm] = (0, _react.useState)({
-        Username: user?.Username || "",
-        Email: user?.Email || "",
-        Birthday: user?.Birthday?.slice(0, 10) || "",
+        Username: user?.username || "",
+        Email: user?.email || "",
+        Birthday: user?.birthday?.slice?.(0, 10) || "",
         Password: ""
     });
     const [ok, setOk] = (0, _react.useState)("");
@@ -1501,7 +1514,7 @@ MoviesMain.propTypes = {
             setOk("Profile updated.");
             await refreshUser();
         } catch (e) {
-            const apiMsg = e.response?.data?.message || (typeof e.response?.data === "string" ? e.response.data : null) || e.message;
+            const apiMsg = e?.response?.data?.message || (typeof e?.response?.data === "string" ? e.response.data : null) || e.message;
             setErr(apiMsg || "Update failed.");
         }
     };
@@ -1553,8 +1566,7 @@ MoviesMain.propTypes = {
                                                         onChange: (e)=>setForm((f)=>({
                                                                     ...f,
                                                                     Username: e.target.value
-                                                                })),
-                                                        required: true
+                                                                }))
                                                     }, void 0, false, {
                                                         fileName: "src/index.jsx",
                                                         lineNumber: 417,
@@ -1574,7 +1586,7 @@ MoviesMain.propTypes = {
                                                         children: "Email"
                                                     }, void 0, false, {
                                                         fileName: "src/index.jsx",
-                                                        lineNumber: 427,
+                                                        lineNumber: 426,
                                                         columnNumber: 19
                                                     }, undefined),
                                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
@@ -1584,17 +1596,16 @@ MoviesMain.propTypes = {
                                                         onChange: (e)=>setForm((f)=>({
                                                                     ...f,
                                                                     Email: e.target.value
-                                                                })),
-                                                        required: true
+                                                                }))
                                                     }, void 0, false, {
                                                         fileName: "src/index.jsx",
-                                                        lineNumber: 428,
+                                                        lineNumber: 427,
                                                         columnNumber: 19
                                                     }, undefined)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "src/index.jsx",
-                                                lineNumber: 426,
+                                                lineNumber: 425,
                                                 columnNumber: 17
                                             }, undefined),
                                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -1605,7 +1616,7 @@ MoviesMain.propTypes = {
                                                         children: "Birthday"
                                                     }, void 0, false, {
                                                         fileName: "src/index.jsx",
-                                                        lineNumber: 439,
+                                                        lineNumber: 437,
                                                         columnNumber: 19
                                                     }, undefined),
                                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
@@ -1618,13 +1629,13 @@ MoviesMain.propTypes = {
                                                                 }))
                                                     }, void 0, false, {
                                                         fileName: "src/index.jsx",
-                                                        lineNumber: 440,
+                                                        lineNumber: 438,
                                                         columnNumber: 19
                                                     }, undefined)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "src/index.jsx",
-                                                lineNumber: 438,
+                                                lineNumber: 436,
                                                 columnNumber: 17
                                             }, undefined),
                                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -1635,7 +1646,7 @@ MoviesMain.propTypes = {
                                                         children: "New Password (optional)"
                                                     }, void 0, false, {
                                                         fileName: "src/index.jsx",
-                                                        lineNumber: 450,
+                                                        lineNumber: 448,
                                                         columnNumber: 19
                                                     }, undefined),
                                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
@@ -1648,13 +1659,13 @@ MoviesMain.propTypes = {
                                                                 }))
                                                     }, void 0, false, {
                                                         fileName: "src/index.jsx",
-                                                        lineNumber: 451,
+                                                        lineNumber: 449,
                                                         columnNumber: 19
                                                     }, undefined)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "src/index.jsx",
-                                                lineNumber: 449,
+                                                lineNumber: 447,
                                                 columnNumber: 17
                                             }, undefined),
                                             ok && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -1662,7 +1673,7 @@ MoviesMain.propTypes = {
                                                 children: ok
                                             }, void 0, false, {
                                                 fileName: "src/index.jsx",
-                                                lineNumber: 460,
+                                                lineNumber: 458,
                                                 columnNumber: 24
                                             }, undefined),
                                             err && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -1670,15 +1681,16 @@ MoviesMain.propTypes = {
                                                 children: err
                                             }, void 0, false, {
                                                 fileName: "src/index.jsx",
-                                                lineNumber: 461,
+                                                lineNumber: 459,
                                                 columnNumber: 25
                                             }, undefined),
                                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
                                                 className: "btn btn-primary me-2",
+                                                type: "submit",
                                                 children: "Save"
                                             }, void 0, false, {
                                                 fileName: "src/index.jsx",
-                                                lineNumber: 462,
+                                                lineNumber: 460,
                                                 columnNumber: 17
                                             }, undefined),
                                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
@@ -1688,7 +1700,7 @@ MoviesMain.propTypes = {
                                                 children: "Delete account"
                                             }, void 0, false, {
                                                 fileName: "src/index.jsx",
-                                                lineNumber: 463,
+                                                lineNumber: 461,
                                                 columnNumber: 17
                                             }, undefined)
                                         ]
@@ -1721,7 +1733,7 @@ MoviesMain.propTypes = {
                                 children: "Favorite Movies"
                             }, void 0, false, {
                                 fileName: "src/index.jsx",
-                                lineNumber: 475,
+                                lineNumber: 473,
                                 columnNumber: 11
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -1731,7 +1743,7 @@ MoviesMain.propTypes = {
                                     children: "No favorites yet."
                                 }, void 0, false, {
                                     fileName: "src/index.jsx",
-                                    lineNumber: 478,
+                                    lineNumber: 476,
                                     columnNumber: 15
                                 }, undefined) : favorites.map((m)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
                                         className: "col-sm-6 col-md-4 d-flex",
@@ -1739,12 +1751,12 @@ MoviesMain.propTypes = {
                                             className: "card mb-3 flex-fill",
                                             children: [
                                                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
-                                                    src: m.ImagePath || "https://via.placeholder.com/300x450?text=No+Image",
+                                                    src: m.imageURL || "https://via.placeholder.com/300x450?text=No+Image",
                                                     className: "card-img-top",
-                                                    alt: m.Title
+                                                    alt: m.title
                                                 }, void 0, false, {
                                                     fileName: "src/index.jsx",
-                                                    lineNumber: 483,
+                                                    lineNumber: 481,
                                                     columnNumber: 21
                                                 }, undefined),
                                                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -1752,10 +1764,10 @@ MoviesMain.propTypes = {
                                                     children: [
                                                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h6", {
                                                             className: "card-title",
-                                                            children: m.Title
+                                                            children: m.title
                                                         }, void 0, false, {
                                                             fileName: "src/index.jsx",
-                                                            lineNumber: 492,
+                                                            lineNumber: 487,
                                                             columnNumber: 23
                                                         }, undefined),
                                                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
@@ -1764,35 +1776,35 @@ MoviesMain.propTypes = {
                                                             children: "Remove"
                                                         }, void 0, false, {
                                                             fileName: "src/index.jsx",
-                                                            lineNumber: 493,
+                                                            lineNumber: 488,
                                                             columnNumber: 23
                                                         }, undefined)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "src/index.jsx",
-                                                    lineNumber: 491,
+                                                    lineNumber: 486,
                                                     columnNumber: 21
                                                 }, undefined)
                                             ]
                                         }, void 0, true, {
                                             fileName: "src/index.jsx",
-                                            lineNumber: 482,
+                                            lineNumber: 480,
                                             columnNumber: 19
                                         }, undefined)
                                     }, m._id, false, {
                                         fileName: "src/index.jsx",
-                                        lineNumber: 481,
+                                        lineNumber: 479,
                                         columnNumber: 17
                                     }, undefined))
                             }, void 0, false, {
                                 fileName: "src/index.jsx",
-                                lineNumber: 476,
+                                lineNumber: 474,
                                 columnNumber: 11
                             }, undefined)
                         ]
                     }, void 0, true, {
                         fileName: "src/index.jsx",
-                        lineNumber: 474,
+                        lineNumber: 472,
                         columnNumber: 9
                     }, undefined)
                 ]
@@ -1808,20 +1820,21 @@ MoviesMain.propTypes = {
         columnNumber: 5
     }, undefined);
 };
-_s3(ProfileView, "uXxcZ3bwRWiBDVAcLBvMt2gMhzY=");
+_s3(ProfileView, "XkNCIz2+LQ1UFtNviQ9SaKAM9VA=");
 _c6 = ProfileView;
 ProfileView.propTypes = {
     user: (0, _propTypesDefault.default).shape({
-        Username: (0, _propTypesDefault.default).string,
-        Email: (0, _propTypesDefault.default).string,
-        Birthday: (0, _propTypesDefault.default).string,
-        FavoriteMovies: (0, _propTypesDefault.default).arrayOf((0, _propTypesDefault.default).string)
+        name: (0, _propTypesDefault.default).string,
+        username: (0, _propTypesDefault.default).string,
+        email: (0, _propTypesDefault.default).string,
+        birthday: (0, _propTypesDefault.default).string,
+        favoriteMovies: (0, _propTypesDefault.default).arrayOf((0, _propTypesDefault.default).string)
     }),
     movies: (0, _propTypesDefault.default).arrayOf(MovieCard.propTypes.movie).isRequired,
-    refreshUser: (0, _propTypesDefault.default).func.isRequired,
-    onRemoveFavorite: (0, _propTypesDefault.default).func.isRequired,
-    onUpdateUser: (0, _propTypesDefault.default).func.isRequired,
-    onDeleteUser: (0, _propTypesDefault.default).func.isRequired
+    refreshUser: (0, _propTypesDefault.default).func,
+    onRemoveFavorite: (0, _propTypesDefault.default).func,
+    onUpdateUser: (0, _propTypesDefault.default).func,
+    onDeleteUser: (0, _propTypesDefault.default).func
 };
 /** =======================
  *  App (routes + fetching)
@@ -1831,15 +1844,15 @@ ProfileView.propTypes = {
         const stored = localStorage.getItem("user");
         return stored ? JSON.parse(stored) : null;
     });
-    const [movies, setMovies] = (0, _react.useState)([]); // requirement 1: empty initial array
+    const [movies, setMovies] = (0, _react.useState)([]); // initial empty array per brief
     const [loading, setLoading] = (0, _react.useState)(false);
     const [query, setQuery] = (0, _react.useState)("");
     const isAuthed = !!localStorage.getItem("token");
     const fetchMovies = async ()=>{
         setLoading(true);
         try {
-            const { data } = await api.get("/movies"); // requirement 2: populate from API
-            setMovies(data); // requirement 3: feed into components
+            const { data } = await api.get("/movies");
+            setMovies(data);
         } catch (e) {
             console.error("Error fetching movies:", e);
         } finally{
@@ -1847,31 +1860,14 @@ ProfileView.propTypes = {
         }
     };
     const refreshUser = async ()=>{
-        if (!user?.Username) return;
-        const { data } = await api.get(`/users/${encodeURIComponent(user.Username)}`);
-        localStorage.setItem("user", JSON.stringify(data));
-        setUser(data);
-    };
-    const addFavorite = async (movieId)=>{
-        if (!user?.Username) return;
-        await api.post(`/users/${encodeURIComponent(user.Username)}/movies/${movieId}`);
-        await refreshUser();
-    };
-    const removeFavorite = async (movieId)=>{
-        if (!user?.Username) return;
-        await api.delete(`/users/${encodeURIComponent(user.Username)}/movies/${movieId}`);
-        await refreshUser();
-    };
-    const updateUser = async (payload)=>{
-        if (!user?.Username) return;
-        const { data } = await api.put(`/users/${encodeURIComponent(user.Username)}`, payload);
-        localStorage.setItem("user", JSON.stringify(data));
-        setUser(data);
-    };
-    const deleteUser = async ()=>{
-        if (!user?.Username) return;
-        await api.delete(`/users/${encodeURIComponent(user.Username)}`);
-        handleLogout();
+        try {
+            const { data } = await api.get("/users/me");
+            localStorage.setItem("user", JSON.stringify(data));
+            setUser(data);
+        } catch (e) {
+            // not fatal for browsing
+            console.warn("refreshUser failed:", e?.response?.status, e?.message);
+        }
     };
     const handleLogout = ()=>{
         localStorage.removeItem("token");
@@ -1887,7 +1883,7 @@ ProfileView.propTypes = {
     const filtered = (0, _react.useMemo)(()=>{
         const q = query.trim().toLowerCase();
         if (!q) return movies;
-        return movies.filter((m)=>m.Title?.toLowerCase().includes(q) || m.Genre?.Name?.toLowerCase().includes(q));
+        return movies.filter((m)=>m.title?.toLowerCase().includes(q) || m.genre?.name?.toLowerCase().includes(q));
     }, [
         movies,
         query
@@ -1897,10 +1893,10 @@ ProfileView.propTypes = {
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(NavBar, {
                 isAuthed: isAuthed,
                 onLogout: handleLogout,
-                username: user?.Username || ""
+                username: user?.username || user?.email || user?.name || ""
             }, void 0, false, {
                 fileName: "src/index.jsx",
-                lineNumber: 608,
+                lineNumber: 580,
                 columnNumber: 7
             }, undefined),
             !isAuthed ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Routes), {
@@ -1911,24 +1907,24 @@ ProfileView.propTypes = {
                             onLoggedIn: setUser
                         }, void 0, false, {
                             fileName: "src/index.jsx",
-                            lineNumber: 615,
+                            lineNumber: 587,
                             columnNumber: 41
                         }, void 0)
                     }, void 0, false, {
                         fileName: "src/index.jsx",
-                        lineNumber: 615,
+                        lineNumber: 587,
                         columnNumber: 11
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
                         path: "/signup",
                         element: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(SignupView, {}, void 0, false, {
                             fileName: "src/index.jsx",
-                            lineNumber: 616,
+                            lineNumber: 588,
                             columnNumber: 42
                         }, void 0)
                     }, void 0, false, {
                         fileName: "src/index.jsx",
-                        lineNumber: 616,
+                        lineNumber: 588,
                         columnNumber: 11
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
@@ -1938,18 +1934,18 @@ ProfileView.propTypes = {
                             replace: true
                         }, void 0, false, {
                             fileName: "src/index.jsx",
-                            lineNumber: 617,
+                            lineNumber: 589,
                             columnNumber: 36
                         }, void 0)
                     }, void 0, false, {
                         fileName: "src/index.jsx",
-                        lineNumber: 617,
+                        lineNumber: 589,
                         columnNumber: 11
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "src/index.jsx",
-                lineNumber: 614,
+                lineNumber: 586,
                 columnNumber: 9
             }, undefined) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Routes), {
                 children: [
@@ -1961,27 +1957,26 @@ ProfileView.propTypes = {
                             query: query
                         }, void 0, false, {
                             fileName: "src/index.jsx",
-                            lineNumber: 624,
+                            lineNumber: 596,
                             columnNumber: 15
                         }, void 0)
                     }, void 0, false, {
                         fileName: "src/index.jsx",
-                        lineNumber: 621,
+                        lineNumber: 593,
                         columnNumber: 11
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
                         path: "/movies/:id",
                         element: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(MovieView, {
-                            movies: movies,
-                            onAddFavorite: addFavorite
+                            movies: movies
                         }, void 0, false, {
                             fileName: "src/index.jsx",
-                            lineNumber: 633,
+                            lineNumber: 605,
                             columnNumber: 22
                         }, void 0)
                     }, void 0, false, {
                         fileName: "src/index.jsx",
-                        lineNumber: 631,
+                        lineNumber: 603,
                         columnNumber: 11
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
@@ -1989,18 +1984,15 @@ ProfileView.propTypes = {
                         element: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(ProfileView, {
                             user: user,
                             movies: movies,
-                            refreshUser: refreshUser,
-                            onRemoveFavorite: removeFavorite,
-                            onUpdateUser: updateUser,
-                            onDeleteUser: deleteUser
+                            refreshUser: refreshUser
                         }, void 0, false, {
                             fileName: "src/index.jsx",
-                            lineNumber: 638,
+                            lineNumber: 610,
                             columnNumber: 15
                         }, void 0)
                     }, void 0, false, {
                         fileName: "src/index.jsx",
-                        lineNumber: 635,
+                        lineNumber: 607,
                         columnNumber: 11
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
@@ -2010,18 +2002,18 @@ ProfileView.propTypes = {
                             replace: true
                         }, void 0, false, {
                             fileName: "src/index.jsx",
-                            lineNumber: 648,
+                            lineNumber: 619,
                             columnNumber: 36
                         }, void 0)
                     }, void 0, false, {
                         fileName: "src/index.jsx",
-                        lineNumber: 648,
+                        lineNumber: 619,
                         columnNumber: 11
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "src/index.jsx",
-                lineNumber: 620,
+                lineNumber: 592,
                 columnNumber: 9
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("footer", {
@@ -2029,13 +2021,13 @@ ProfileView.propTypes = {
                 children: "myFlix \u2022 MERN"
             }, void 0, false, {
                 fileName: "src/index.jsx",
-                lineNumber: 651,
+                lineNumber: 622,
                 columnNumber: 7
             }, undefined)
         ]
     }, void 0, true, {
         fileName: "src/index.jsx",
-        lineNumber: 607,
+        lineNumber: 579,
         columnNumber: 5
     }, undefined);
 };
@@ -2045,7 +2037,7 @@ _c7 = App;
 const root = (0, _client.createRoot)(container);
 root.render(/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(App, {}, void 0, false, {
     fileName: "src/index.jsx",
-    lineNumber: 661,
+    lineNumber: 632,
     columnNumber: 13
 }, undefined));
 var _c, _c1, _c2, _c3, _c4, _c5, _c6, _c7;
