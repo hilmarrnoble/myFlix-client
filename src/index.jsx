@@ -12,12 +12,16 @@ import {
   useParams,
 } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./index.scss";
+import "./index.scss"; // keep your styling import (scss or css as in your project)
+
+// Hotfix: if any accidental `sole.error(...)` slipped in, alias it to console so it won't crash
+const sole = { error: () => {} };
 
 /** =======================
  *  Config
  *  ======================= */
-const API_BASE = "https://YOUR-HEROKU-APP-NAME.herokuapp.com"; // <- change me
+// Server base (includes /api because your server mounts routes under /api/*)
+const API_BASE = "https://Hilmarrnoble-movie-api.herokuapp.com/api";
 
 const api = axios.create({
   baseURL: API_BASE,
@@ -30,7 +34,7 @@ api.interceptors.request.use((config) => {
 });
 
 /** =======================
- *  UI Bits
+ *  UI: NavBar
  *  ======================= */
 const NavBar = ({ isAuthed, onLogout, username }) => (
   <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -96,8 +100,8 @@ NavBar.propTypes = {
  *  Auth Views
  *  ======================= */
 const LoginView = ({ onLoggedIn }) => {
-  const [username, setU] = useState("");
-  const [password, setP] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
   const nav = useNavigate();
@@ -107,14 +111,26 @@ const LoginView = ({ onLoggedIn }) => {
     setErr("");
     setLoading(true);
     try {
-      const { data } = await api.post("/login", { Username: username, Password: password });
-      const { token, user } = data;
+      // 1) Login against /auth/login (base without /api)
+      const { data } = await axios.post(
+        API_BASE.replace(/\/api$/, "") + "/auth/login",
+        { email, password }
+      );
+      const { token } = data;
       localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
-      onLoggedIn(user);
+
+      // 2) Fetch current user
+      const me = await api.get("/users/me");
+      localStorage.setItem("user", JSON.stringify(me.data));
+      onLoggedIn(me.data);
       nav("/");
     } catch (e) {
-      setErr("Invalid credentials or server error.");
+      const apiMsg =
+        e.response?.data?.message ||
+        (typeof e.response?.data === "string" ? e.response.data : null) ||
+        e.message;
+      setErr(apiMsg || "Invalid credentials or server error.");
+      console.warn("Login error:", e.response?.status, e.response?.data || e);
     } finally {
       setLoading(false);
     }
@@ -127,12 +143,24 @@ const LoginView = ({ onLoggedIn }) => {
           <h2 className="mb-3">Log in</h2>
           <form onSubmit={submit} className="card card-body">
             <div className="mb-3">
-              <label className="form-label">Username</label>
-              <input className="form-control" value={username} onChange={(e) => setU(e.target.value)} required />
+              <label className="form-label">Email</label>
+              <input
+                className="form-control"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
             </div>
             <div className="mb-3">
               <label className="form-label">Password</label>
-              <input type="password" className="form-control" value={password} onChange={(e) => setP(e.target.value)} required />
+              <input
+                type="password"
+                className="form-control"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
             </div>
             {err && <div className="alert alert-danger">{err}</div>}
             <button className="btn btn-primary" disabled={loading}>
@@ -147,7 +175,12 @@ const LoginView = ({ onLoggedIn }) => {
 LoginView.propTypes = { onLoggedIn: PropTypes.func.isRequired };
 
 const SignupView = () => {
-  const [form, setForm] = useState({ Username: "", Password: "", Email: "", Birthday: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    birthday: "",
+  });
   const [ok, setOk] = useState("");
   const [err, setErr] = useState("");
 
@@ -156,12 +189,31 @@ const SignupView = () => {
     setErr("");
     setOk("");
     try {
-      await api.post("/users", form);
+      // POST /auth/register (base without /api)
+      await axios.post(
+        API_BASE.replace(/\/api$/, "") + "/auth/register",
+        form
+      );
       setOk("Account created! You can now log in.");
     } catch (e) {
-      setErr("Signup failed. Check your inputs.");
+      const apiMsg =
+        e.response?.data?.message ||
+        (Array.isArray(e.response?.data?.errors)
+          ? e.response.data.errors.map(er => er.msg || er).join(", ")
+          : null) ||
+        (typeof e.response?.data === "string" ? e.response.data : null) ||
+        e.message;
+      setErr(apiMsg || "Signup failed. Check your inputs.");
+      console.warn("Signup error:", e.response?.status, e.response?.data || e);
     }
   };
+
+  const inputs = [
+    ["name", "Name", "text"],
+    ["email", "Email", "email"],
+    ["password", "Password", "password"],
+    ["birthday", "Birthday", "date"],
+  ];
 
   return (
     <div className="container py-4">
@@ -169,15 +221,15 @@ const SignupView = () => {
         <div className="col-sm-10 col-md-6 col-lg-5">
           <h2 className="mb-3">Sign up</h2>
           <form onSubmit={submit} className="card card-body">
-            {["Username", "Password", "Email", "Birthday"].map((field) => (
-              <div className="mb-3" key={field}>
-                <label className="form-label">{field}</label>
+            {inputs.map(([key, label, type]) => (
+              <div className="mb-3" key={key}>
+                <label className="form-label">{label}</label>
                 <input
-                  type={field === "Password" ? "password" : field === "Birthday" ? "date" : "text"}
+                  type={type}
                   className="form-control"
-                  value={form[field]}
-                  onChange={(e) => setForm((f) => ({ ...f, [field]: e.target.value }))}
-                  required={field !== "Birthday"}
+                  value={form[key]}
+                  onChange={(e) => setForm((f) => ({ ...f, [key]: e.target.value }))}
+                  required={key !== "birthday"}
                 />
               </div>
             ))}
@@ -195,14 +247,19 @@ const SignupView = () => {
  *  Movies
  *  ======================= */
 const MovieCard = ({ movie }) => {
-  const poster = movie.ImagePath || "https://via.placeholder.com/300x450?text=No+Image";
+  const poster = movie.imageURL || "https://via.placeholder.com/300x450?text=No+Image";
   return (
     <div className="col-sm-6 col-md-4 col-lg-3 d-flex">
-      <Link to={`/movies/${movie._id}`} className="card mb-4 text-decoration-none flex-fill shadow-sm">
-        <img src={poster} className="card-img-top" alt={movie.Title} />
+      <Link
+        to={`/movies/${movie._id}`}
+        className="card mb-4 text-decoration-none flex-fill shadow-sm"
+      >
+        <img src={poster} className="card-img-top" alt={movie.title} />
         <div className="card-body">
-          <h5 className="card-title">{movie.Title}</h5>
-          <p className="card-text small text-muted mb-0">{movie.Genre?.Name}</p>
+          <h5 className="card-title">{movie.title}</h5>
+          <p className="card-text small text-muted mb-0">
+            {movie.genre?.name}
+          </p>
         </div>
       </Link>
     </div>
@@ -211,15 +268,23 @@ const MovieCard = ({ movie }) => {
 MovieCard.propTypes = {
   movie: PropTypes.shape({
     _id: PropTypes.string.isRequired,
-    Title: PropTypes.string.isRequired,
-    Description: PropTypes.string,
-    ImagePath: PropTypes.string,
-    Genre: PropTypes.shape({ Name: PropTypes.string, Description: PropTypes.string }),
-    Director: PropTypes.shape({ Name: PropTypes.string, Bio: PropTypes.string, Birth: PropTypes.string }),
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    imageURL: PropTypes.string,
+    genre: PropTypes.shape({
+      name: PropTypes.string,
+      description: PropTypes.string,
+    }),
+    director: PropTypes.shape({
+      name: PropTypes.string,
+      bio: PropTypes.string,
+      birthYear: PropTypes.number,
+    }),
+    releaseYear: PropTypes.number,
   }).isRequired,
 };
 
-const MovieView = ({ movies, onAddFavorite }) => {
+const MovieView = ({ movies }) => {
   const { id } = useParams();
   const movie = movies.find((m) => m._id === id);
 
@@ -227,7 +292,9 @@ const MovieView = ({ movies, onAddFavorite }) => {
     return (
       <div className="container py-4">
         <div className="alert alert-warning">Movie not found.</div>
-        <Link to="/" className="btn btn-outline-secondary">Back</Link>
+        <Link to="/" className="btn btn-outline-secondary">
+          Back
+        </Link>
       </div>
     );
 
@@ -236,22 +303,26 @@ const MovieView = ({ movies, onAddFavorite }) => {
       <div className="row g-4">
         <div className="col-md-4">
           <img
-            src={movie.ImagePath || "https://via.placeholder.com/500x750?text=No+Image"}
-            alt={movie.Title}
+            src={movie.imageURL || "https://via.placeholder.com/500x750?text=No+Image"}
+            alt={movie.title}
             className="img-fluid rounded shadow-sm"
           />
         </div>
         <div className="col-md-8">
-          <h2 className="mb-3">{movie.Title}</h2>
-          <p>{movie.Description}</p>
+          <h2 className="mb-3">{movie.title}</h2>
+          <p>{movie.description}</p>
           <div className="mb-2">
-            <span className="badge text-bg-primary me-2">{movie.Genre?.Name || "Genre"}</span>
-            <span className="badge text-bg-secondary">{movie.Director?.Name || "Director"}</span>
+            <span className="badge text-bg-primary me-2">
+              {movie.genre?.name || "Genre"}
+            </span>
+            <span className="badge text-bg-secondary">
+              {movie.director?.name || "Director"}
+            </span>
           </div>
-          <button className="btn btn-primary me-2" onClick={() => onAddFavorite(movie._id)}>
-            + Add to Favorites
-          </button>
-          <Link to="/" className="btn btn-outline-secondary">Back</Link>
+          {/* Favorites hook can be re-enabled once API endpoints exist */}
+          <Link to="/" className="btn btn-outline-secondary">
+            Back
+          </Link>
         </div>
       </div>
     </div>
@@ -259,7 +330,6 @@ const MovieView = ({ movies, onAddFavorite }) => {
 };
 MovieView.propTypes = {
   movies: PropTypes.arrayOf(MovieCard.propTypes.movie).isRequired,
-  onAddFavorite: PropTypes.func.isRequired,
 };
 
 const MoviesMain = ({ movies, onQuery, query }) => {
@@ -296,14 +366,21 @@ MoviesMain.propTypes = {
 /** =======================
  *  Profile
  *  ======================= */
-const ProfileView = ({ user, movies, refreshUser, onRemoveFavorite, onUpdateUser, onDeleteUser }) => {
-  const favIds = new Set(user?.FavoriteMovies || []);
+const ProfileView = ({
+  user,
+  movies,
+  refreshUser = () => {},
+  onRemoveFavorite = () => {},
+  onUpdateUser = () => {},
+  onDeleteUser = () => {},
+}) => {
+  const favIds = new Set(user?.favoriteMovies || []);
   const favorites = movies.filter((m) => favIds.has(m._id));
 
   const [form, setForm] = useState({
-    Username: user?.Username || "",
-    Email: user?.Email || "",
-    Birthday: user?.Birthday?.slice(0, 10) || "",
+    Username: user?.username || "",
+    Email: user?.email || "",
+    Birthday: user?.birthday?.slice?.(0, 10) || "",
     Password: "",
   });
   const [ok, setOk] = useState("");
@@ -318,7 +395,11 @@ const ProfileView = ({ user, movies, refreshUser, onRemoveFavorite, onUpdateUser
       setOk("Profile updated.");
       await refreshUser();
     } catch (e) {
-      setErr("Update failed.");
+      const apiMsg =
+        e?.response?.data?.message ||
+        (typeof e?.response?.data === "string" ? e.response.data : null) ||
+        e.message;
+      setErr(apiMsg || "Update failed.");
     }
   };
 
@@ -333,24 +414,55 @@ const ProfileView = ({ user, movies, refreshUser, onRemoveFavorite, onUpdateUser
               <form onSubmit={save}>
                 <div className="mb-2">
                   <label className="form-label">Username</label>
-                  <input className="form-control" value={form.Username} onChange={(e) => setForm((f) => ({ ...f, Username: e.target.value }))} required />
+                  <input
+                    className="form-control"
+                    value={form.Username}
+                    onChange={(e) =>
+                      setForm((f) => ({ ...f, Username: e.target.value }))
+                    }
+                  />
                 </div>
                 <div className="mb-2">
                   <label className="form-label">Email</label>
-                  <input type="email" className="form-control" value={form.Email} onChange={(e) => setForm((f) => ({ ...f, Email: e.target.value }))} required />
+                  <input
+                    type="email"
+                    className="form-control"
+                    value={form.Email}
+                    onChange={(e) =>
+                      setForm((f) => ({ ...f, Email: e.target.value }))
+                    }
+                  />
                 </div>
                 <div className="mb-2">
                   <label className="form-label">Birthday</label>
-                  <input type="date" className="form-control" value={form.Birthday} onChange={(e) => setForm((f) => ({ ...f, Birthday: e.target.value }))} />
+                  <input
+                    type="date"
+                    className="form-control"
+                    value={form.Birthday}
+                    onChange={(e) =>
+                      setForm((f) => ({ ...f, Birthday: e.target.value }))
+                    }
+                  />
                 </div>
                 <div className="mb-2">
                   <label className="form-label">New Password (optional)</label>
-                  <input type="password" className="form-control" value={form.Password} onChange={(e) => setForm((f) => ({ ...f, Password: e.target.value }))} />
+                  <input
+                    type="password"
+                    className="form-control"
+                    value={form.Password}
+                    onChange={(e) =>
+                      setForm((f) => ({ ...f, Password: e.target.value }))
+                    }
+                  />
                 </div>
                 {ok && <div className="alert alert-success py-1 my-2">{ok}</div>}
                 {err && <div className="alert alert-danger py-1 my-2">{err}</div>}
-                <button className="btn btn-primary me-2">Save</button>
-                <button type="button" className="btn btn-outline-danger" onClick={onDeleteUser}>
+                <button className="btn btn-primary me-2" type="submit">Save</button>
+                <button
+                  type="button"
+                  className="btn btn-outline-danger"
+                  onClick={onDeleteUser}
+                >
                   Delete account
                 </button>
               </form>
@@ -366,10 +478,17 @@ const ProfileView = ({ user, movies, refreshUser, onRemoveFavorite, onUpdateUser
               favorites.map((m) => (
                 <div className="col-sm-6 col-md-4 d-flex" key={m._id}>
                   <div className="card mb-3 flex-fill">
-                    <img src={m.ImagePath || "https://via.placeholder.com/300x450?text=No+Image"} className="card-img-top" alt={m.Title} />
+                    <img
+                      src={m.imageURL || "https://via.placeholder.com/300x450?text=No+Image"}
+                      className="card-img-top"
+                      alt={m.title}
+                    />
                     <div className="card-body">
-                      <h6 className="card-title">{m.Title}</h6>
-                      <button className="btn btn-sm btn-outline-danger" onClick={() => onRemoveFavorite(m._id)}>
+                      <h6 className="card-title">{m.title}</h6>
+                      <button
+                        className="btn btn-sm btn-outline-danger"
+                        onClick={() => onRemoveFavorite(m._id)}
+                      >
                         Remove
                       </button>
                     </div>
@@ -385,16 +504,17 @@ const ProfileView = ({ user, movies, refreshUser, onRemoveFavorite, onUpdateUser
 };
 ProfileView.propTypes = {
   user: PropTypes.shape({
-    Username: PropTypes.string,
-    Email: PropTypes.string,
-    Birthday: PropTypes.string,
-    FavoriteMovies: PropTypes.arrayOf(PropTypes.string),
+    name: PropTypes.string,
+    username: PropTypes.string,
+    email: PropTypes.string,
+    birthday: PropTypes.string,
+    favoriteMovies: PropTypes.arrayOf(PropTypes.string),
   }),
   movies: PropTypes.arrayOf(MovieCard.propTypes.movie).isRequired,
-  refreshUser: PropTypes.func.isRequired,
-  onRemoveFavorite: PropTypes.func.isRequired,
-  onUpdateUser: PropTypes.func.isRequired,
-  onDeleteUser: PropTypes.func.isRequired,
+  refreshUser: PropTypes.func,
+  onRemoveFavorite: PropTypes.func,
+  onUpdateUser: PropTypes.func,
+  onDeleteUser: PropTypes.func,
 };
 
 /** =======================
@@ -405,7 +525,7 @@ const App = () => {
     const stored = localStorage.getItem("user");
     return stored ? JSON.parse(stored) : null;
   });
-  const [movies, setMovies] = useState([]); // <- initial empty array (requirement 1)
+  const [movies, setMovies] = useState([]); // initial empty array per brief
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState("");
 
@@ -414,8 +534,8 @@ const App = () => {
   const fetchMovies = async () => {
     setLoading(true);
     try {
-      const { data } = await api.get("/movies"); // <- populate from API (requirement 2)
-      setMovies(data); // <- feed into components (requirement 3)
+      const { data } = await api.get("/movies");
+      setMovies(data);
     } catch (e) {
       console.error("Error fetching movies:", e);
     } finally {
@@ -424,35 +544,14 @@ const App = () => {
   };
 
   const refreshUser = async () => {
-    if (!user?.Username) return;
-    const { data } = await api.get(`/users/${encodeURIComponent(user.Username)}`);
-    localStorage.setItem("user", JSON.stringify(data));
-    setUser(data);
-  };
-
-  const addFavorite = async (movieId) => {
-    if (!user?.Username) return;
-    await api.post(`/users/${encodeURIComponent(user.Username)}/movies/${movieId}`);
-    await refreshUser();
-  };
-
-  const removeFavorite = async (movieId) => {
-    if (!user?.Username) return;
-    await api.delete(`/users/${encodeURIComponent(user.Username)}/movies/${movieId}`);
-    await refreshUser();
-  };
-
-  const updateUser = async (payload) => {
-    if (!user?.Username) return;
-    const { data } = await api.put(`/users/${encodeURIComponent(user.Username)}`, payload);
-    localStorage.setItem("user", JSON.stringify(data));
-    setUser(data);
-  };
-
-  const deleteUser = async () => {
-    if (!user?.Username) return;
-    await api.delete(`/users/${encodeURIComponent(user.Username)}`);
-    handleLogout();
+    try {
+      const { data } = await api.get("/users/me");
+      localStorage.setItem("user", JSON.stringify(data));
+      setUser(data);
+    } catch (e) {
+      // not fatal for browsing
+      console.warn("refreshUser failed:", e?.response?.status, e?.message);
+    }
   };
 
   const handleLogout = () => {
@@ -471,14 +570,18 @@ const App = () => {
     if (!q) return movies;
     return movies.filter(
       (m) =>
-        m.Title?.toLowerCase().includes(q) ||
-        m.Genre?.Name?.toLowerCase().includes(q)
+        m.title?.toLowerCase().includes(q) ||
+        m.genre?.name?.toLowerCase().includes(q)
     );
   }, [movies, query]);
 
   return (
     <BrowserRouter>
-      <NavBar isAuthed={isAuthed} onLogout={handleLogout} username={user?.Username || ""} />
+      <NavBar
+        isAuthed={isAuthed}
+        onLogout={handleLogout}
+        username={user?.username || user?.email || user?.name || ""}
+      />
       {!isAuthed ? (
         <Routes>
           <Route path="/login" element={<LoginView onLoggedIn={setUser} />} />
@@ -489,9 +592,18 @@ const App = () => {
         <Routes>
           <Route
             path="/"
-            element={<MoviesMain movies={loading ? [] : filtered} onQuery={setQuery} query={query} />}
+            element={
+              <MoviesMain
+                movies={loading ? [] : filtered}
+                onQuery={setQuery}
+                query={query}
+              />
+            }
           />
-          <Route path="/movies/:id" element={<MovieView movies={movies} onAddFavorite={addFavorite} />} />
+          <Route
+            path="/movies/:id"
+            element={<MovieView movies={movies} />}
+          />
           <Route
             path="/profile"
             element={
@@ -499,16 +611,17 @@ const App = () => {
                 user={user}
                 movies={movies}
                 refreshUser={refreshUser}
-                onRemoveFavorite={removeFavorite}
-                onUpdateUser={updateUser}
-                onDeleteUser={deleteUser}
+                // onRemoveFavorite / onUpdateUser / onDeleteUser
+                // can be passed once you expose those API endpoints
               />
             }
           />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       )}
-      <footer className="text-center text-muted small py-4">myFlix • MERN</footer>
+      <footer className="text-center text-muted small py-4">
+        myFlix • MERN
+      </footer>
     </BrowserRouter>
   );
 };

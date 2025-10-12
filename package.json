@@ -22,10 +22,12 @@
     "prop-types": "^15.8.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-router-dom": "^7.9.4"
+    "react-router": "^6.26.2",
+    "react-router-dom": "^6.26.2"
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.16.0",
-    "buffer": "^6.0.3"
+    "buffer": "^6.0.3",
+    "parcel": "^2.16.0"
   }
 }
