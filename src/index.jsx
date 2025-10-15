@@ -1,32 +1,27 @@
+// src/index.jsx
 import React, { useEffect, useMemo, useState } from "react";
 import { createRoot } from "react-dom/client";
-import axios from "axios";
-import PropTypes from "prop-types";
 import {
   BrowserRouter,
   Routes,
   Route,
   Navigate,
-  Link,
-  useNavigate,
-  useParams,
+  Link
 } from "react-router-dom";
+import PropTypes from "prop-types";
+import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./index.scss"; // keep your styling import (scss or css as in your project)
-
-// Hotfix: if any accidental `sole.error(...)` slipped in, alias it to console so it won't crash
-const sole = { error: () => {} };
+import "./index.scss";
 
 /** =======================
- *  Config
+ *  API config
  *  ======================= */
-// Server base (includes /api because your server mounts routes under /api/*)
-const API_BASE = "https://Hilmarrnoble-movie-api.herokuapp.com/api";
+const API_BASE =
+  window._API_BASE ||
+  "http://localhost:5000/api";
+const AUTH_BASE = API_BASE.replace(/\/api$/, "") + "/auth";
 
-const api = axios.create({
-  baseURL: API_BASE,
-});
-
+export const api = axios.create({ baseURL: API_BASE });
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) config.headers.Authorization = `Bearer ${token}`;
@@ -37,40 +32,33 @@ api.interceptors.request.use((config) => {
  *  UI: NavBar
  *  ======================= */
 const NavBar = ({ isAuthed, onLogout, username }) => (
-  <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
     <div className="container">
-      <Link className="navbar-brand" to="/">
-        myFlix
-      </Link>
-      <div className="collapse navbar-collapse show">
-        <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+      <Link className="navbar-brand fw-bold" to="/">myFlix</Link>
+      <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+        <span className="navbar-toggler-icon"></span>
+      </button>
+      <div id="nav" className="collapse navbar-collapse show">
+        <ul className="navbar-nav me-auto">
           {isAuthed && (
             <>
               <li className="nav-item">
-                <Link className="nav-link" to="/">
-                  Movies
-                </Link>
+                <Link className="nav-link" to="/">Movies</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/profile">
-                  Profile
-                </Link>
+                <Link className="nav-link" to="/profile">Profile</Link>
               </li>
             </>
           )}
         </ul>
-        <ul className="navbar-nav ms-auto">
+        <ul className="navbar-nav ms-auto align-items-center">
           {!isAuthed ? (
             <>
               <li className="nav-item">
-                <Link className="nav-link" to="/login">
-                  Log in
-                </Link>
+                <Link className="nav-link" to="/login">Log in</Link>
               </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/signup">
-                  Sign up
-                </Link>
+              <li className="nav-item ms-1">
+                <Link className="btn btn-primary btn-sm" to="/signup">Sign up</Link>
               </li>
             </>
           ) : (
@@ -97,460 +85,48 @@ NavBar.propTypes = {
 };
 
 /** =======================
- *  Auth Views
+ *  Components
  *  ======================= */
-const LoginView = ({ onLoggedIn }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState("");
-  const nav = useNavigate();
-
-  const submit = async (e) => {
-    e.preventDefault();
-    setErr("");
-    setLoading(true);
-    try {
-      // 1) Login against /auth/login (base without /api)
-      const { data } = await axios.post(
-        API_BASE.replace(/\/api$/, "") + "/auth/login",
-        { email, password }
-      );
-      const { token } = data;
-      localStorage.setItem("token", token);
-
-      // 2) Fetch current user
-      const me = await api.get("/users/me");
-      localStorage.setItem("user", JSON.stringify(me.data));
-      onLoggedIn(me.data);
-      nav("/");
-    } catch (e) {
-      const apiMsg =
-        e.response?.data?.message ||
-        (typeof e.response?.data === "string" ? e.response.data : null) ||
-        e.message;
-      setErr(apiMsg || "Invalid credentials or server error.");
-      console.warn("Login error:", e.response?.status, e.response?.data || e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div className="container py-4">
-      <div className="row justify-content-center">
-        <div className="col-sm-10 col-md-6 col-lg-4">
-          <h2 className="mb-3">Log in</h2>
-          <form onSubmit={submit} className="card card-body">
-            <div className="mb-3">
-              <label className="form-label">Email</label>
-              <input
-                className="form-control"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Password</label>
-              <input
-                type="password"
-                className="form-control"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            {err && <div className="alert alert-danger">{err}</div>}
-            <button className="btn btn-primary" disabled={loading}>
-              {loading ? "Logging in..." : "Log in"}
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-  );
-};
-LoginView.propTypes = { onLoggedIn: PropTypes.func.isRequired };
-
-const SignupView = () => {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-    birthday: "",
-  });
-  const [ok, setOk] = useState("");
-  const [err, setErr] = useState("");
-
-  const submit = async (e) => {
-    e.preventDefault();
-    setErr("");
-    setOk("");
-    try {
-      // POST /auth/register (base without /api)
-      await axios.post(
-        API_BASE.replace(/\/api$/, "") + "/auth/register",
-        form
-      );
-      setOk("Account created! You can now log in.");
-    } catch (e) {
-      const apiMsg =
-        e.response?.data?.message ||
-        (Array.isArray(e.response?.data?.errors)
-          ? e.response.data.errors.map(er => er.msg || er).join(", ")
-          : null) ||
-        (typeof e.response?.data === "string" ? e.response.data : null) ||
-        e.message;
-      setErr(apiMsg || "Signup failed. Check your inputs.");
-      console.warn("Signup error:", e.response?.status, e.response?.data || e);
-    }
-  };
-
-  const inputs = [
-    ["name", "Name", "text"],
-    ["email", "Email", "email"],
-    ["password", "Password", "password"],
-    ["birthday", "Birthday", "date"],
-  ];
-
-  return (
-    <div className="container py-4">
-      <div className="row justify-content-center">
-        <div className="col-sm-10 col-md-6 col-lg-5">
-          <h2 className="mb-3">Sign up</h2>
-          <form onSubmit={submit} className="card card-body">
-            {inputs.map(([key, label, type]) => (
-              <div className="mb-3" key={key}>
-                <label className="form-label">{label}</label>
-                <input
-                  type={type}
-                  className="form-control"
-                  value={form[key]}
-                  onChange={(e) => setForm((f) => ({ ...f, [key]: e.target.value }))}
-                  required={key !== "birthday"}
-                />
-              </div>
-            ))}
-            {ok && <div className="alert alert-success">{ok}</div>}
-            {err && <div className="alert alert-danger">{err}</div>}
-            <button className="btn btn-success">Create account</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  );
-};
+import { LoginView } from "./components/login-view/login-view.jsx";
+import { SignupView } from "./components/signup-view/signup-view.jsx";
+import { MainView } from "./components/main-view/main-view.jsx";
+import { MovieView } from "./components/movie-view/movie-view.jsx";
+import { ProfileView } from "./components/profile-view/profile-view.jsx";
 
 /** =======================
- *  Movies
- *  ======================= */
-const MovieCard = ({ movie }) => {
-  const poster = movie.imageURL || "https://via.placeholder.com/300x450?text=No+Image";
-  return (
-    <div className="col-sm-6 col-md-4 col-lg-3 d-flex">
-      <Link
-        to={`/movies/${movie._id}`}
-        className="card mb-4 text-decoration-none flex-fill shadow-sm"
-      >
-        <img src={poster} className="card-img-top" alt={movie.title} />
-        <div className="card-body">
-          <h5 className="card-title">{movie.title}</h5>
-          <p className="card-text small text-muted mb-0">
-            {movie.genre?.name}
-          </p>
-        </div>
-      </Link>
-    </div>
-  );
-};
-MovieCard.propTypes = {
-  movie: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    description: PropTypes.string,
-    imageURL: PropTypes.string,
-    genre: PropTypes.shape({
-      name: PropTypes.string,
-      description: PropTypes.string,
-    }),
-    director: PropTypes.shape({
-      name: PropTypes.string,
-      bio: PropTypes.string,
-      birthYear: PropTypes.number,
-    }),
-    releaseYear: PropTypes.number,
-  }).isRequired,
-};
-
-const MovieView = ({ movies }) => {
-  const { id } = useParams();
-  const movie = movies.find((m) => m._id === id);
-
-  if (!movie)
-    return (
-      <div className="container py-4">
-        <div className="alert alert-warning">Movie not found.</div>
-        <Link to="/" className="btn btn-outline-secondary">
-          Back
-        </Link>
-      </div>
-    );
-
-  return (
-    <div className="container py-4">
-      <div className="row g-4">
-        <div className="col-md-4">
-          <img
-            src={movie.imageURL || "https://via.placeholder.com/500x750?text=No+Image"}
-            alt={movie.title}
-            className="img-fluid rounded shadow-sm"
-          />
-        </div>
-        <div className="col-md-8">
-          <h2 className="mb-3">{movie.title}</h2>
-          <p>{movie.description}</p>
-          <div className="mb-2">
-            <span className="badge text-bg-primary me-2">
-              {movie.genre?.name || "Genre"}
-            </span>
-            <span className="badge text-bg-secondary">
-              {movie.director?.name || "Director"}
-            </span>
-          </div>
-          {/* Favorites hook can be re-enabled once API endpoints exist */}
-          <Link to="/" className="btn btn-outline-secondary">
-            Back
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-};
-MovieView.propTypes = {
-  movies: PropTypes.arrayOf(MovieCard.propTypes.movie).isRequired,
-};
-
-const MoviesMain = ({ movies, onQuery, query }) => {
-  return (
-    <div className="container py-4">
-      <div className="d-flex align-items-center justify-content-between mb-3">
-        <h1 className="h3 mb-0">Movies</h1>
-        <input
-          className="form-control w-auto"
-          style={{ minWidth: 260 }}
-          placeholder="Search by title or genre…"
-          value={query}
-          onChange={(e) => onQuery(e.target.value)}
-        />
-      </div>
-      {movies.length === 0 ? (
-        <div className="text-muted">Loading movies…</div>
-      ) : (
-        <div className="row">
-          {movies.map((m) => (
-            <MovieCard key={m._id} movie={m} />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
-MoviesMain.propTypes = {
-  movies: PropTypes.arrayOf(MovieCard.propTypes.movie).isRequired,
-  onQuery: PropTypes.func.isRequired,
-  query: PropTypes.string.isRequired,
-};
-
-/** =======================
- *  Profile
- *  ======================= */
-const ProfileView = ({
-  user,
-  movies,
-  refreshUser = () => {},
-  onRemoveFavorite = () => {},
-  onUpdateUser = () => {},
-  onDeleteUser = () => {},
-}) => {
-  const favIds = new Set(user?.favoriteMovies || []);
-  const favorites = movies.filter((m) => favIds.has(m._id));
-
-  const [form, setForm] = useState({
-    Username: user?.username || "",
-    Email: user?.email || "",
-    Birthday: user?.birthday?.slice?.(0, 10) || "",
-    Password: "",
-  });
-  const [ok, setOk] = useState("");
-  const [err, setErr] = useState("");
-
-  const save = async (e) => {
-    e.preventDefault();
-    setOk("");
-    setErr("");
-    try {
-      await onUpdateUser(form);
-      setOk("Profile updated.");
-      await refreshUser();
-    } catch (e) {
-      const apiMsg =
-        e?.response?.data?.message ||
-        (typeof e?.response?.data === "string" ? e.response.data : null) ||
-        e.message;
-      setErr(apiMsg || "Update failed.");
-    }
-  };
-
-  return (
-    <div className="container py-4">
-      <h2 className="mb-3">Profile</h2>
-      <div className="row g-4">
-        <div className="col-lg-5">
-          <div className="card">
-            <div className="card-body">
-              <h5>Details</h5>
-              <form onSubmit={save}>
-                <div className="mb-2">
-                  <label className="form-label">Username</label>
-                  <input
-                    className="form-control"
-                    value={form.Username}
-                    onChange={(e) =>
-                      setForm((f) => ({ ...f, Username: e.target.value }))
-                    }
-                  />
-                </div>
-                <div className="mb-2">
-                  <label className="form-label">Email</label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    value={form.Email}
-                    onChange={(e) =>
-                      setForm((f) => ({ ...f, Email: e.target.value }))
-                    }
-                  />
-                </div>
-                <div className="mb-2">
-                  <label className="form-label">Birthday</label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    value={form.Birthday}
-                    onChange={(e) =>
-                      setForm((f) => ({ ...f, Birthday: e.target.value }))
-                    }
-                  />
-                </div>
-                <div className="mb-2">
-                  <label className="form-label">New Password (optional)</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    value={form.Password}
-                    onChange={(e) =>
-                      setForm((f) => ({ ...f, Password: e.target.value }))
-                    }
-                  />
-                </div>
-                {ok && <div className="alert alert-success py-1 my-2">{ok}</div>}
-                {err && <div className="alert alert-danger py-1 my-2">{err}</div>}
-                <button className="btn btn-primary me-2" type="submit">Save</button>
-                <button
-                  type="button"
-                  className="btn btn-outline-danger"
-                  onClick={onDeleteUser}
-                >
-                  Delete account
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-        <div className="col-lg-7">
-          <h5 className="mb-3">Favorite Movies</h5>
-          <div className="row">
-            {favorites.length === 0 ? (
-              <div className="text-muted">No favorites yet.</div>
-            ) : (
-              favorites.map((m) => (
-                <div className="col-sm-6 col-md-4 d-flex" key={m._id}>
-                  <div className="card mb-3 flex-fill">
-                    <img
-                      src={m.imageURL || "https://via.placeholder.com/300x450?text=No+Image"}
-                      className="card-img-top"
-                      alt={m.title}
-                    />
-                    <div className="card-body">
-                      <h6 className="card-title">{m.title}</h6>
-                      <button
-                        className="btn btn-sm btn-outline-danger"
-                        onClick={() => onRemoveFavorite(m._id)}
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-ProfileView.propTypes = {
-  user: PropTypes.shape({
-    name: PropTypes.string,
-    username: PropTypes.string,
-    email: PropTypes.string,
-    birthday: PropTypes.string,
-    favoriteMovies: PropTypes.arrayOf(PropTypes.string),
-  }),
-  movies: PropTypes.arrayOf(MovieCard.propTypes.movie).isRequired,
-  refreshUser: PropTypes.func,
-  onRemoveFavorite: PropTypes.func,
-  onUpdateUser: PropTypes.func,
-  onDeleteUser: PropTypes.func,
-};
-
-/** =======================
- *  App (routes + fetching)
+ *  App
  *  ======================= */
 const App = () => {
   const [user, setUser] = useState(() => {
-    const stored = localStorage.getItem("user");
-    return stored ? JSON.parse(stored) : null;
+    const raw = localStorage.getItem("user");
+    return raw ? JSON.parse(raw) : null;
   });
-  const [movies, setMovies] = useState([]); // initial empty array per brief
+  const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState("");
 
   const isAuthed = !!localStorage.getItem("token");
 
-  const fetchMovies = async () => {
-    setLoading(true);
-    try {
-      const { data } = await api.get("/movies");
-      setMovies(data);
-    } catch (e) {
-      console.error("Error fetching movies:", e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const refreshUser = async () => {
+  const fetchMe = async () => {
     try {
       const { data } = await api.get("/users/me");
       localStorage.setItem("user", JSON.stringify(data));
       setUser(data);
     } catch (e) {
-      // not fatal for browsing
-      console.warn("refreshUser failed:", e?.response?.status, e?.message);
+      console.warn("fetchMe failed:", e?.response?.status, e?.message);
+    }
+  };
+
+  const fetchMovies = async () => {
+    setLoading(true);
+    try {
+      const { data } = await api.get("/movies");
+      setMovies(data || []);
+    } catch (e) {
+      console.error("Error fetching movies:", e?.response?.status, e?.message);
+      setMovies([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -562,7 +138,10 @@ const App = () => {
   };
 
   useEffect(() => {
-    if (isAuthed) fetchMovies();
+    if (isAuthed) {
+      fetchMe();
+      fetchMovies();
+    }
   }, [isAuthed]);
 
   const filtered = useMemo(() => {
@@ -575,6 +154,26 @@ const App = () => {
     );
   }, [movies, query]);
 
+  // === Favorites toggle (MovieView + ProfileView use this) ===
+  const toggleFavorite = async (movieId, want) => {
+    try {
+      if (want) {
+        await api.post(`/users/me/favorites/${movieId}`);
+      } else {
+        await api.delete(`/users/me/favorites/${movieId}`);
+      }
+      const { data } = await api.get("/users/me");
+      localStorage.setItem("user", JSON.stringify(data));
+      setUser(data);
+    } catch (e) {
+      alert(
+        e?.response?.data?.message ||
+        e.message ||
+        "Could not update favorites."
+      );
+    }
+  };
+
   return (
     <BrowserRouter>
       <NavBar
@@ -582,10 +181,19 @@ const App = () => {
         onLogout={handleLogout}
         username={user?.username || user?.email || user?.name || ""}
       />
+
       {!isAuthed ? (
         <Routes>
-          <Route path="/login" element={<LoginView onLoggedIn={setUser} />} />
-          <Route path="/signup" element={<SignupView />} />
+          <Route path="/login" element={
+            <LoginView
+              AUTH_BASE={AUTH_BASE}
+              onLoggedIn={setUser}
+              onAfterLogin={() => {
+                fetchMe().then(fetchMovies);
+              }}
+            />
+          }/>
+          <Route path="/signup" element={<SignupView AUTH_BASE={AUTH_BASE} />} />
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       ) : (
@@ -593,16 +201,24 @@ const App = () => {
           <Route
             path="/"
             element={
-              <MoviesMain
+              <MainView
                 movies={loading ? [] : filtered}
-                onQuery={setQuery}
+                isLoading={loading}
                 query={query}
+                onQuery={setQuery}
+                onLogout={handleLogout}
               />
             }
           />
           <Route
             path="/movies/:id"
-            element={<MovieView movies={movies} />}
+            element={
+              <MovieView
+                movies={movies}
+                user={user}
+                onToggleFavorite={toggleFavorite}
+              />
+            }
           />
           <Route
             path="/profile"
@@ -610,23 +226,20 @@ const App = () => {
               <ProfileView
                 user={user}
                 movies={movies}
-                refreshUser={refreshUser}
-                // onRemoveFavorite / onUpdateUser / onDeleteUser
-                // can be passed once you expose those API endpoints
+                onUserChange={setUser}
+                onLogout={handleLogout}
               />
             }
           />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       )}
-      <footer className="text-center text-muted small py-4">
-        myFlix • MERN
-      </footer>
+
+      <footer className="text-center text-muted small py-4">myFlix • MERN</footer>
     </BrowserRouter>
   );
 };
 
-/** Root */
-const container = document.querySelector("#root");
-const root = createRoot(container);
+// Root
+const root = createRoot(document.getElementById("root"));
 root.render(<App />);
