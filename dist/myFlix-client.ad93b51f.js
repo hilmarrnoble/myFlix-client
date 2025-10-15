@@ -722,26 +722,31 @@ $parcel$ReactRefreshHelpers$ca65.prelude(module);
 
 try {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "api", ()=>api);
 var _jsxDevRuntime = require("react/jsx-dev-runtime");
 var _react = require("react");
 var _reactDefault = parcelHelpers.interopDefault(_react);
 var _client = require("react-dom/client");
-var _axios = require("axios");
-var _axiosDefault = parcelHelpers.interopDefault(_axios);
+var _reactRouterDom = require("react-router-dom");
 var _propTypes = require("prop-types");
 var _propTypesDefault = parcelHelpers.interopDefault(_propTypes);
-var _reactRouterDom = require("react-router-dom");
+var _axios = require("axios");
+var _axiosDefault = parcelHelpers.interopDefault(_axios);
 var _bootstrapMinCss = require("bootstrap/dist/css/bootstrap.min.css");
-var _indexScss = require("./index.scss"); // keep your styling import (scss or css as in your project)
-var _s = $RefreshSig$(), _s1 = $RefreshSig$(), _s2 = $RefreshSig$(), _s3 = $RefreshSig$(), _s4 = $RefreshSig$();
-// Hotfix: if any accidental `sole.error(...)` slipped in, alias it to console so it won't crash
-const sole = {
-    error: ()=>{}
-};
+var _indexScss = require("./index.scss");
 /** =======================
- *  Config
- *  ======================= */ // Server base (includes /api because your server mounts routes under /api/*)
-const API_BASE = "https://Hilmarrnoble-movie-api.herokuapp.com/api";
+ *  Components (imported)
+ *  ======================= */ var _loginViewJsx = require("./components/login-view/login-view.jsx");
+var _signupViewJsx = require("./components/signup-view/signup-view.jsx");
+var _mainViewJsx = require("./components/main-view/main-view.jsx");
+var _movieViewJsx = require("./components/movie-view/movie-view.jsx");
+var _s = $RefreshSig$();
+/** =======================
+ *  API config
+ *  ======================= */ // Change this if your API is hosted elsewhere (e.g., Heroku)
+const API_BASE = window._API_BASE || "http://localhost:5000/api"; // e.g., "https://your-heroku-app.herokuapp.com/api"
+const AUTH_BASE = API_BASE.replace(/\/api$/, "") + "/auth";
 const api = (0, _axiosDefault.default).create({
     baseURL: API_BASE
 });
@@ -753,67 +758,65 @@ api.interceptors.request.use((config)=>{
 /** =======================
  *  UI: NavBar
  *  ======================= */ const NavBar = ({ isAuthed, onLogout, username })=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("nav", {
-        className: "navbar navbar-expand-lg navbar-dark bg-dark",
+        className: "navbar navbar-expand-lg navbar-dark bg-dark shadow-sm",
         children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
             className: "container",
             children: [
                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Link), {
-                    className: "navbar-brand",
+                    className: "navbar-brand fw-bold",
                     to: "/",
                     children: "myFlix"
                 }, void 0, false, {
                     fileName: "src/index.jsx",
-                    lineNumber: 42,
+                    lineNumber: 38,
+                    columnNumber: 7
+                }, undefined),
+                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
+                    className: "navbar-toggler",
+                    type: "button",
+                    "data-bs-toggle": "collapse",
+                    "data-bs-target": "#nav",
+                    children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
+                        className: "navbar-toggler-icon"
+                    }, void 0, false, {
+                        fileName: "src/index.jsx",
+                        lineNumber: 40,
+                        columnNumber: 9
+                    }, undefined)
+                }, void 0, false, {
+                    fileName: "src/index.jsx",
+                    lineNumber: 39,
                     columnNumber: 7
                 }, undefined),
                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                    id: "nav",
                     className: "collapse navbar-collapse show",
                     children: [
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("ul", {
-                            className: "navbar-nav me-auto mb-2 mb-lg-0",
-                            children: isAuthed && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxDevRuntime.Fragment), {
-                                children: [
-                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("li", {
-                                        className: "nav-item",
-                                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Link), {
-                                            className: "nav-link",
-                                            to: "/",
-                                            children: "Movies"
-                                        }, void 0, false, {
-                                            fileName: "src/index.jsx",
-                                            lineNumber: 50,
-                                            columnNumber: 17
-                                        }, undefined)
-                                    }, void 0, false, {
-                                        fileName: "src/index.jsx",
-                                        lineNumber: 49,
-                                        columnNumber: 15
-                                    }, undefined),
-                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("li", {
-                                        className: "nav-item",
-                                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Link), {
-                                            className: "nav-link",
-                                            to: "/profile",
-                                            children: "Profile"
-                                        }, void 0, false, {
-                                            fileName: "src/index.jsx",
-                                            lineNumber: 55,
-                                            columnNumber: 17
-                                        }, undefined)
-                                    }, void 0, false, {
-                                        fileName: "src/index.jsx",
-                                        lineNumber: 54,
-                                        columnNumber: 15
-                                    }, undefined)
-                                ]
-                            }, void 0, true)
+                            className: "navbar-nav me-auto",
+                            children: isAuthed && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("li", {
+                                className: "nav-item",
+                                children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Link), {
+                                    className: "nav-link",
+                                    to: "/",
+                                    children: "Movies"
+                                }, void 0, false, {
+                                    fileName: "src/index.jsx",
+                                    lineNumber: 46,
+                                    columnNumber: 15
+                                }, undefined)
+                            }, void 0, false, {
+                                fileName: "src/index.jsx",
+                                lineNumber: 45,
+                                columnNumber: 13
+                            }, undefined)
                         }, void 0, false, {
                             fileName: "src/index.jsx",
-                            lineNumber: 46,
+                            lineNumber: 43,
                             columnNumber: 9
                         }, undefined),
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("ul", {
-                            className: "navbar-nav ms-auto",
+                            className: "navbar-nav ms-auto align-items-center",
                             children: !isAuthed ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxDevRuntime.Fragment), {
                                 children: [
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("li", {
@@ -824,28 +827,28 @@ api.interceptors.request.use((config)=>{
                                             children: "Log in"
                                         }, void 0, false, {
                                             fileName: "src/index.jsx",
-                                            lineNumber: 66,
+                                            lineNumber: 54,
                                             columnNumber: 17
                                         }, undefined)
                                     }, void 0, false, {
                                         fileName: "src/index.jsx",
-                                        lineNumber: 65,
+                                        lineNumber: 53,
                                         columnNumber: 15
                                     }, undefined),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("li", {
-                                        className: "nav-item",
+                                        className: "nav-item ms-1",
                                         children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Link), {
-                                            className: "nav-link",
+                                            className: "btn btn-primary btn-sm",
                                             to: "/signup",
                                             children: "Sign up"
                                         }, void 0, false, {
                                             fileName: "src/index.jsx",
-                                            lineNumber: 71,
+                                            lineNumber: 57,
                                             columnNumber: 17
                                         }, undefined)
                                     }, void 0, false, {
                                         fileName: "src/index.jsx",
-                                        lineNumber: 70,
+                                        lineNumber: 56,
                                         columnNumber: 15
                                     }, undefined)
                                 ]
@@ -861,12 +864,12 @@ api.interceptors.request.use((config)=>{
                                             ]
                                         }, void 0, true, {
                                             fileName: "src/index.jsx",
-                                            lineNumber: 79,
+                                            lineNumber: 63,
                                             columnNumber: 17
                                         }, undefined)
                                     }, void 0, false, {
                                         fileName: "src/index.jsx",
-                                        lineNumber: 78,
+                                        lineNumber: 62,
                                         columnNumber: 15
                                     }, undefined),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("li", {
@@ -877,36 +880,36 @@ api.interceptors.request.use((config)=>{
                                             children: "Log out"
                                         }, void 0, false, {
                                             fileName: "src/index.jsx",
-                                            lineNumber: 82,
+                                            lineNumber: 66,
                                             columnNumber: 17
                                         }, undefined)
                                     }, void 0, false, {
                                         fileName: "src/index.jsx",
-                                        lineNumber: 81,
+                                        lineNumber: 65,
                                         columnNumber: 15
                                     }, undefined)
                                 ]
                             }, void 0, true)
                         }, void 0, false, {
                             fileName: "src/index.jsx",
-                            lineNumber: 62,
+                            lineNumber: 50,
                             columnNumber: 9
                         }, undefined)
                     ]
                 }, void 0, true, {
                     fileName: "src/index.jsx",
-                    lineNumber: 45,
+                    lineNumber: 42,
                     columnNumber: 7
                 }, undefined)
             ]
         }, void 0, true, {
             fileName: "src/index.jsx",
-            lineNumber: 41,
+            lineNumber: 37,
             columnNumber: 5
         }, undefined)
     }, void 0, false, {
         fileName: "src/index.jsx",
-        lineNumber: 40,
+        lineNumber: 36,
         columnNumber: 3
     }, undefined);
 _c = NavBar;
@@ -916,957 +919,36 @@ NavBar.propTypes = {
     username: (0, _propTypesDefault.default).string
 };
 /** =======================
- *  Auth Views
- *  ======================= */ const LoginView = ({ onLoggedIn })=>{
-    _s();
-    const [email, setEmail] = (0, _react.useState)("");
-    const [password, setPassword] = (0, _react.useState)("");
-    const [loading, setLoading] = (0, _react.useState)(false);
-    const [err, setErr] = (0, _react.useState)("");
-    const nav = (0, _reactRouterDom.useNavigate)();
-    const submit = async (e)=>{
-        e.preventDefault();
-        setErr("");
-        setLoading(true);
-        try {
-            // 1) Login against /auth/login (base without /api)
-            const { data } = await (0, _axiosDefault.default).post(API_BASE.replace(/\/api$/, "") + "/auth/login", {
-                email,
-                password
-            });
-            const { token } = data;
-            localStorage.setItem("token", token);
-            // 2) Fetch current user
-            const me = await api.get("/users/me");
-            localStorage.setItem("user", JSON.stringify(me.data));
-            onLoggedIn(me.data);
-            nav("/");
-        } catch (e) {
-            const apiMsg = e.response?.data?.message || (typeof e.response?.data === "string" ? e.response.data : null) || e.message;
-            setErr(apiMsg || "Invalid credentials or server error.");
-            console.warn("Login error:", e.response?.status, e.response?.data || e);
-        } finally{
-            setLoading(false);
-        }
-    };
-    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-        className: "container py-4",
-        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-            className: "row justify-content-center",
-            children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                className: "col-sm-10 col-md-6 col-lg-4",
-                children: [
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
-                        className: "mb-3",
-                        children: "Log in"
-                    }, void 0, false, {
-                        fileName: "src/index.jsx",
-                        lineNumber: 143,
-                        columnNumber: 11
-                    }, undefined),
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("form", {
-                        onSubmit: submit,
-                        className: "card card-body",
-                        children: [
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                                className: "mb-3",
-                                children: [
-                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
-                                        className: "form-label",
-                                        children: "Email"
-                                    }, void 0, false, {
-                                        fileName: "src/index.jsx",
-                                        lineNumber: 146,
-                                        columnNumber: 15
-                                    }, undefined),
-                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
-                                        className: "form-control",
-                                        type: "email",
-                                        value: email,
-                                        onChange: (e)=>setEmail(e.target.value),
-                                        required: true
-                                    }, void 0, false, {
-                                        fileName: "src/index.jsx",
-                                        lineNumber: 147,
-                                        columnNumber: 15
-                                    }, undefined)
-                                ]
-                            }, void 0, true, {
-                                fileName: "src/index.jsx",
-                                lineNumber: 145,
-                                columnNumber: 13
-                            }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                                className: "mb-3",
-                                children: [
-                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
-                                        className: "form-label",
-                                        children: "Password"
-                                    }, void 0, false, {
-                                        fileName: "src/index.jsx",
-                                        lineNumber: 156,
-                                        columnNumber: 15
-                                    }, undefined),
-                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
-                                        type: "password",
-                                        className: "form-control",
-                                        value: password,
-                                        onChange: (e)=>setPassword(e.target.value),
-                                        required: true
-                                    }, void 0, false, {
-                                        fileName: "src/index.jsx",
-                                        lineNumber: 157,
-                                        columnNumber: 15
-                                    }, undefined)
-                                ]
-                            }, void 0, true, {
-                                fileName: "src/index.jsx",
-                                lineNumber: 155,
-                                columnNumber: 13
-                            }, undefined),
-                            err && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                                className: "alert alert-danger",
-                                children: err
-                            }, void 0, false, {
-                                fileName: "src/index.jsx",
-                                lineNumber: 165,
-                                columnNumber: 21
-                            }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
-                                className: "btn btn-primary",
-                                disabled: loading,
-                                children: loading ? "Logging in..." : "Log in"
-                            }, void 0, false, {
-                                fileName: "src/index.jsx",
-                                lineNumber: 166,
-                                columnNumber: 13
-                            }, undefined)
-                        ]
-                    }, void 0, true, {
-                        fileName: "src/index.jsx",
-                        lineNumber: 144,
-                        columnNumber: 11
-                    }, undefined)
-                ]
-            }, void 0, true, {
-                fileName: "src/index.jsx",
-                lineNumber: 142,
-                columnNumber: 9
-            }, undefined)
-        }, void 0, false, {
-            fileName: "src/index.jsx",
-            lineNumber: 141,
-            columnNumber: 7
-        }, undefined)
-    }, void 0, false, {
-        fileName: "src/index.jsx",
-        lineNumber: 140,
-        columnNumber: 5
-    }, undefined);
-};
-_s(LoginView, "2xXwS4f0monA1db5iiuWSBe/cUI=", false, function() {
-    return [
-        (0, _reactRouterDom.useNavigate)
-    ];
-});
-_c1 = LoginView;
-LoginView.propTypes = {
-    onLoggedIn: (0, _propTypesDefault.default).func.isRequired
-};
-const SignupView = ()=>{
-    _s1();
-    const [form, setForm] = (0, _react.useState)({
-        name: "",
-        email: "",
-        password: "",
-        birthday: ""
-    });
-    const [ok, setOk] = (0, _react.useState)("");
-    const [err, setErr] = (0, _react.useState)("");
-    const submit = async (e)=>{
-        e.preventDefault();
-        setErr("");
-        setOk("");
-        try {
-            // POST /auth/register (base without /api)
-            await (0, _axiosDefault.default).post(API_BASE.replace(/\/api$/, "") + "/auth/register", form);
-            setOk("Account created! You can now log in.");
-        } catch (e) {
-            const apiMsg = e.response?.data?.message || (Array.isArray(e.response?.data?.errors) ? e.response.data.errors.map((er)=>er.msg || er).join(", ") : null) || (typeof e.response?.data === "string" ? e.response.data : null) || e.message;
-            setErr(apiMsg || "Signup failed. Check your inputs.");
-            console.warn("Signup error:", e.response?.status, e.response?.data || e);
-        }
-    };
-    const inputs = [
-        [
-            "name",
-            "Name",
-            "text"
-        ],
-        [
-            "email",
-            "Email",
-            "email"
-        ],
-        [
-            "password",
-            "Password",
-            "password"
-        ],
-        [
-            "birthday",
-            "Birthday",
-            "date"
-        ]
-    ];
-    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-        className: "container py-4",
-        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-            className: "row justify-content-center",
-            children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                className: "col-sm-10 col-md-6 col-lg-5",
-                children: [
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
-                        className: "mb-3",
-                        children: "Sign up"
-                    }, void 0, false, {
-                        fileName: "src/index.jsx",
-                        lineNumber: 222,
-                        columnNumber: 11
-                    }, undefined),
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("form", {
-                        onSubmit: submit,
-                        className: "card card-body",
-                        children: [
-                            inputs.map(([key, label, type])=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                                    className: "mb-3",
-                                    children: [
-                                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
-                                            className: "form-label",
-                                            children: label
-                                        }, void 0, false, {
-                                            fileName: "src/index.jsx",
-                                            lineNumber: 226,
-                                            columnNumber: 17
-                                        }, undefined),
-                                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
-                                            type: type,
-                                            className: "form-control",
-                                            value: form[key],
-                                            onChange: (e)=>setForm((f)=>({
-                                                        ...f,
-                                                        [key]: e.target.value
-                                                    })),
-                                            required: key !== "birthday"
-                                        }, void 0, false, {
-                                            fileName: "src/index.jsx",
-                                            lineNumber: 227,
-                                            columnNumber: 17
-                                        }, undefined)
-                                    ]
-                                }, key, true, {
-                                    fileName: "src/index.jsx",
-                                    lineNumber: 225,
-                                    columnNumber: 15
-                                }, undefined)),
-                            ok && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                                className: "alert alert-success",
-                                children: ok
-                            }, void 0, false, {
-                                fileName: "src/index.jsx",
-                                lineNumber: 236,
-                                columnNumber: 20
-                            }, undefined),
-                            err && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                                className: "alert alert-danger",
-                                children: err
-                            }, void 0, false, {
-                                fileName: "src/index.jsx",
-                                lineNumber: 237,
-                                columnNumber: 21
-                            }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
-                                className: "btn btn-success",
-                                children: "Create account"
-                            }, void 0, false, {
-                                fileName: "src/index.jsx",
-                                lineNumber: 238,
-                                columnNumber: 13
-                            }, undefined)
-                        ]
-                    }, void 0, true, {
-                        fileName: "src/index.jsx",
-                        lineNumber: 223,
-                        columnNumber: 11
-                    }, undefined)
-                ]
-            }, void 0, true, {
-                fileName: "src/index.jsx",
-                lineNumber: 221,
-                columnNumber: 9
-            }, undefined)
-        }, void 0, false, {
-            fileName: "src/index.jsx",
-            lineNumber: 220,
-            columnNumber: 7
-        }, undefined)
-    }, void 0, false, {
-        fileName: "src/index.jsx",
-        lineNumber: 219,
-        columnNumber: 5
-    }, undefined);
-};
-_s1(SignupView, "G8WTNMY1WoJ+M4KYFjVb9L01xso=");
-_c2 = SignupView;
-/** =======================
- *  Movies
- *  ======================= */ const MovieCard = ({ movie })=>{
-    const poster = movie.imageURL || "https://via.placeholder.com/300x450?text=No+Image";
-    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-        className: "col-sm-6 col-md-4 col-lg-3 d-flex",
-        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Link), {
-            to: `/movies/${movie._id}`,
-            className: "card mb-4 text-decoration-none flex-fill shadow-sm",
-            children: [
-                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
-                    src: poster,
-                    className: "card-img-top",
-                    alt: movie.title
-                }, void 0, false, {
-                    fileName: "src/index.jsx",
-                    lineNumber: 257,
-                    columnNumber: 9
-                }, undefined),
-                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                    className: "card-body",
-                    children: [
-                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h5", {
-                            className: "card-title",
-                            children: movie.title
-                        }, void 0, false, {
-                            fileName: "src/index.jsx",
-                            lineNumber: 259,
-                            columnNumber: 11
-                        }, undefined),
-                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
-                            className: "card-text small text-muted mb-0",
-                            children: movie.genre?.name
-                        }, void 0, false, {
-                            fileName: "src/index.jsx",
-                            lineNumber: 260,
-                            columnNumber: 11
-                        }, undefined)
-                    ]
-                }, void 0, true, {
-                    fileName: "src/index.jsx",
-                    lineNumber: 258,
-                    columnNumber: 9
-                }, undefined)
-            ]
-        }, void 0, true, {
-            fileName: "src/index.jsx",
-            lineNumber: 253,
-            columnNumber: 7
-        }, undefined)
-    }, void 0, false, {
-        fileName: "src/index.jsx",
-        lineNumber: 252,
-        columnNumber: 5
-    }, undefined);
-};
-_c3 = MovieCard;
-MovieCard.propTypes = {
-    movie: (0, _propTypesDefault.default).shape({
-        _id: (0, _propTypesDefault.default).string.isRequired,
-        title: (0, _propTypesDefault.default).string.isRequired,
-        description: (0, _propTypesDefault.default).string,
-        imageURL: (0, _propTypesDefault.default).string,
-        genre: (0, _propTypesDefault.default).shape({
-            name: (0, _propTypesDefault.default).string,
-            description: (0, _propTypesDefault.default).string
-        }),
-        director: (0, _propTypesDefault.default).shape({
-            name: (0, _propTypesDefault.default).string,
-            bio: (0, _propTypesDefault.default).string,
-            birthYear: (0, _propTypesDefault.default).number
-        }),
-        releaseYear: (0, _propTypesDefault.default).number
-    }).isRequired
-};
-const MovieView = ({ movies })=>{
-    _s2();
-    const { id } = (0, _reactRouterDom.useParams)();
-    const movie = movies.find((m)=>m._id === id);
-    if (!movie) return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-        className: "container py-4",
-        children: [
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                className: "alert alert-warning",
-                children: "Movie not found."
-            }, void 0, false, {
-                fileName: "src/index.jsx",
-                lineNumber: 294,
-                columnNumber: 9
-            }, undefined),
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Link), {
-                to: "/",
-                className: "btn btn-outline-secondary",
-                children: "Back"
-            }, void 0, false, {
-                fileName: "src/index.jsx",
-                lineNumber: 295,
-                columnNumber: 9
-            }, undefined)
-        ]
-    }, void 0, true, {
-        fileName: "src/index.jsx",
-        lineNumber: 293,
-        columnNumber: 7
-    }, undefined);
-    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-        className: "container py-4",
-        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-            className: "row g-4",
-            children: [
-                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                    className: "col-md-4",
-                    children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
-                        src: movie.imageURL || "https://via.placeholder.com/500x750?text=No+Image",
-                        alt: movie.title,
-                        className: "img-fluid rounded shadow-sm"
-                    }, void 0, false, {
-                        fileName: "src/index.jsx",
-                        lineNumber: 305,
-                        columnNumber: 11
-                    }, undefined)
-                }, void 0, false, {
-                    fileName: "src/index.jsx",
-                    lineNumber: 304,
-                    columnNumber: 9
-                }, undefined),
-                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                    className: "col-md-8",
-                    children: [
-                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
-                            className: "mb-3",
-                            children: movie.title
-                        }, void 0, false, {
-                            fileName: "src/index.jsx",
-                            lineNumber: 312,
-                            columnNumber: 11
-                        }, undefined),
-                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
-                            children: movie.description
-                        }, void 0, false, {
-                            fileName: "src/index.jsx",
-                            lineNumber: 313,
-                            columnNumber: 11
-                        }, undefined),
-                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                            className: "mb-2",
-                            children: [
-                                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
-                                    className: "badge text-bg-primary me-2",
-                                    children: movie.genre?.name || "Genre"
-                                }, void 0, false, {
-                                    fileName: "src/index.jsx",
-                                    lineNumber: 315,
-                                    columnNumber: 13
-                                }, undefined),
-                                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
-                                    className: "badge text-bg-secondary",
-                                    children: movie.director?.name || "Director"
-                                }, void 0, false, {
-                                    fileName: "src/index.jsx",
-                                    lineNumber: 318,
-                                    columnNumber: 13
-                                }, undefined)
-                            ]
-                        }, void 0, true, {
-                            fileName: "src/index.jsx",
-                            lineNumber: 314,
-                            columnNumber: 11
-                        }, undefined),
-                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Link), {
-                            to: "/",
-                            className: "btn btn-outline-secondary",
-                            children: "Back"
-                        }, void 0, false, {
-                            fileName: "src/index.jsx",
-                            lineNumber: 323,
-                            columnNumber: 11
-                        }, undefined)
-                    ]
-                }, void 0, true, {
-                    fileName: "src/index.jsx",
-                    lineNumber: 311,
-                    columnNumber: 9
-                }, undefined)
-            ]
-        }, void 0, true, {
-            fileName: "src/index.jsx",
-            lineNumber: 303,
-            columnNumber: 7
-        }, undefined)
-    }, void 0, false, {
-        fileName: "src/index.jsx",
-        lineNumber: 302,
-        columnNumber: 5
-    }, undefined);
-};
-_s2(MovieView, "yQgCIz/jJfqV1l9s2yoba81MT5A=", false, function() {
-    return [
-        (0, _reactRouterDom.useParams)
-    ];
-});
-_c4 = MovieView;
-MovieView.propTypes = {
-    movies: (0, _propTypesDefault.default).arrayOf(MovieCard.propTypes.movie).isRequired
-};
-const MoviesMain = ({ movies, onQuery, query })=>{
-    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-        className: "container py-4",
-        children: [
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                className: "d-flex align-items-center justify-content-between mb-3",
-                children: [
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h1", {
-                        className: "h3 mb-0",
-                        children: "Movies"
-                    }, void 0, false, {
-                        fileName: "src/index.jsx",
-                        lineNumber: 339,
-                        columnNumber: 9
-                    }, undefined),
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
-                        className: "form-control w-auto",
-                        style: {
-                            minWidth: 260
-                        },
-                        placeholder: "Search by title or genre\u2026",
-                        value: query,
-                        onChange: (e)=>onQuery(e.target.value)
-                    }, void 0, false, {
-                        fileName: "src/index.jsx",
-                        lineNumber: 340,
-                        columnNumber: 9
-                    }, undefined)
-                ]
-            }, void 0, true, {
-                fileName: "src/index.jsx",
-                lineNumber: 338,
-                columnNumber: 7
-            }, undefined),
-            movies.length === 0 ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                className: "text-muted",
-                children: "Loading movies\u2026"
-            }, void 0, false, {
-                fileName: "src/index.jsx",
-                lineNumber: 349,
-                columnNumber: 9
-            }, undefined) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                className: "row",
-                children: movies.map((m)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(MovieCard, {
-                        movie: m
-                    }, m._id, false, {
-                        fileName: "src/index.jsx",
-                        lineNumber: 353,
-                        columnNumber: 13
-                    }, undefined))
-            }, void 0, false, {
-                fileName: "src/index.jsx",
-                lineNumber: 351,
-                columnNumber: 9
-            }, undefined)
-        ]
-    }, void 0, true, {
-        fileName: "src/index.jsx",
-        lineNumber: 337,
-        columnNumber: 5
-    }, undefined);
-};
-_c5 = MoviesMain;
-MoviesMain.propTypes = {
-    movies: (0, _propTypesDefault.default).arrayOf(MovieCard.propTypes.movie).isRequired,
-    onQuery: (0, _propTypesDefault.default).func.isRequired,
-    query: (0, _propTypesDefault.default).string.isRequired
-};
-/** =======================
- *  Profile
- *  ======================= */ const ProfileView = ({ user, movies, refreshUser = ()=>{}, onRemoveFavorite = ()=>{}, onUpdateUser = ()=>{}, onDeleteUser = ()=>{} })=>{
-    _s3();
-    const favIds = new Set(user?.favoriteMovies || []);
-    const favorites = movies.filter((m)=>favIds.has(m._id));
-    const [form, setForm] = (0, _react.useState)({
-        Username: user?.username || "",
-        Email: user?.email || "",
-        Birthday: user?.birthday?.slice?.(0, 10) || "",
-        Password: ""
-    });
-    const [ok, setOk] = (0, _react.useState)("");
-    const [err, setErr] = (0, _react.useState)("");
-    const save = async (e)=>{
-        e.preventDefault();
-        setOk("");
-        setErr("");
-        try {
-            await onUpdateUser(form);
-            setOk("Profile updated.");
-            await refreshUser();
-        } catch (e) {
-            const apiMsg = e?.response?.data?.message || (typeof e?.response?.data === "string" ? e.response.data : null) || e.message;
-            setErr(apiMsg || "Update failed.");
-        }
-    };
-    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-        className: "container py-4",
-        children: [
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
-                className: "mb-3",
-                children: "Profile"
-            }, void 0, false, {
-                fileName: "src/index.jsx",
-                lineNumber: 408,
-                columnNumber: 7
-            }, undefined),
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                className: "row g-4",
-                children: [
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                        className: "col-lg-5",
-                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                            className: "card",
-                            children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                                className: "card-body",
-                                children: [
-                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h5", {
-                                        children: "Details"
-                                    }, void 0, false, {
-                                        fileName: "src/index.jsx",
-                                        lineNumber: 413,
-                                        columnNumber: 15
-                                    }, undefined),
-                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("form", {
-                                        onSubmit: save,
-                                        children: [
-                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                                                className: "mb-2",
-                                                children: [
-                                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
-                                                        className: "form-label",
-                                                        children: "Username"
-                                                    }, void 0, false, {
-                                                        fileName: "src/index.jsx",
-                                                        lineNumber: 416,
-                                                        columnNumber: 19
-                                                    }, undefined),
-                                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
-                                                        className: "form-control",
-                                                        value: form.Username,
-                                                        onChange: (e)=>setForm((f)=>({
-                                                                    ...f,
-                                                                    Username: e.target.value
-                                                                }))
-                                                    }, void 0, false, {
-                                                        fileName: "src/index.jsx",
-                                                        lineNumber: 417,
-                                                        columnNumber: 19
-                                                    }, undefined)
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "src/index.jsx",
-                                                lineNumber: 415,
-                                                columnNumber: 17
-                                            }, undefined),
-                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                                                className: "mb-2",
-                                                children: [
-                                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
-                                                        className: "form-label",
-                                                        children: "Email"
-                                                    }, void 0, false, {
-                                                        fileName: "src/index.jsx",
-                                                        lineNumber: 426,
-                                                        columnNumber: 19
-                                                    }, undefined),
-                                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
-                                                        type: "email",
-                                                        className: "form-control",
-                                                        value: form.Email,
-                                                        onChange: (e)=>setForm((f)=>({
-                                                                    ...f,
-                                                                    Email: e.target.value
-                                                                }))
-                                                    }, void 0, false, {
-                                                        fileName: "src/index.jsx",
-                                                        lineNumber: 427,
-                                                        columnNumber: 19
-                                                    }, undefined)
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "src/index.jsx",
-                                                lineNumber: 425,
-                                                columnNumber: 17
-                                            }, undefined),
-                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                                                className: "mb-2",
-                                                children: [
-                                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
-                                                        className: "form-label",
-                                                        children: "Birthday"
-                                                    }, void 0, false, {
-                                                        fileName: "src/index.jsx",
-                                                        lineNumber: 437,
-                                                        columnNumber: 19
-                                                    }, undefined),
-                                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
-                                                        type: "date",
-                                                        className: "form-control",
-                                                        value: form.Birthday,
-                                                        onChange: (e)=>setForm((f)=>({
-                                                                    ...f,
-                                                                    Birthday: e.target.value
-                                                                }))
-                                                    }, void 0, false, {
-                                                        fileName: "src/index.jsx",
-                                                        lineNumber: 438,
-                                                        columnNumber: 19
-                                                    }, undefined)
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "src/index.jsx",
-                                                lineNumber: 436,
-                                                columnNumber: 17
-                                            }, undefined),
-                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                                                className: "mb-2",
-                                                children: [
-                                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
-                                                        className: "form-label",
-                                                        children: "New Password (optional)"
-                                                    }, void 0, false, {
-                                                        fileName: "src/index.jsx",
-                                                        lineNumber: 448,
-                                                        columnNumber: 19
-                                                    }, undefined),
-                                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
-                                                        type: "password",
-                                                        className: "form-control",
-                                                        value: form.Password,
-                                                        onChange: (e)=>setForm((f)=>({
-                                                                    ...f,
-                                                                    Password: e.target.value
-                                                                }))
-                                                    }, void 0, false, {
-                                                        fileName: "src/index.jsx",
-                                                        lineNumber: 449,
-                                                        columnNumber: 19
-                                                    }, undefined)
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "src/index.jsx",
-                                                lineNumber: 447,
-                                                columnNumber: 17
-                                            }, undefined),
-                                            ok && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                                                className: "alert alert-success py-1 my-2",
-                                                children: ok
-                                            }, void 0, false, {
-                                                fileName: "src/index.jsx",
-                                                lineNumber: 458,
-                                                columnNumber: 24
-                                            }, undefined),
-                                            err && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                                                className: "alert alert-danger py-1 my-2",
-                                                children: err
-                                            }, void 0, false, {
-                                                fileName: "src/index.jsx",
-                                                lineNumber: 459,
-                                                columnNumber: 25
-                                            }, undefined),
-                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
-                                                className: "btn btn-primary me-2",
-                                                type: "submit",
-                                                children: "Save"
-                                            }, void 0, false, {
-                                                fileName: "src/index.jsx",
-                                                lineNumber: 460,
-                                                columnNumber: 17
-                                            }, undefined),
-                                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
-                                                type: "button",
-                                                className: "btn btn-outline-danger",
-                                                onClick: onDeleteUser,
-                                                children: "Delete account"
-                                            }, void 0, false, {
-                                                fileName: "src/index.jsx",
-                                                lineNumber: 461,
-                                                columnNumber: 17
-                                            }, undefined)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "src/index.jsx",
-                                        lineNumber: 414,
-                                        columnNumber: 15
-                                    }, undefined)
-                                ]
-                            }, void 0, true, {
-                                fileName: "src/index.jsx",
-                                lineNumber: 412,
-                                columnNumber: 13
-                            }, undefined)
-                        }, void 0, false, {
-                            fileName: "src/index.jsx",
-                            lineNumber: 411,
-                            columnNumber: 11
-                        }, undefined)
-                    }, void 0, false, {
-                        fileName: "src/index.jsx",
-                        lineNumber: 410,
-                        columnNumber: 9
-                    }, undefined),
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                        className: "col-lg-7",
-                        children: [
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h5", {
-                                className: "mb-3",
-                                children: "Favorite Movies"
-                            }, void 0, false, {
-                                fileName: "src/index.jsx",
-                                lineNumber: 473,
-                                columnNumber: 11
-                            }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                                className: "row",
-                                children: favorites.length === 0 ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                                    className: "text-muted",
-                                    children: "No favorites yet."
-                                }, void 0, false, {
-                                    fileName: "src/index.jsx",
-                                    lineNumber: 476,
-                                    columnNumber: 15
-                                }, undefined) : favorites.map((m)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                                        className: "col-sm-6 col-md-4 d-flex",
-                                        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                                            className: "card mb-3 flex-fill",
-                                            children: [
-                                                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
-                                                    src: m.imageURL || "https://via.placeholder.com/300x450?text=No+Image",
-                                                    className: "card-img-top",
-                                                    alt: m.title
-                                                }, void 0, false, {
-                                                    fileName: "src/index.jsx",
-                                                    lineNumber: 481,
-                                                    columnNumber: 21
-                                                }, undefined),
-                                                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                                                    className: "card-body",
-                                                    children: [
-                                                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h6", {
-                                                            className: "card-title",
-                                                            children: m.title
-                                                        }, void 0, false, {
-                                                            fileName: "src/index.jsx",
-                                                            lineNumber: 487,
-                                                            columnNumber: 23
-                                                        }, undefined),
-                                                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
-                                                            className: "btn btn-sm btn-outline-danger",
-                                                            onClick: ()=>onRemoveFavorite(m._id),
-                                                            children: "Remove"
-                                                        }, void 0, false, {
-                                                            fileName: "src/index.jsx",
-                                                            lineNumber: 488,
-                                                            columnNumber: 23
-                                                        }, undefined)
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "src/index.jsx",
-                                                    lineNumber: 486,
-                                                    columnNumber: 21
-                                                }, undefined)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "src/index.jsx",
-                                            lineNumber: 480,
-                                            columnNumber: 19
-                                        }, undefined)
-                                    }, m._id, false, {
-                                        fileName: "src/index.jsx",
-                                        lineNumber: 479,
-                                        columnNumber: 17
-                                    }, undefined))
-                            }, void 0, false, {
-                                fileName: "src/index.jsx",
-                                lineNumber: 474,
-                                columnNumber: 11
-                            }, undefined)
-                        ]
-                    }, void 0, true, {
-                        fileName: "src/index.jsx",
-                        lineNumber: 472,
-                        columnNumber: 9
-                    }, undefined)
-                ]
-            }, void 0, true, {
-                fileName: "src/index.jsx",
-                lineNumber: 409,
-                columnNumber: 7
-            }, undefined)
-        ]
-    }, void 0, true, {
-        fileName: "src/index.jsx",
-        lineNumber: 407,
-        columnNumber: 5
-    }, undefined);
-};
-_s3(ProfileView, "XkNCIz2+LQ1UFtNviQ9SaKAM9VA=");
-_c6 = ProfileView;
-ProfileView.propTypes = {
-    user: (0, _propTypesDefault.default).shape({
-        name: (0, _propTypesDefault.default).string,
-        username: (0, _propTypesDefault.default).string,
-        email: (0, _propTypesDefault.default).string,
-        birthday: (0, _propTypesDefault.default).string,
-        favoriteMovies: (0, _propTypesDefault.default).arrayOf((0, _propTypesDefault.default).string)
-    }),
-    movies: (0, _propTypesDefault.default).arrayOf(MovieCard.propTypes.movie).isRequired,
-    refreshUser: (0, _propTypesDefault.default).func,
-    onRemoveFavorite: (0, _propTypesDefault.default).func,
-    onUpdateUser: (0, _propTypesDefault.default).func,
-    onDeleteUser: (0, _propTypesDefault.default).func
-};
-/** =======================
- *  App (routes + fetching)
+ *  App
  *  ======================= */ const App = ()=>{
-    _s4();
+    _s();
     const [user, setUser] = (0, _react.useState)(()=>{
-        const stored = localStorage.getItem("user");
-        return stored ? JSON.parse(stored) : null;
+        const raw = localStorage.getItem("user");
+        return raw ? JSON.parse(raw) : null;
     });
-    const [movies, setMovies] = (0, _react.useState)([]); // initial empty array per brief
+    const [movies, setMovies] = (0, _react.useState)([]);
     const [loading, setLoading] = (0, _react.useState)(false);
     const [query, setQuery] = (0, _react.useState)("");
     const isAuthed = !!localStorage.getItem("token");
-    const fetchMovies = async ()=>{
-        setLoading(true);
-        try {
-            const { data } = await api.get("/movies");
-            setMovies(data);
-        } catch (e) {
-            console.error("Error fetching movies:", e);
-        } finally{
-            setLoading(false);
-        }
-    };
-    const refreshUser = async ()=>{
+    const fetchMe = async ()=>{
         try {
             const { data } = await api.get("/users/me");
             localStorage.setItem("user", JSON.stringify(data));
             setUser(data);
         } catch (e) {
-            // not fatal for browsing
-            console.warn("refreshUser failed:", e?.response?.status, e?.message);
+            console.warn("fetchMe failed:", e?.response?.status, e?.message);
+        }
+    };
+    const fetchMovies = async ()=>{
+        setLoading(true);
+        try {
+            const { data } = await api.get("/movies");
+            setMovies(data || []);
+        } catch (e) {
+            console.error("Error fetching movies:", e?.response?.status, e?.message);
+            setMovies([]);
+        } finally{
+            setLoading(false);
         }
     };
     const handleLogout = ()=>{
@@ -1876,7 +958,10 @@ ProfileView.propTypes = {
         setMovies([]);
     };
     (0, _react.useEffect)(()=>{
-        if (isAuthed) fetchMovies();
+        if (isAuthed) {
+            fetchMe();
+            fetchMovies();
+        }
     }, [
         isAuthed
     ]);
@@ -1896,35 +981,41 @@ ProfileView.propTypes = {
                 username: user?.username || user?.email || user?.name || ""
             }, void 0, false, {
                 fileName: "src/index.jsx",
-                lineNumber: 580,
+                lineNumber: 154,
                 columnNumber: 7
             }, undefined),
             !isAuthed ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Routes), {
                 children: [
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
                         path: "/login",
-                        element: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(LoginView, {
-                            onLoggedIn: setUser
+                        element: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _loginViewJsx.LoginView), {
+                            AUTH_BASE: AUTH_BASE,
+                            onLoggedIn: setUser,
+                            onAfterLogin: ()=>{
+                                fetchMe().then(fetchMovies);
+                            }
                         }, void 0, false, {
                             fileName: "src/index.jsx",
-                            lineNumber: 587,
-                            columnNumber: 41
+                            lineNumber: 163,
+                            columnNumber: 13
                         }, void 0)
                     }, void 0, false, {
                         fileName: "src/index.jsx",
-                        lineNumber: 587,
+                        lineNumber: 162,
                         columnNumber: 11
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
                         path: "/signup",
-                        element: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(SignupView, {}, void 0, false, {
+                        element: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _signupViewJsx.SignupView), {
+                            AUTH_BASE: AUTH_BASE
+                        }, void 0, false, {
                             fileName: "src/index.jsx",
-                            lineNumber: 588,
+                            lineNumber: 171,
                             columnNumber: 42
                         }, void 0)
                     }, void 0, false, {
                         fileName: "src/index.jsx",
-                        lineNumber: 588,
+                        lineNumber: 171,
                         columnNumber: 11
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
@@ -1934,65 +1025,51 @@ ProfileView.propTypes = {
                             replace: true
                         }, void 0, false, {
                             fileName: "src/index.jsx",
-                            lineNumber: 589,
+                            lineNumber: 172,
                             columnNumber: 36
                         }, void 0)
                     }, void 0, false, {
                         fileName: "src/index.jsx",
-                        lineNumber: 589,
+                        lineNumber: 172,
                         columnNumber: 11
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "src/index.jsx",
-                lineNumber: 586,
+                lineNumber: 161,
                 columnNumber: 9
             }, undefined) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Routes), {
                 children: [
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
                         path: "/",
-                        element: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(MoviesMain, {
+                        element: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _mainViewJsx.MainView), {
                             movies: loading ? [] : filtered,
+                            isLoading: loading,
+                            query: query,
                             onQuery: setQuery,
-                            query: query
+                            onLogout: handleLogout
                         }, void 0, false, {
                             fileName: "src/index.jsx",
-                            lineNumber: 596,
+                            lineNumber: 179,
                             columnNumber: 15
                         }, void 0)
                     }, void 0, false, {
                         fileName: "src/index.jsx",
-                        lineNumber: 593,
+                        lineNumber: 176,
                         columnNumber: 11
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
                         path: "/movies/:id",
-                        element: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(MovieView, {
+                        element: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _movieViewJsx.MovieView), {
                             movies: movies
                         }, void 0, false, {
                             fileName: "src/index.jsx",
-                            lineNumber: 605,
-                            columnNumber: 22
+                            lineNumber: 188,
+                            columnNumber: 46
                         }, void 0)
                     }, void 0, false, {
                         fileName: "src/index.jsx",
-                        lineNumber: 603,
-                        columnNumber: 11
-                    }, undefined),
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
-                        path: "/profile",
-                        element: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(ProfileView, {
-                            user: user,
-                            movies: movies,
-                            refreshUser: refreshUser
-                        }, void 0, false, {
-                            fileName: "src/index.jsx",
-                            lineNumber: 610,
-                            columnNumber: 15
-                        }, void 0)
-                    }, void 0, false, {
-                        fileName: "src/index.jsx",
-                        lineNumber: 607,
+                        lineNumber: 188,
                         columnNumber: 11
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
@@ -2002,18 +1079,18 @@ ProfileView.propTypes = {
                             replace: true
                         }, void 0, false, {
                             fileName: "src/index.jsx",
-                            lineNumber: 619,
+                            lineNumber: 189,
                             columnNumber: 36
                         }, void 0)
                     }, void 0, false, {
                         fileName: "src/index.jsx",
-                        lineNumber: 619,
+                        lineNumber: 189,
                         columnNumber: 11
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "src/index.jsx",
-                lineNumber: 592,
+                lineNumber: 175,
                 columnNumber: 9
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("footer", {
@@ -2021,41 +1098,35 @@ ProfileView.propTypes = {
                 children: "myFlix \u2022 MERN"
             }, void 0, false, {
                 fileName: "src/index.jsx",
-                lineNumber: 622,
+                lineNumber: 193,
                 columnNumber: 7
             }, undefined)
         ]
     }, void 0, true, {
         fileName: "src/index.jsx",
-        lineNumber: 579,
+        lineNumber: 153,
         columnNumber: 5
     }, undefined);
 };
-_s4(App, "hqbug9v8uHElSBAsSqujg04cwNQ=");
-_c7 = App;
-/** Root */ const container = document.querySelector("#root");
-const root = (0, _client.createRoot)(container);
+_s(App, "7mqNTYjv74xQ7+8Emz/j25D7voc=");
+_c1 = App;
+// Root
+const root = (0, _client.createRoot)(document.getElementById("root"));
 root.render(/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(App, {}, void 0, false, {
     fileName: "src/index.jsx",
-    lineNumber: 632,
+    lineNumber: 200,
     columnNumber: 13
 }, undefined));
-var _c, _c1, _c2, _c3, _c4, _c5, _c6, _c7;
+var _c, _c1;
 $RefreshReg$(_c, "NavBar");
-$RefreshReg$(_c1, "LoginView");
-$RefreshReg$(_c2, "SignupView");
-$RefreshReg$(_c3, "MovieCard");
-$RefreshReg$(_c4, "MovieView");
-$RefreshReg$(_c5, "MoviesMain");
-$RefreshReg$(_c6, "ProfileView");
-$RefreshReg$(_c7, "App");
+$RefreshReg$(_c1, "App");
 
   $parcel$ReactRefreshHelpers$ca65.postlude(module);
 } finally {
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","react-dom/client":"hrvwu","axios":"kooH4","prop-types":"GNqOQ","react-router-dom":"61z4w","bootstrap/dist/css/bootstrap.min.css":"i5LP7","./index.scss":"lJZlQ","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"dVPUn":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","react-dom/client":"hrvwu","axios":"kooH4","prop-types":"GNqOQ","react-router-dom":"61z4w","./index.scss":"lJZlQ","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","./components/login-view/login-view.jsx":"8ru9P","./components/signup-view/signup-view.jsx":"nAl3Z","./components/main-view/main-view.jsx":"etjHZ","./components/movie-view/movie-view.jsx":"dkfGy","bootstrap/dist/css/bootstrap.min.css":"i5LP7"}],"dVPUn":[function(require,module,exports,__globalThis) {
 'use strict';
 module.exports = require("ee51401569654d91");
 
@@ -24345,7 +23416,7 @@ module.exports = checkPropTypes;
 
 },{"24ba1e58d167a82c":"ggXkd","898bc82f39d83f7c":"cnEYJ"}],"61z4w":[function(require,module,exports,__globalThis) {
 /**
- * React Router DOM v6.26.2
+ * React Router DOM v6.30.1
  *
  * Copyright (c) Remix Software Inc.
  *
@@ -24424,7 +23495,6 @@ parcelHelpers.export(exports, "createHashRouter", ()=>createHashRouter);
 parcelHelpers.export(exports, "createSearchParams", ()=>createSearchParams);
 parcelHelpers.export(exports, "unstable_HistoryRouter", ()=>HistoryRouter);
 parcelHelpers.export(exports, "unstable_usePrompt", ()=>usePrompt);
-parcelHelpers.export(exports, "unstable_useViewTransitionState", ()=>useViewTransitionState);
 parcelHelpers.export(exports, "useBeforeUnload", ()=>useBeforeUnload);
 parcelHelpers.export(exports, "useFetcher", ()=>useFetcher);
 parcelHelpers.export(exports, "useFetchers", ()=>useFetchers);
@@ -24432,6 +23502,7 @@ parcelHelpers.export(exports, "useFormAction", ()=>useFormAction);
 parcelHelpers.export(exports, "useLinkClickHandler", ()=>useLinkClickHandler);
 parcelHelpers.export(exports, "useSearchParams", ()=>useSearchParams);
 parcelHelpers.export(exports, "useSubmit", ()=>useSubmit);
+parcelHelpers.export(exports, "useViewTransitionState", ()=>useViewTransitionState);
 var _react = require("react");
 var _reactDom = require("react-dom");
 var _reactRouter = require("react-router");
@@ -24623,7 +23694,7 @@ const _excluded = [
     "target",
     "to",
     "preventScrollReset",
-    "unstable_viewTransition"
+    "viewTransition"
 ], _excluded2 = [
     "aria-current",
     "caseSensitive",
@@ -24631,7 +23702,7 @@ const _excluded = [
     "end",
     "style",
     "to",
-    "unstable_viewTransition",
+    "viewTransition",
     "children"
 ], _excluded3 = [
     "fetcherKey",
@@ -24644,7 +23715,7 @@ const _excluded = [
     "onSubmit",
     "relative",
     "preventScrollReset",
-    "unstable_viewTransition"
+    "viewTransition"
 ];
 // HEY YOU! DON'T TOUCH THIS VARIABLE!
 //
@@ -24673,8 +23744,8 @@ function createBrowserRouter(routes, opts) {
         hydrationData: (opts == null ? void 0 : opts.hydrationData) || parseHydrationData(),
         routes,
         mapRouteProperties: (0, _reactRouter.UNSAFE_mapRouteProperties),
-        unstable_dataStrategy: opts == null ? void 0 : opts.unstable_dataStrategy,
-        unstable_patchRoutesOnNavigation: opts == null ? void 0 : opts.unstable_patchRoutesOnNavigation,
+        dataStrategy: opts == null ? void 0 : opts.dataStrategy,
+        patchRoutesOnNavigation: opts == null ? void 0 : opts.patchRoutesOnNavigation,
         window: opts == null ? void 0 : opts.window
     }).initialize();
 }
@@ -24690,8 +23761,8 @@ function createHashRouter(routes, opts) {
         hydrationData: (opts == null ? void 0 : opts.hydrationData) || parseHydrationData(),
         routes,
         mapRouteProperties: (0, _reactRouter.UNSAFE_mapRouteProperties),
-        unstable_dataStrategy: opts == null ? void 0 : opts.unstable_dataStrategy,
-        unstable_patchRoutesOnNavigation: opts == null ? void 0 : opts.unstable_patchRoutesOnNavigation,
+        dataStrategy: opts == null ? void 0 : opts.dataStrategy,
+        patchRoutesOnNavigation: opts == null ? void 0 : opts.patchRoutesOnNavigation,
         window: opts == null ? void 0 : opts.window
     }).initialize();
 }
@@ -24821,11 +23892,11 @@ class Deferred {
         v7_startTransition
     ]);
     let setState = _react.useCallback((newState, _ref2)=>{
-        let { deletedFetchers, unstable_flushSync: flushSync, unstable_viewTransitionOpts: viewTransitionOpts } = _ref2;
-        deletedFetchers.forEach((key)=>fetcherData.current.delete(key));
+        let { deletedFetchers, flushSync: flushSync, viewTransitionOpts: viewTransitionOpts } = _ref2;
         newState.fetchers.forEach((fetcher, key)=>{
             if (fetcher.data !== undefined) fetcherData.current.set(key, fetcher.data);
         });
+        deletedFetchers.forEach((key)=>fetcherData.current.delete(key));
         let isViewTransitionUnavailable = router.window == null || router.window.document == null || typeof router.window.document.startViewTransition !== "function";
         // If this isn't a view transition or it's not available in this browser,
         // just update and be done with it
@@ -25002,6 +24073,10 @@ class Deferred {
         }), [
         router.future.v7_relativeSplatPath
     ]);
+    _react.useEffect(()=>(0, _reactRouter.UNSAFE_logV6DeprecationWarnings)(future, router.future), [
+        future,
+        router.future
+    ]);
     // The fragment and {null} here are important!  We need them to keep React 18's
     // useId happy when we are server-rendering since we may have a <script> here
     // containing the hydrated server-side staticContext (from StaticRouterProvider).
@@ -25059,6 +24134,9 @@ function DataRoutes(_ref3) {
         history,
         setState
     ]);
+    _react.useEffect(()=>(0, _reactRouter.UNSAFE_logV6DeprecationWarnings)(future), [
+        future
+    ]);
     return /*#__PURE__*/ _react.createElement((0, _reactRouter.Router), {
         basename: basename,
         children: children,
@@ -25094,6 +24172,9 @@ function DataRoutes(_ref3) {
         history,
         setState
     ]);
+    _react.useEffect(()=>(0, _reactRouter.UNSAFE_logV6DeprecationWarnings)(future), [
+        future
+    ]);
     return /*#__PURE__*/ _react.createElement((0, _reactRouter.Router), {
         basename: basename,
         children: children,
@@ -25125,6 +24206,9 @@ function DataRoutes(_ref3) {
         history,
         setState
     ]);
+    _react.useEffect(()=>(0, _reactRouter.UNSAFE_logV6DeprecationWarnings)(future), [
+        future
+    ]);
     return /*#__PURE__*/ _react.createElement((0, _reactRouter.Router), {
         basename: basename,
         children: children,
@@ -25140,7 +24224,7 @@ const ABSOLUTE_URL_REGEX = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
 /**
  * The public API for rendering a history-aware `<a>`.
  */ const Link = /*#__PURE__*/ _react.forwardRef(function LinkWithRef(_ref7, ref) {
-    let { onClick, relative, reloadDocument, replace, state, target, to, preventScrollReset, unstable_viewTransition } = _ref7, rest = _objectWithoutPropertiesLoose(_ref7, _excluded);
+    let { onClick, relative, reloadDocument, replace, state, target, to, preventScrollReset, viewTransition } = _ref7, rest = _objectWithoutPropertiesLoose(_ref7, _excluded);
     let { basename } = _react.useContext((0, _reactRouter.UNSAFE_NavigationContext));
     // Rendered into <a href> for absolute URLs
     let absoluteHref;
@@ -25171,7 +24255,7 @@ const ABSOLUTE_URL_REGEX = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
         target,
         preventScrollReset,
         relative,
-        unstable_viewTransition
+        viewTransition
     });
     function handleClick(event) {
         if (onClick) onClick(event);
@@ -25189,7 +24273,7 @@ Link.displayName = "Link";
 /**
  * A `<Link>` wrapper that knows if it's "active" or not.
  */ const NavLink = /*#__PURE__*/ _react.forwardRef(function NavLinkWithRef(_ref8, ref) {
-    let { "aria-current": ariaCurrentProp = "page", caseSensitive = false, className: classNameProp = "", end = false, style: styleProp, to, unstable_viewTransition, children } = _ref8, rest = _objectWithoutPropertiesLoose(_ref8, _excluded2);
+    let { "aria-current": ariaCurrentProp = "page", caseSensitive = false, className: classNameProp = "", end = false, style: styleProp, to, viewTransition, children } = _ref8, rest = _objectWithoutPropertiesLoose(_ref8, _excluded2);
     let path = (0, _reactRouter.useResolvedPath)(to, {
         relative: rest.relative
     });
@@ -25198,7 +24282,7 @@ Link.displayName = "Link";
     let { navigator, basename } = _react.useContext((0, _reactRouter.UNSAFE_NavigationContext));
     let isTransitioning = routerState != null && // Conditional usage is OK here because the usage of a data router is static
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    useViewTransitionState(path) && unstable_viewTransition === true;
+    useViewTransitionState(path) && viewTransition === true;
     let toPathname = navigator.encodeLocation ? navigator.encodeLocation(path).pathname : path.pathname;
     let locationPathname = location.pathname;
     let nextLocationPathname = routerState && routerState.navigation && routerState.navigation.location ? routerState.navigation.location.pathname : null;
@@ -25242,7 +24326,7 @@ Link.displayName = "Link";
         ref: ref,
         style: style,
         to: to,
-        unstable_viewTransition: unstable_viewTransition
+        viewTransition: viewTransition
     }), typeof children === "function" ? children(renderProps) : children);
 });
 NavLink.displayName = "NavLink";
@@ -25252,7 +24336,7 @@ NavLink.displayName = "NavLink";
  * requests, allowing components to add nicer UX to the page as the form is
  * submitted and returns with data.
  */ const Form = /*#__PURE__*/ _react.forwardRef((_ref9, forwardedRef)=>{
-    let { fetcherKey, navigate, reloadDocument, replace, state, method = defaultMethod, action, onSubmit, relative, preventScrollReset, unstable_viewTransition } = _ref9, props = _objectWithoutPropertiesLoose(_ref9, _excluded3);
+    let { fetcherKey, navigate, reloadDocument, replace, state, method = defaultMethod, action, onSubmit, relative, preventScrollReset, viewTransition } = _ref9, props = _objectWithoutPropertiesLoose(_ref9, _excluded3);
     let submit = useSubmit();
     let formAction = useFormAction(action, {
         relative
@@ -25272,7 +24356,7 @@ NavLink.displayName = "NavLink";
             state,
             relative,
             preventScrollReset,
-            unstable_viewTransition
+            viewTransition
         });
     };
     return /*#__PURE__*/ _react.createElement("form", _extends({
@@ -25315,7 +24399,7 @@ var DataRouterStateHook;
 })(DataRouterStateHook || (DataRouterStateHook = {}));
 // Internal hooks
 function getDataRouterConsoleError(hookName) {
-    return hookName + " must be used within a data router.  See https://reactrouter.com/routers/picking-a-router.";
+    return hookName + " must be used within a data router.  See https://reactrouter.com/v6/routers/picking-a-router.";
 }
 function useDataRouterContext(hookName) {
     let ctx = _react.useContext((0, _reactRouter.UNSAFE_DataRouterContext));
@@ -25333,7 +24417,7 @@ function useDataRouterState(hookName) {
  * you need to create custom `<Link>` components with the same click behavior we
  * use in our exported `<Link>`.
  */ function useLinkClickHandler(to, _temp) {
-    let { target, replace: replaceProp, state, preventScrollReset, relative, unstable_viewTransition } = _temp === void 0 ? {} : _temp;
+    let { target, replace: replaceProp, state, preventScrollReset, relative, viewTransition } = _temp === void 0 ? {} : _temp;
     let navigate = (0, _reactRouter.useNavigate)();
     let location = (0, _reactRouter.useLocation)();
     let path = (0, _reactRouter.useResolvedPath)(to, {
@@ -25350,7 +24434,7 @@ function useDataRouterState(hookName) {
                 state,
                 preventScrollReset,
                 relative,
-                unstable_viewTransition
+                viewTransition
             });
         }
     }, [
@@ -25363,7 +24447,7 @@ function useDataRouterState(hookName) {
         to,
         preventScrollReset,
         relative,
-        unstable_viewTransition
+        viewTransition
     ]);
 }
 /**
@@ -25418,7 +24502,7 @@ let getUniqueFetcherId = ()=>"__" + String(++fetcherId) + "__";
                 body,
                 formMethod: options.method || method,
                 formEncType: options.encType || encType,
-                unstable_flushSync: options.unstable_flushSync
+                flushSync: options.flushSync
             });
         } else router.navigate(options.action || action, {
             preventScrollReset: options.preventScrollReset,
@@ -25429,8 +24513,8 @@ let getUniqueFetcherId = ()=>"__" + String(++fetcherId) + "__";
             replace: options.replace,
             state: options.state,
             fromRouteId: currentRouteId,
-            unstable_flushSync: options.unstable_flushSync,
-            unstable_viewTransition: options.unstable_viewTransition
+            flushSync: options.flushSync,
+            viewTransition: options.viewTransition
         });
     }, [
         router,
@@ -25463,9 +24547,13 @@ function useFormAction(action, _temp2) {
         // since it might not apply to our contextual route.  We add it back based
         // on match.route.index below
         let params = new URLSearchParams(path.search);
-        if (params.has("index") && params.get("index") === "") {
+        let indexValues = params.getAll("index");
+        let hasNakedIndexParam = indexValues.some((v)=>v === "");
+        if (hasNakedIndexParam) {
             params.delete("index");
-            path.search = params.toString() ? "?" + params.toString() : "";
+            indexValues.filter((v)=>v).forEach((v)=>params.append("index", v));
+            let qs = params.toString();
+            path.search = qs ? "?" + qs : "";
         }
     }
     if ((!action || action === ".") && match.route.index) path.search = path.search ? path.search.replace(/^\?/, "?index&") : "?index";
@@ -25754,7 +24842,7 @@ let savedScrollPositions = {};
  */ function useViewTransitionState(to, opts) {
     if (opts === void 0) opts = {};
     let vtContext = _react.useContext(ViewTransitionContext);
-    !(vtContext != null) && (0, _router.UNSAFE_invariant)(false, "`unstable_useViewTransitionState` must be used within `react-router-dom`'s `RouterProvider`.  Did you accidentally import `RouterProvider` from `react-router`?");
+    !(vtContext != null) && (0, _router.UNSAFE_invariant)(false, "`useViewTransitionState` must be used within `react-router-dom`'s `RouterProvider`.  Did you accidentally import `RouterProvider` from `react-router`?");
     let { basename } = useDataRouterContext(DataRouterHook.useViewTransitionState);
     let path = (0, _reactRouter.useResolvedPath)(to, {
         relative: opts.relative
@@ -25766,11 +24854,11 @@ let savedScrollPositions = {};
     // destination.  This ensures that other PUSH navigations that reverse
     // an indicated transition apply.  I.e., on the list view you have:
     //
-    //   <NavLink to="/details/1" unstable_viewTransition>
+    //   <NavLink to="/details/1" viewTransition>
     //
     // If you click the breadcrumb back to the list view:
     //
-    //   <NavLink to="/list" unstable_viewTransition>
+    //   <NavLink to="/list" viewTransition>
     //
     // We should apply the transition because it's indicated as active going
     // from /list -> /details/1 and therefore should be active on the reverse
@@ -25780,7 +24868,7 @@ let savedScrollPositions = {};
 
 },{"react":"jMk1U","react-dom":"i4X7T","react-router":"4ChVy","@remix-run/router":"2GHDR","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"4ChVy":[function(require,module,exports,__globalThis) {
 /**
- * React Router v6.26.2
+ * React Router v6.30.1
  *
  * Copyright (c) Remix Software Inc.
  *
@@ -25817,6 +24905,7 @@ parcelHelpers.export(exports, "UNSAFE_DataRouterStateContext", ()=>DataRouterSta
 parcelHelpers.export(exports, "UNSAFE_LocationContext", ()=>LocationContext);
 parcelHelpers.export(exports, "UNSAFE_NavigationContext", ()=>NavigationContext);
 parcelHelpers.export(exports, "UNSAFE_RouteContext", ()=>RouteContext);
+parcelHelpers.export(exports, "UNSAFE_logV6DeprecationWarnings", ()=>logV6DeprecationWarnings);
 parcelHelpers.export(exports, "UNSAFE_mapRouteProperties", ()=>mapRouteProperties);
 parcelHelpers.export(exports, "UNSAFE_useRouteId", ()=>useRouteId);
 parcelHelpers.export(exports, "UNSAFE_useRoutesImpl", ()=>useRoutesImpl);
@@ -25889,7 +24978,7 @@ RouteErrorContext.displayName = "RouteError";
  * Returns the full href for the given "to" value. This is useful for building
  * custom links that are also accessible and preserve right-click behavior.
  *
- * @see https://reactrouter.com/hooks/use-href
+ * @see https://reactrouter.com/v6/hooks/use-href
  */ function useHref(to, _temp) {
     let { relative } = _temp === void 0 ? {} : _temp;
     !useInRouterContext() && (0, _router.UNSAFE_invariant)(false, // router loaded. We can help them understand how to avoid that.
@@ -25916,7 +25005,7 @@ RouteErrorContext.displayName = "RouteError";
 /**
  * Returns true if this component is a descendant of a `<Router>`.
  *
- * @see https://reactrouter.com/hooks/use-in-router-context
+ * @see https://reactrouter.com/v6/hooks/use-in-router-context
  */ function useInRouterContext() {
     return _react.useContext(LocationContext) != null;
 }
@@ -25928,7 +25017,7 @@ RouteErrorContext.displayName = "RouteError";
  * "routing" in your app, and we'd like to know what your use case is. We may
  * be able to provide something higher-level to better suit your needs.
  *
- * @see https://reactrouter.com/hooks/use-location
+ * @see https://reactrouter.com/v6/hooks/use-location
  */ function useLocation() {
     !useInRouterContext() && (0, _router.UNSAFE_invariant)(false, // router loaded. We can help them understand how to avoid that.
     "useLocation() may be used only in the context of a <Router> component.");
@@ -25938,7 +25027,7 @@ RouteErrorContext.displayName = "RouteError";
  * Returns the current navigation action which describes how the router came to
  * the current location, either by a pop, push, or replace on the history stack.
  *
- * @see https://reactrouter.com/hooks/use-navigation-type
+ * @see https://reactrouter.com/v6/hooks/use-navigation-type
  */ function useNavigationType() {
     return _react.useContext(LocationContext).navigationType;
 }
@@ -25947,7 +25036,7 @@ RouteErrorContext.displayName = "RouteError";
  * This is useful for components that need to know "active" state, e.g.
  * `<NavLink>`.
  *
- * @see https://reactrouter.com/hooks/use-match
+ * @see https://reactrouter.com/v6/hooks/use-match
  */ function useMatch(pattern) {
     !useInRouterContext() && (0, _router.UNSAFE_invariant)(false, // router loaded. We can help them understand how to avoid that.
     "useMatch() may be used only in the context of a <Router> component.");
@@ -25972,7 +25061,7 @@ function useIsomorphicLayoutEffect(cb) {
  * Returns an imperative method for changing the location. Used by `<Link>`s, but
  * may also be used by other elements to change the location.
  *
- * @see https://reactrouter.com/hooks/use-navigate
+ * @see https://reactrouter.com/v6/hooks/use-navigate
  */ function useNavigate() {
     let { isDataRoute } = _react.useContext(RouteContext);
     // Conditional usage is OK here because the usage of a data router is static
@@ -26026,7 +25115,7 @@ const OutletContext = /*#__PURE__*/ _react.createContext(null);
 /**
  * Returns the context (if provided) for the child route at this level of the route
  * hierarchy.
- * @see https://reactrouter.com/hooks/use-outlet-context
+ * @see https://reactrouter.com/v6/hooks/use-outlet-context
  */ function useOutletContext() {
     return _react.useContext(OutletContext);
 }
@@ -26034,7 +25123,7 @@ const OutletContext = /*#__PURE__*/ _react.createContext(null);
  * Returns the element for the child route at this level of the route
  * hierarchy. Used internally by `<Outlet>` to render child routes.
  *
- * @see https://reactrouter.com/hooks/use-outlet
+ * @see https://reactrouter.com/v6/hooks/use-outlet
  */ function useOutlet(context) {
     let outlet = _react.useContext(RouteContext).outlet;
     if (outlet) return /*#__PURE__*/ _react.createElement(OutletContext.Provider, {
@@ -26046,7 +25135,7 @@ const OutletContext = /*#__PURE__*/ _react.createContext(null);
  * Returns an object of key/value pairs of the dynamic params from the current
  * URL that were matched by the route path.
  *
- * @see https://reactrouter.com/hooks/use-params
+ * @see https://reactrouter.com/v6/hooks/use-params
  */ function useParams() {
     let { matches } = _react.useContext(RouteContext);
     let routeMatch = matches[matches.length - 1];
@@ -26055,7 +25144,7 @@ const OutletContext = /*#__PURE__*/ _react.createContext(null);
 /**
  * Resolves the pathname of the given `to` value against the current location.
  *
- * @see https://reactrouter.com/hooks/use-resolved-path
+ * @see https://reactrouter.com/v6/hooks/use-resolved-path
  */ function useResolvedPath(to, _temp2) {
     let { relative } = _temp2 === void 0 ? {} : _temp2;
     let { future } = _react.useContext(NavigationContext);
@@ -26075,7 +25164,7 @@ const OutletContext = /*#__PURE__*/ _react.createContext(null);
  * elements in the tree must render an `<Outlet>` to render their child route's
  * element.
  *
- * @see https://reactrouter.com/hooks/use-routes
+ * @see https://reactrouter.com/v6/hooks/use-routes
  */ function useRoutes(routes, locationArg) {
     return useRoutesImpl(routes, locationArg);
 }
@@ -26400,7 +25489,7 @@ var DataRouterStateHook = /*#__PURE__*/ function(DataRouterStateHook) {
     return DataRouterStateHook;
 }(DataRouterStateHook || {});
 function getDataRouterConsoleError(hookName) {
-    return hookName + " must be used within a data router.  See https://reactrouter.com/routers/picking-a-router.";
+    return hookName + " must be used within a data router.  See https://reactrouter.com/v6/routers/picking-a-router.";
 }
 function useDataRouterContext(hookName) {
     let ctx = _react.useContext(DataRouterContext);
@@ -26591,11 +25680,29 @@ let blockerId = 0;
     ]);
     return navigate;
 }
-const alreadyWarned = {};
+const alreadyWarned$1 = {};
 function warningOnce(key, cond, message) {
-    if (!cond && !alreadyWarned[key]) {
-        alreadyWarned[key] = true;
+    if (!cond && !alreadyWarned$1[key]) {
+        alreadyWarned$1[key] = true;
         (0, _router.UNSAFE_warning)(false, message);
+    }
+}
+const alreadyWarned = {};
+function warnOnce(key, message) {
+    if (!alreadyWarned[message]) {
+        alreadyWarned[message] = true;
+        console.warn(message);
+    }
+}
+const logDeprecation = (flag, msg, link)=>warnOnce(flag, "\u26A0\uFE0F React Router Future Flag Warning: " + msg + ". " + ("You can use the `" + flag + "` future flag to opt-in early. ") + ("For more information, see " + link + "."));
+function logV6DeprecationWarnings(renderFuture, routerFuture) {
+    if ((renderFuture == null ? void 0 : renderFuture.v7_startTransition) === undefined) logDeprecation("v7_startTransition", "React Router will begin wrapping state updates in `React.startTransition` in v7", "https://reactrouter.com/v6/upgrading/future#v7_starttransition");
+    if ((renderFuture == null ? void 0 : renderFuture.v7_relativeSplatPath) === undefined && (!routerFuture || routerFuture.v7_relativeSplatPath === undefined)) logDeprecation("v7_relativeSplatPath", "Relative route resolution within Splat routes is changing in v7", "https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath");
+    if (routerFuture) {
+        if (routerFuture.v7_fetcherPersist === undefined) logDeprecation("v7_fetcherPersist", "The persistence behavior of fetchers is changing in v7", "https://reactrouter.com/v6/upgrading/future#v7_fetcherpersist");
+        if (routerFuture.v7_normalizeFormMethod === undefined) logDeprecation("v7_normalizeFormMethod", "Casing of `formMethod` fields is being normalized to uppercase in v7", "https://reactrouter.com/v6/upgrading/future#v7_normalizeformmethod");
+        if (routerFuture.v7_partialHydration === undefined) logDeprecation("v7_partialHydration", "`RouterProvider` hydration behavior is changing in v7", "https://reactrouter.com/v6/upgrading/future#v7_partialhydration");
+        if (routerFuture.v7_skipActionErrorRevalidation === undefined) logDeprecation("v7_skipActionErrorRevalidation", "The revalidation behavior after 4xx/5xx `action` responses is changing in v7", "https://reactrouter.com/v6/upgrading/future#v7_skipactionerrorrevalidation");
     }
 }
 /**
@@ -26673,6 +25780,10 @@ const startTransitionImpl = _react[START_TRANSITION];
         navigator,
         basename
     ]);
+    _react.useEffect(()=>logV6DeprecationWarnings(future, router.future), [
+        router,
+        future
+    ]);
     // The fragment and {null} here are important!  We need them to keep React 18's
     // useId happy when we are server-rendering since we may have a <script> here
     // containing the hydrated server-side staticContext (from StaticRouterProvider).
@@ -26704,7 +25815,7 @@ function DataRoutes(_ref2) {
 /**
  * A `<Router>` that stores all entries in memory.
  *
- * @see https://reactrouter.com/router-components/memory-router
+ * @see https://reactrouter.com/v6/router-components/memory-router
  */ function MemoryRouter(_ref3) {
     let { basename, children, initialEntries, initialIndex, future } = _ref3;
     let historyRef = _react.useRef();
@@ -26729,6 +25840,9 @@ function DataRoutes(_ref2) {
         history,
         setState
     ]);
+    _react.useEffect(()=>logV6DeprecationWarnings(future), [
+        future
+    ]);
     return /*#__PURE__*/ _react.createElement(Router, {
         basename: basename,
         children: children,
@@ -26745,7 +25859,7 @@ function DataRoutes(_ref2) {
  * able to use hooks. In functional components, we recommend you use the
  * `useNavigate` hook instead.
  *
- * @see https://reactrouter.com/components/navigate
+ * @see https://reactrouter.com/v6/components/navigate
  */ function Navigate(_ref4) {
     let { to, replace, state, relative } = _ref4;
     !useInRouterContext() && (0, _router.UNSAFE_invariant)(false, // the router loaded. We can help them understand how to avoid that.
@@ -26775,14 +25889,14 @@ function DataRoutes(_ref2) {
 /**
  * Renders the child route's element, if there is one.
  *
- * @see https://reactrouter.com/components/outlet
+ * @see https://reactrouter.com/v6/components/outlet
  */ function Outlet(props) {
     return useOutlet(props.context);
 }
 /**
  * Declares an element that should be rendered at a certain URL path.
  *
- * @see https://reactrouter.com/components/route
+ * @see https://reactrouter.com/v6/components/route
  */ function Route(_props) {
     (0, _router.UNSAFE_invariant)(false, "A <Route> is only ever to be used as the child of <Routes> element, never rendered directly. Please wrap your <Route> in a <Routes>.");
 }
@@ -26793,7 +25907,7 @@ function DataRoutes(_ref2) {
  * router that is more specific to your environment such as a `<BrowserRouter>`
  * in web browsers or a `<StaticRouter>` for server rendering.
  *
- * @see https://reactrouter.com/router-components/router
+ * @see https://reactrouter.com/v6/router-components/router
  */ function Router(_ref5) {
     let { basename: basenameProp = "/", children = null, location: locationProp, navigationType = (0, _router.Action).Pop, navigator, static: staticProp = false, future } = _ref5;
     !!useInRouterContext() && (0, _router.UNSAFE_invariant)(false, "You cannot render a <Router> inside another <Router>. You should never have more than one in your app.");
@@ -26850,7 +25964,7 @@ function DataRoutes(_ref2) {
  * A container for a nested tree of `<Route>` elements that renders the branch
  * that best matches the current location.
  *
- * @see https://reactrouter.com/components/routes
+ * @see https://reactrouter.com/v6/components/routes
  */ function Routes(_ref6) {
     let { children, location } = _ref6;
     return useRoutes(createRoutesFromChildren(children), location);
@@ -26963,7 +26077,7 @@ class AwaitErrorBoundary extends _react.Component {
  * either a `<Route>` element or an array of them. Used internally by
  * `<Routes>` to create a route config from its children.
  *
- * @see https://reactrouter.com/utils/create-routes-from-children
+ * @see https://reactrouter.com/v6/utils/create-routes-from-children
  */ function createRoutesFromChildren(children, parentPath) {
     if (parentPath === void 0) parentPath = [];
     let routes = [];
@@ -27050,14 +26164,14 @@ function createMemoryRouter(routes, opts) {
         hydrationData: opts == null ? void 0 : opts.hydrationData,
         routes,
         mapRouteProperties,
-        unstable_dataStrategy: opts == null ? void 0 : opts.unstable_dataStrategy,
-        unstable_patchRoutesOnNavigation: opts == null ? void 0 : opts.unstable_patchRoutesOnNavigation
+        dataStrategy: opts == null ? void 0 : opts.dataStrategy,
+        patchRoutesOnNavigation: opts == null ? void 0 : opts.patchRoutesOnNavigation
     }).initialize();
 }
 
 },{"react":"jMk1U","@remix-run/router":"2GHDR","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"2GHDR":[function(require,module,exports,__globalThis) {
 /**
- * @remix-run/router v1.19.2
+ * @remix-run/router v1.23.0
  *
  * Copyright (c) Remix Software Inc.
  *
@@ -27088,6 +26202,7 @@ parcelHelpers.export(exports, "createMemoryHistory", ()=>createMemoryHistory);
 parcelHelpers.export(exports, "createPath", ()=>createPath);
 parcelHelpers.export(exports, "createRouter", ()=>createRouter);
 parcelHelpers.export(exports, "createStaticHandler", ()=>createStaticHandler);
+parcelHelpers.export(exports, "data", ()=>data);
 parcelHelpers.export(exports, "defer", ()=>defer);
 parcelHelpers.export(exports, "generatePath", ()=>generatePath);
 parcelHelpers.export(exports, "getStaticContextFromError", ()=>getStaticContextFromError);
@@ -27107,7 +26222,6 @@ parcelHelpers.export(exports, "replace", ()=>replace);
 parcelHelpers.export(exports, "resolvePath", ()=>resolvePath);
 parcelHelpers.export(exports, "resolveTo", ()=>resolveTo);
 parcelHelpers.export(exports, "stripBasename", ()=>stripBasename);
-parcelHelpers.export(exports, "unstable_data", ()=>data);
 function _extends() {
     _extends = Object.assign ? Object.assign.bind() : function(target) {
         for(var i = 1; i < arguments.length; i++){
@@ -27546,7 +26660,7 @@ function convertRoutesToDataRoutes(routes, mapRouteProperties, parentPath, manif
 /**
  * Matches the given routes to a location and returns the match data.
  *
- * @see https://reactrouter.com/utils/match-routes
+ * @see https://reactrouter.com/v6/utils/match-routes
  */ function matchRoutes(routes, locationArg, basename) {
     if (basename === void 0) basename = "/";
     return matchRoutesImpl(routes, locationArg, basename, false);
@@ -27747,7 +26861,7 @@ function matchRouteBranch(branch, pathname, allowPartial) {
 /**
  * Returns a path with params interpolated.
  *
- * @see https://reactrouter.com/utils/generate-path
+ * @see https://reactrouter.com/v6/utils/generate-path
  */ function generatePath(originalPath, params) {
     if (params === void 0) params = {};
     let path = originalPath;
@@ -27783,7 +26897,7 @@ function matchRouteBranch(branch, pathname, allowPartial) {
  * Performs pattern matching on a URL pathname and returns information about
  * the match.
  *
- * @see https://reactrouter.com/utils/match-path
+ * @see https://reactrouter.com/v6/utils/match-path
  */ function matchPath(pattern, pathname) {
     if (typeof pattern === "string") pattern = {
         path: pattern,
@@ -27877,7 +26991,7 @@ function decodePath(value) {
 /**
  * Returns a resolved path object relative to the given pathname.
  *
- * @see https://reactrouter.com/utils/resolve-path
+ * @see https://reactrouter.com/v6/utils/resolve-path
  */ function resolvePath(to, fromPathname) {
     if (fromPathname === void 0) fromPathname = "/";
     let { pathname: toPathname, search = "", hash = "" } = typeof to === "string" ? parsePath(to) : to;
@@ -28007,6 +27121,9 @@ function getResolveToMatches(matches, v7_relativeSplatPath) {
 /**
  * This is a shortcut for creating `application/json` responses. Converts `data`
  * to JSON and sets the `Content-Type` header.
+ *
+ * @deprecated The `json` method is deprecated in favor of returning raw objects.
+ * This method will be removed in v7.
  */ const json = function json(data, init) {
     if (init === void 0) init = {};
     let responseInit = typeof init === "number" ? {
@@ -28161,7 +27278,10 @@ function unwrapTrackedPromise(value) {
     if (value._error) throw value._error;
     return value._data;
 }
-const defer = function defer(data, init) {
+/**
+ * @deprecated The `defer` method is deprecated in favor of returning raw
+ * objects. This method will be removed in v7.
+ */ const defer = function defer(data, init) {
     if (init === void 0) init = {};
     let responseInit = typeof init === "number" ? {
         status: init
@@ -28308,8 +27428,8 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
     let dataRoutes = convertRoutesToDataRoutes(init.routes, mapRouteProperties, undefined, manifest);
     let inFlightDataRoutes;
     let basename = init.basename || "/";
-    let dataStrategyImpl = init.unstable_dataStrategy || defaultDataStrategy;
-    let patchRoutesOnNavigationImpl = init.unstable_patchRoutesOnNavigation;
+    let dataStrategyImpl = init.dataStrategy || defaultDataStrategy;
+    let patchRoutesOnNavigationImpl = init.patchRoutesOnNavigation;
     // Config driven behavior flags
     let future = _extends({
         v7_fetcherPersist: false,
@@ -28323,10 +27443,6 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
     let unlistenHistory = null;
     // Externally-provided functions to call on all state changes
     let subscribers = new Set();
-    // FIFO queue of previously discovered routes to prevent re-calling on
-    // subsequent navigations to the same path
-    let discoveredRoutesMaxSize = 1000;
-    let discoveredRoutes = new Set();
     // Externally-provided object to hold scroll restoration locations during routing
     let savedScrollPositions = null;
     // Externally-provided function to get scroll restoration keys
@@ -28341,6 +27457,7 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
     // SSR did the initial scroll restoration.
     let initialScrollRestored = init.hydrationData != null;
     let initialMatches = matchRoutes(dataRoutes, init.history.location, basename);
+    let initialMatchesIsFOW = false;
     let initialErrors = null;
     if (initialMatches == null && !patchRoutesOnNavigationImpl) {
         // If we do not match a user-provided-route, fall back to the root
@@ -28373,7 +27490,10 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
         // the initial matches so we can properly render `HydrateFallback`'s
         if (future.v7_partialHydration) {
             let fogOfWar = checkFogOfWar(null, dataRoutes, init.history.location.pathname);
-            if (fogOfWar.active && fogOfWar.matches) initialMatches = fogOfWar.matches;
+            if (fogOfWar.active && fogOfWar.matches) {
+                initialMatchesIsFOW = true;
+                initialMatches = fogOfWar.matches;
+            }
         }
     } else if (initialMatches.some((m)=>m.route.lazy)) // All initialMatches need to be loaded before we're ready.  If we have lazy
     // functions around still then we'll need to run them in initialize()
@@ -28386,19 +27506,11 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
         // were marked for explicit hydration
         let loaderData = init.hydrationData ? init.hydrationData.loaderData : null;
         let errors = init.hydrationData ? init.hydrationData.errors : null;
-        let isRouteInitialized = (m)=>{
-            // No loader, nothing to initialize
-            if (!m.route.loader) return true;
-            // Explicitly opting-in to running on hydration
-            if (typeof m.route.loader === "function" && m.route.loader.hydrate === true) return false;
-            // Otherwise, initialized if hydrated with data or an error
-            return loaderData && loaderData[m.route.id] !== undefined || errors && errors[m.route.id] !== undefined;
-        };
         // If errors exist, don't consider routes below the boundary
         if (errors) {
             let idx = initialMatches.findIndex((m)=>errors[m.route.id] !== undefined);
-            initialized = initialMatches.slice(0, idx + 1).every(isRouteInitialized);
-        } else initialized = initialMatches.every(isRouteInitialized);
+            initialized = initialMatches.slice(0, idx + 1).every((m)=>!shouldLoadRouteOnHydration(m.route, loaderData, errors));
+        } else initialized = initialMatches.every((m)=>!shouldLoadRouteOnHydration(m.route, loaderData, errors));
     } else // Without partial hydration - we're initialized if we were provided any
     // hydrationData - which is expected to be complete
     initialized = init.hydrationData != null;
@@ -28474,9 +27586,6 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
     // Store blocker functions in a separate Map outside of router state since
     // we don't need to update UI state if they change
     let blockerFunctions = new Map();
-    // Map of pending patchRoutesOnNavigation() promises (keyed by path/matches) so
-    // that we only kick them off once for a given combo
-    let pendingPatchRoutes = new Map();
     // Flag to ignore the next history update, so we can revert the URL change on
     // a POP navigation that was blocked by the user without touching router state
     let unblockBlockerHistoryUpdate = undefined;
@@ -28584,6 +27693,11 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
                 completedFetchers.push(key);
             }
         });
+        // Remove any lingering deleted fetchers that have already been removed
+        // from state.fetchers
+        deletedFetchers.forEach((key)=>{
+            if (!state.fetchers.has(key) && !fetchControllers.has(key)) deletedFetchersKeys.push(key);
+        });
         // Iterate over a local copy so that if flushSync is used and we end up
         // removing and adding a new subscriber due to the useCallback dependencies,
         // we don't get ourselves into a loop calling the new subscriber immediately
@@ -28591,14 +27705,16 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
             ...subscribers
         ].forEach((subscriber)=>subscriber(state, {
                 deletedFetchers: deletedFetchersKeys,
-                unstable_viewTransitionOpts: opts.viewTransitionOpts,
-                unstable_flushSync: opts.flushSync === true
+                viewTransitionOpts: opts.viewTransitionOpts,
+                flushSync: opts.flushSync === true
             }));
         // Remove idle fetchers from state since we only care about in-flight fetchers.
         if (future.v7_fetcherPersist) {
             completedFetchers.forEach((key)=>state.fetchers.delete(key));
             deletedFetchersKeys.forEach((key)=>deleteFetcher(key));
-        }
+        } else // We already called deleteFetcher() on these, can remove them from this
+        // Set now that we've handed the keys off to the data layer
+        deletedFetchersKeys.forEach((key)=>deletedFetchers.delete(key));
     }
     // Complete a navigation returning the state.navigation back to the IDLE_NAVIGATION
     // and setting state.[historyAction/location/matches] to the new route.
@@ -28724,7 +27840,7 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
         // action/loader this will be ignored and the redirect will be a PUSH
         historyAction = Action.Replace;
         let preventScrollReset = opts && "preventScrollReset" in opts ? opts.preventScrollReset === true : undefined;
-        let flushSync = (opts && opts.unstable_flushSync) === true;
+        let flushSync = (opts && opts.flushSync) === true;
         let blockerKey = shouldBlockNavigation({
             currentLocation,
             nextLocation,
@@ -28762,7 +27878,7 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
             pendingError: error,
             preventScrollReset,
             replace: opts && opts.replace,
-            enableViewTransition: opts && opts.unstable_viewTransition,
+            enableViewTransition: opts && opts.viewTransition,
             flushSync
         });
     }
@@ -28813,8 +27929,23 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
         pendingViewTransitionEnabled = (opts && opts.enableViewTransition) === true;
         let routesToUse = inFlightDataRoutes || dataRoutes;
         let loadingNavigation = opts && opts.overrideNavigation;
-        let matches = matchRoutes(routesToUse, location, basename);
+        let matches = opts != null && opts.initialHydration && state.matches && state.matches.length > 0 && !initialMatchesIsFOW ? // `matchRoutes()` has already been called if we're in here via `router.initialize()`
+        state.matches : matchRoutes(routesToUse, location, basename);
         let flushSync = (opts && opts.flushSync) === true;
+        // Short circuit if it's only a hash change and not a revalidation or
+        // mutation submission.
+        //
+        // Ignore on initial page loads because since the initial hydration will always
+        // be "same hash".  For example, on /page#hash and submit a <Form method="post">
+        // which will default to a navigation to /page
+        if (matches && state.initialized && !isRevalidationRequired && isHashChangeOnly(state.location, location) && !(opts && opts.submission && isMutationMethod(opts.submission.formMethod))) {
+            completeNavigation(location, {
+                matches
+            }, {
+                flushSync
+            });
+            return;
+        }
         let fogOfWar = checkFogOfWar(matches, routesToUse, location.pathname);
         if (fogOfWar.active && fogOfWar.matches) matches = fogOfWar.matches;
         // Short circuit with a 404 on the root error boundary if we match nothing
@@ -28826,20 +27957,6 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
                 errors: {
                     [route.id]: error
                 }
-            }, {
-                flushSync
-            });
-            return;
-        }
-        // Short circuit if it's only a hash change and not a revalidation or
-        // mutation submission.
-        //
-        // Ignore on initial page loads because since the initial load will always
-        // be "same hash".  For example, on /page#hash and submit a <Form method="post">
-        // which will default to a navigation to /page
-        if (state.initialized && !isRevalidationRequired && isHashChangeOnly(state.location, location) && !(opts && opts.submission && isMutationMethod(opts.submission.formMethod))) {
-            completeNavigation(location, {
-                matches
             }, {
                 flushSync
             });
@@ -28924,14 +28041,14 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
                 shortCircuited: true
             };
             else if (discoverResult.type === "error") {
-                let { boundaryId, error } = handleDiscoverRouteError(location.pathname, discoverResult);
+                let boundaryId = findNearestBoundary(discoverResult.partialMatches).route.id;
                 return {
                     matches: discoverResult.partialMatches,
                     pendingActionResult: [
                         boundaryId,
                         {
                             type: ResultType.error,
-                            error
+                            error: discoverResult.error
                         }
                     ]
                 };
@@ -29052,12 +28169,12 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
                 shortCircuited: true
             };
             else if (discoverResult.type === "error") {
-                let { boundaryId, error } = handleDiscoverRouteError(location.pathname, discoverResult);
+                let boundaryId = findNearestBoundary(discoverResult.partialMatches).route.id;
                 return {
                     matches: discoverResult.partialMatches,
                     loaderData: {},
                     errors: {
-                        [boundaryId]: error
+                        [boundaryId]: discoverResult.error
                     }
                 };
             } else if (!discoverResult.matches) {
@@ -29111,7 +28228,7 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
             });
         }
         revalidatingFetchers.forEach((rf)=>{
-            if (fetchControllers.has(rf.key)) abortFetcher(rf.key);
+            abortFetcher(rf.key);
             if (rf.controller) // Fetchers use an independent AbortController so that aborting a fetcher
             // (via deleteFetcher) does not abort the triggering navigation that
             // triggered the revalidation
@@ -29153,7 +28270,7 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
             };
         }
         // Process and commit output from loaders
-        let { loaderData, errors } = processLoaderData(state, matches, matchesToLoad, loaderResults, pendingActionResult, revalidatingFetchers, fetcherResults, activeDeferreds);
+        let { loaderData, errors } = processLoaderData(state, matches, loaderResults, pendingActionResult, revalidatingFetchers, fetcherResults, activeDeferreds);
         // Wire up subscribers to update loaderData as promises settle
         activeDeferreds.forEach((deferredData, routeId)=>{
             deferredData.subscribe((aborted)=>{
@@ -29163,16 +28280,8 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
                 if (aborted || deferredData.done) activeDeferreds.delete(routeId);
             });
         });
-        // During partial hydration, preserve SSR errors for routes that don't re-run
-        if (future.v7_partialHydration && initialHydration && state.errors) Object.entries(state.errors).filter((_ref2)=>{
-            let [id] = _ref2;
-            return !matchesToLoad.some((m)=>m.route.id === id);
-        }).forEach((_ref3)=>{
-            let [routeId, error] = _ref3;
-            errors = Object.assign(errors || {}, {
-                [routeId]: error
-            });
-        });
+        // Preserve SSR errors during partial hydration
+        if (future.v7_partialHydration && initialHydration && state.errors) errors = _extends({}, state.errors, errors);
         let updatedFetchers = markFetchRedirectsDone();
         let didAbortFetchLoads = abortStaleFetchLoads(pendingNavigationLoadId);
         let shouldUpdateFetchers = updatedFetchers || didAbortFetchLoads || revalidatingFetchers.length > 0;
@@ -29207,8 +28316,8 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
     // Trigger a fetcher load/submit for the given fetcher key
     function fetch(key, routeId, href, opts) {
         if (isServer) throw new Error("router.fetch() was called during the server render, but it shouldn't be. You are likely calling a useFetcher() method in the body of your component. Try moving it to a useEffect or a callback.");
-        if (fetchControllers.has(key)) abortFetcher(key);
-        let flushSync = (opts && opts.unstable_flushSync) === true;
+        abortFetcher(key);
+        let flushSync = (opts && opts.flushSync) === true;
         let routesToUse = inFlightDataRoutes || dataRoutes;
         let normalizedPath = normalizeTo(state.location, state.matches, basename, future.v7_prependBasename, href, future.v7_relativeSplatPath, routeId, opts == null ? void 0 : opts.relative);
         let matches = matchRoutes(routesToUse, normalizedPath, basename);
@@ -29230,9 +28339,9 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
             return;
         }
         let match = getTargetMatch(matches, path);
-        pendingPreventScrollReset = (opts && opts.preventScrollReset) === true;
+        let preventScrollReset = (opts && opts.preventScrollReset) === true;
         if (submission && isMutationMethod(submission.formMethod)) {
-            handleFetcherAction(key, routeId, path, match, matches, fogOfWar.active, flushSync, submission);
+            handleFetcherAction(key, routeId, path, match, matches, fogOfWar.active, flushSync, preventScrollReset, submission);
             return;
         }
         // Store off the match so we can call it's shouldRevalidate on subsequent
@@ -29241,11 +28350,11 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
             routeId,
             path
         });
-        handleFetcherLoader(key, routeId, path, match, matches, fogOfWar.active, flushSync, submission);
+        handleFetcherLoader(key, routeId, path, match, matches, fogOfWar.active, flushSync, preventScrollReset, submission);
     }
     // Call the action for the matched fetcher.submit(), and then handle redirects,
     // errors, and revalidation
-    async function handleFetcherAction(key, routeId, path, match, requestMatches, isFogOfWar, flushSync, submission) {
+    async function handleFetcherAction(key, routeId, path, match, requestMatches, isFogOfWar, flushSync, preventScrollReset, submission) {
         interruptActiveLoads();
         fetchLoadMatches.delete(key);
         function detectAndHandle405Error(m) {
@@ -29271,11 +28380,10 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
         let abortController = new AbortController();
         let fetchRequest = createClientSideRequest(init.history, path, abortController.signal, submission);
         if (isFogOfWar) {
-            let discoverResult = await discoverRoutes(requestMatches, path, fetchRequest.signal);
+            let discoverResult = await discoverRoutes(requestMatches, new URL(fetchRequest.url).pathname, fetchRequest.signal, key);
             if (discoverResult.type === "aborted") return;
             else if (discoverResult.type === "error") {
-                let { error } = handleDiscoverRouteError(path, discoverResult);
-                setFetcherError(key, routeId, error, {
+                setFetcherError(key, routeId, discoverResult.error, {
                     flushSync
                 });
                 return;
@@ -29327,7 +28435,8 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
                     fetchRedirectIds.add(key);
                     updateFetcherState(key, getLoadingFetcher(submission));
                     return startRedirectNavigation(fetchRequest, actionResult, false, {
-                        fetcherSubmission: submission
+                        fetcherSubmission: submission,
+                        preventScrollReset
                     });
                 }
             }
@@ -29363,7 +28472,7 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
             let existingFetcher = state.fetchers.get(staleKey);
             let revalidatingFetcher = getLoadingFetcher(undefined, existingFetcher ? existingFetcher.data : undefined);
             state.fetchers.set(staleKey, revalidatingFetcher);
-            if (fetchControllers.has(staleKey)) abortFetcher(staleKey);
+            abortFetcher(staleKey);
             if (rf.controller) fetchControllers.set(staleKey, rf.controller);
         });
         updateState({
@@ -29378,17 +28487,21 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
         fetchControllers.delete(key);
         revalidatingFetchers.forEach((r)=>fetchControllers.delete(r.key));
         let redirect = findRedirect(loaderResults);
-        if (redirect) return startRedirectNavigation(revalidationRequest, redirect.result, false);
+        if (redirect) return startRedirectNavigation(revalidationRequest, redirect.result, false, {
+            preventScrollReset
+        });
         redirect = findRedirect(fetcherResults);
         if (redirect) {
             // If this redirect came from a fetcher make sure we mark it in
             // fetchRedirectIds so it doesn't get revalidated on the next set of
             // loader executions
             fetchRedirectIds.add(redirect.key);
-            return startRedirectNavigation(revalidationRequest, redirect.result, false);
+            return startRedirectNavigation(revalidationRequest, redirect.result, false, {
+                preventScrollReset
+            });
         }
         // Process and commit output from loaders
-        let { loaderData, errors } = processLoaderData(state, matches, matchesToLoad, loaderResults, undefined, revalidatingFetchers, fetcherResults, activeDeferreds);
+        let { loaderData, errors } = processLoaderData(state, matches, loaderResults, undefined, revalidatingFetchers, fetcherResults, activeDeferreds);
         // Since we let revalidations complete even if the submitting fetcher was
         // deleted, only put it back to idle if it hasn't been deleted
         if (state.fetchers.has(key)) {
@@ -29421,7 +28534,7 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
         }
     }
     // Call the matched loader for fetcher.load(), handling redirects, errors, etc.
-    async function handleFetcherLoader(key, routeId, path, match, matches, isFogOfWar, flushSync, submission) {
+    async function handleFetcherLoader(key, routeId, path, match, matches, isFogOfWar, flushSync, preventScrollReset, submission) {
         let existingFetcher = state.fetchers.get(key);
         updateFetcherState(key, getLoadingFetcher(submission, existingFetcher ? existingFetcher.data : undefined), {
             flushSync
@@ -29429,11 +28542,10 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
         let abortController = new AbortController();
         let fetchRequest = createClientSideRequest(init.history, path, abortController.signal);
         if (isFogOfWar) {
-            let discoverResult = await discoverRoutes(matches, path, fetchRequest.signal);
+            let discoverResult = await discoverRoutes(matches, new URL(fetchRequest.url).pathname, fetchRequest.signal, key);
             if (discoverResult.type === "aborted") return;
             else if (discoverResult.type === "error") {
-                let { error } = handleDiscoverRouteError(path, discoverResult);
-                setFetcherError(key, routeId, error, {
+                setFetcherError(key, routeId, discoverResult.error, {
                     flushSync
                 });
                 return;
@@ -29480,7 +28592,9 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
                 return;
             } else {
                 fetchRedirectIds.add(key);
-                await startRedirectNavigation(fetchRequest, result, false);
+                await startRedirectNavigation(fetchRequest, result, false, {
+                    preventScrollReset
+                });
                 return;
             }
         }
@@ -29512,7 +28626,7 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
    * actually touch history until we've processed redirects, so we just use
    * the history action from the original navigation (PUSH or REPLACE).
    */ async function startRedirectNavigation(request, redirect, isNavigation, _temp2) {
-        let { submission, fetcherSubmission, replace } = _temp2 === void 0 ? {} : _temp2;
+        let { submission, fetcherSubmission, preventScrollReset, replace } = _temp2 === void 0 ? {} : _temp2;
         if (redirect.response.headers.has("X-Remix-Revalidate")) isRevalidationRequired = true;
         let location = redirect.response.headers.get("Location");
         invariant(location, "Expected a Location header on the redirect Response");
@@ -29553,7 +28667,7 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
                 formAction: location
             }),
             // Preserve these flags across redirects
-            preventScrollReset: pendingPreventScrollReset,
+            preventScrollReset: preventScrollReset || pendingPreventScrollReset,
             enableViewTransition: isNavigation ? pendingViewTransitionEnabled : undefined
         });
         else {
@@ -29565,7 +28679,7 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
                 // Send fetcher submissions through for shouldRevalidate
                 fetcherSubmission,
                 // Preserve these flags across redirects
-                preventScrollReset: pendingPreventScrollReset,
+                preventScrollReset: preventScrollReset || pendingPreventScrollReset,
                 enableViewTransition: isNavigation ? pendingViewTransitionEnabled : undefined
             });
         }
@@ -29639,10 +28753,8 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
         cancelledDeferredRoutes.push(...cancelActiveDeferreds());
         // Abort in-flight fetcher loads
         fetchLoadMatches.forEach((_, key)=>{
-            if (fetchControllers.has(key)) {
-                cancelledFetcherLoads.add(key);
-                abortFetcher(key);
-            }
+            if (fetchControllers.has(key)) cancelledFetcherLoads.add(key);
+            abortFetcher(key);
         });
     }
     function updateFetcherState(key, fetcher, opts) {
@@ -29668,12 +28780,10 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
         });
     }
     function getFetcher(key) {
-        if (future.v7_fetcherPersist) {
-            activeFetchers.set(key, (activeFetchers.get(key) || 0) + 1);
-            // If this fetcher was previously marked for deletion, unmark it since we
-            // have a new instance
-            if (deletedFetchers.has(key)) deletedFetchers.delete(key);
-        }
+        activeFetchers.set(key, (activeFetchers.get(key) || 0) + 1);
+        // If this fetcher was previously marked for deletion, unmark it since we
+        // have a new instance
+        if (deletedFetchers.has(key)) deletedFetchers.delete(key);
         return state.fetchers.get(key) || IDLE_FETCHER;
     }
     function deleteFetcher(key) {
@@ -29685,27 +28795,33 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
         fetchLoadMatches.delete(key);
         fetchReloadIds.delete(key);
         fetchRedirectIds.delete(key);
-        deletedFetchers.delete(key);
+        // If we opted into the flag we can clear this now since we're calling
+        // deleteFetcher() at the end of updateState() and we've already handed the
+        // deleted fetcher keys off to the data layer.
+        // If not, we're eagerly calling deleteFetcher() and we need to keep this
+        // Set populated until the next updateState call, and we'll clear
+        // `deletedFetchers` then
+        if (future.v7_fetcherPersist) deletedFetchers.delete(key);
         cancelledFetcherLoads.delete(key);
         state.fetchers.delete(key);
     }
     function deleteFetcherAndUpdateState(key) {
-        if (future.v7_fetcherPersist) {
-            let count = (activeFetchers.get(key) || 0) - 1;
-            if (count <= 0) {
-                activeFetchers.delete(key);
-                deletedFetchers.add(key);
-            } else activeFetchers.set(key, count);
-        } else deleteFetcher(key);
+        let count = (activeFetchers.get(key) || 0) - 1;
+        if (count <= 0) {
+            activeFetchers.delete(key);
+            deletedFetchers.add(key);
+            if (!future.v7_fetcherPersist) deleteFetcher(key);
+        } else activeFetchers.set(key, count);
         updateState({
             fetchers: new Map(state.fetchers)
         });
     }
     function abortFetcher(key) {
         let controller = fetchControllers.get(key);
-        invariant(controller, "Expected fetch controller: " + key);
-        controller.abort();
-        fetchControllers.delete(key);
+        if (controller) {
+            controller.abort();
+            fetchControllers.delete(key);
+        }
     }
     function markFetchersDone(keys) {
         for (let key of keys){
@@ -29764,8 +28880,8 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
             blockers
         });
     }
-    function shouldBlockNavigation(_ref4) {
-        let { currentLocation, nextLocation, historyAction } = _ref4;
+    function shouldBlockNavigation(_ref2) {
+        let { currentLocation, nextLocation, historyAction } = _ref2;
         if (blockerFunctions.size === 0) return;
         // We ony support a single active blocker at the moment since we don't have
         // any compelling use cases for multi-blocker yet
@@ -29796,16 +28912,6 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
             notFoundMatches: matches,
             route,
             error
-        };
-    }
-    function handleDiscoverRouteError(pathname, discoverResult) {
-        return {
-            boundaryId: findNearestBoundary(discoverResult.partialMatches).route.id,
-            error: getInternalRouterError(400, {
-                type: "route-discovery",
-                pathname,
-                message: discoverResult.error != null && "message" in discoverResult.error ? discoverResult.error : String(discoverResult.error)
-            })
         };
     }
     function cancelActiveDeferreds(predicate) {
@@ -29867,13 +28973,6 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
     }
     function checkFogOfWar(matches, routesToUse, pathname) {
         if (patchRoutesOnNavigationImpl) {
-            // Don't bother re-calling patchRouteOnMiss for a path we've already
-            // processed.  the last execution would have patched the route tree
-            // accordingly so `matches` here are already accurate.
-            if (discoveredRoutes.has(pathname)) return {
-                active: false,
-                matches
-            };
             if (!matches) {
                 let fogMatches = matchRoutesImpl(routesToUse, pathname, basename, true);
                 return {
@@ -29896,13 +28995,27 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
             matches: null
         };
     }
-    async function discoverRoutes(matches, pathname, signal) {
+    async function discoverRoutes(matches, pathname, signal, fetcherKey) {
+        if (!patchRoutesOnNavigationImpl) return {
+            type: "success",
+            matches
+        };
         let partialMatches = matches;
         while(true){
             let isNonHMR = inFlightDataRoutes == null;
             let routesToUse = inFlightDataRoutes || dataRoutes;
+            let localManifest = manifest;
             try {
-                await loadLazyRouteChildren(patchRoutesOnNavigationImpl, pathname, partialMatches, routesToUse, manifest, mapRouteProperties, pendingPatchRoutes, signal);
+                await patchRoutesOnNavigationImpl({
+                    signal,
+                    path: pathname,
+                    matches: partialMatches,
+                    fetcherKey,
+                    patch: (routeId, children)=>{
+                        if (signal.aborted) return;
+                        patchRoutesImpl(routeId, children, routesToUse, localManifest, mapRouteProperties);
+                    }
+                });
             } catch (e) {
                 return {
                     type: "error",
@@ -29916,7 +29029,7 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
                 // trigger a re-run of memoized `router.routes` dependencies.
                 // HMR will already update the identity and reflow when it lands
                 // `inFlightDataRoutes` in `completeNavigation`
-                if (isNonHMR) dataRoutes = [
+                if (isNonHMR && !signal.aborted) dataRoutes = [
                     ...dataRoutes
                 ];
             }
@@ -29924,31 +29037,18 @@ const TRANSITIONS_STORAGE_KEY = "remix-router-transitions";
                 type: "aborted"
             };
             let newMatches = matchRoutes(routesToUse, pathname, basename);
-            if (newMatches) {
-                addToFifoQueue(pathname, discoveredRoutes);
-                return {
-                    type: "success",
-                    matches: newMatches
-                };
-            }
+            if (newMatches) return {
+                type: "success",
+                matches: newMatches
+            };
             let newPartialMatches = matchRoutesImpl(routesToUse, pathname, basename, true);
             // Avoid loops if the second pass results in the same partial matches
-            if (!newPartialMatches || partialMatches.length === newPartialMatches.length && partialMatches.every((m, i)=>m.route.id === newPartialMatches[i].route.id)) {
-                addToFifoQueue(pathname, discoveredRoutes);
-                return {
-                    type: "success",
-                    matches: null
-                };
-            }
+            if (!newPartialMatches || partialMatches.length === newPartialMatches.length && partialMatches.every((m, i)=>m.route.id === newPartialMatches[i].route.id)) return {
+                type: "success",
+                matches: null
+            };
             partialMatches = newPartialMatches;
         }
-    }
-    function addToFifoQueue(path, queue) {
-        if (queue.size >= discoveredRoutesMaxSize) {
-            let first = queue.values().next().value;
-            queue.delete(first);
-        }
-        queue.add(path);
     }
     function _internalSetRoutes(newRoutes) {
         manifest = {};
@@ -30060,7 +29160,7 @@ function createStaticHandler(routes, opts) {
    *   where the client will handle the bubbling and we may need to return data
    *   for the handling route
    */ async function query(request, _temp3) {
-        let { requestContext, skipLoaderErrorBubbling, unstable_dataStrategy } = _temp3 === void 0 ? {} : _temp3;
+        let { requestContext, skipLoaderErrorBubbling, dataStrategy } = _temp3 === void 0 ? {} : _temp3;
         let url = new URL(request.url);
         let method = request.method;
         let location = createLocation("", createPath(url), null, "default");
@@ -30105,7 +29205,7 @@ function createStaticHandler(routes, opts) {
                 activeDeferreds: null
             };
         }
-        let result = await queryImpl(request, location, matches, requestContext, unstable_dataStrategy || null, skipLoaderErrorBubbling === true, null);
+        let result = await queryImpl(request, location, matches, requestContext, dataStrategy || null, skipLoaderErrorBubbling === true, null);
         if (isResponse(result)) return result;
         // When returning StaticHandlerContext, we patch back in the location here
         // since we need it for React Context.  But this helps keep our submit and
@@ -30141,7 +29241,7 @@ function createStaticHandler(routes, opts) {
    * - `opts.requestContext` is an optional server context that will be passed
    *    to actions/loaders in the `context` parameter
    */ async function queryRoute(request, _temp4) {
-        let { routeId, requestContext, unstable_dataStrategy } = _temp4 === void 0 ? {} : _temp4;
+        let { routeId, requestContext, dataStrategy } = _temp4 === void 0 ? {} : _temp4;
         let url = new URL(request.url);
         let method = request.method;
         let location = createLocation("", createPath(url), null, "default");
@@ -30162,7 +29262,7 @@ function createStaticHandler(routes, opts) {
         throw getInternalRouterError(404, {
             pathname: location.pathname
         });
-        let result = await queryImpl(request, location, matches, requestContext, unstable_dataStrategy || null, false, match);
+        let result = await queryImpl(request, location, matches, requestContext, dataStrategy || null, false, match);
         if (isResponse(result)) return result;
         let error = result.errors ? Object.values(result.errors)[0] : undefined;
         if (error !== undefined) // If we got back result.errors, that means the loader/action threw
@@ -30180,14 +29280,14 @@ function createStaticHandler(routes, opts) {
         }
         return undefined;
     }
-    async function queryImpl(request, location, matches, requestContext, unstable_dataStrategy, skipLoaderErrorBubbling, routeMatch) {
+    async function queryImpl(request, location, matches, requestContext, dataStrategy, skipLoaderErrorBubbling, routeMatch) {
         invariant(request.signal, "query()/queryRoute() requests must contain an AbortController signal");
         try {
             if (isMutationMethod(request.method.toLowerCase())) {
-                let result = await submit(request, matches, routeMatch || getTargetMatch(matches, location), requestContext, unstable_dataStrategy, skipLoaderErrorBubbling, routeMatch != null);
+                let result = await submit(request, matches, routeMatch || getTargetMatch(matches, location), requestContext, dataStrategy, skipLoaderErrorBubbling, routeMatch != null);
                 return result;
             }
-            let result = await loadRouteData(request, matches, requestContext, unstable_dataStrategy, skipLoaderErrorBubbling, routeMatch);
+            let result = await loadRouteData(request, matches, requestContext, dataStrategy, skipLoaderErrorBubbling, routeMatch);
             return isResponse(result) ? result : _extends({}, result, {
                 actionData: null,
                 actionHeaders: {}
@@ -30206,7 +29306,7 @@ function createStaticHandler(routes, opts) {
             throw e;
         }
     }
-    async function submit(request, matches, actionMatch, requestContext, unstable_dataStrategy, skipLoaderErrorBubbling, isRouteRequest) {
+    async function submit(request, matches, actionMatch, requestContext, dataStrategy, skipLoaderErrorBubbling, isRouteRequest) {
         let result;
         if (!actionMatch.route.action && !actionMatch.route.lazy) {
             let error = getInternalRouterError(405, {
@@ -30222,7 +29322,7 @@ function createStaticHandler(routes, opts) {
         } else {
             let results = await callDataStrategy("action", request, [
                 actionMatch
-            ], matches, isRouteRequest, requestContext, unstable_dataStrategy);
+            ], matches, isRouteRequest, requestContext, dataStrategy);
             result = results[actionMatch.route.id];
             if (request.signal.aborted) throwStaticHandlerAbortedError(request, isRouteRequest, future);
         }
@@ -30277,7 +29377,7 @@ function createStaticHandler(routes, opts) {
             // Store off the pending error - we use it to determine which loaders
             // to call and will commit it when we complete the navigation
             let boundaryMatch = skipLoaderErrorBubbling ? actionMatch : findNearestBoundary(matches, actionMatch.route.id);
-            let context = await loadRouteData(loaderRequest, matches, requestContext, unstable_dataStrategy, skipLoaderErrorBubbling, null, [
+            let context = await loadRouteData(loaderRequest, matches, requestContext, dataStrategy, skipLoaderErrorBubbling, null, [
                 boundaryMatch.route.id,
                 result
             ]);
@@ -30290,7 +29390,7 @@ function createStaticHandler(routes, opts) {
                 } : {})
             });
         }
-        let context = await loadRouteData(loaderRequest, matches, requestContext, unstable_dataStrategy, skipLoaderErrorBubbling, null);
+        let context = await loadRouteData(loaderRequest, matches, requestContext, dataStrategy, skipLoaderErrorBubbling, null);
         return _extends({}, context, {
             actionData: {
                 [actionMatch.route.id]: result.data
@@ -30303,7 +29403,7 @@ function createStaticHandler(routes, opts) {
             } : {}
         });
     }
-    async function loadRouteData(request, matches, requestContext, unstable_dataStrategy, skipLoaderErrorBubbling, routeMatch, pendingActionResult) {
+    async function loadRouteData(request, matches, requestContext, dataStrategy, skipLoaderErrorBubbling, routeMatch, pendingActionResult) {
         let isRouteRequest = routeMatch != null;
         // Short circuit if we have no loaders to run (queryRoute())
         if (isRouteRequest && !(routeMatch != null && routeMatch.route.loader) && !(routeMatch != null && routeMatch.route.lazy)) throw getInternalRouterError(400, {
@@ -30329,7 +29429,7 @@ function createStaticHandler(routes, opts) {
             loaderHeaders: {},
             activeDeferreds: null
         };
-        let results = await callDataStrategy("loader", request, matchesToLoad, matches, isRouteRequest, requestContext, unstable_dataStrategy);
+        let results = await callDataStrategy("loader", request, matchesToLoad, matches, isRouteRequest, requestContext, dataStrategy);
         if (request.signal.aborted) throwStaticHandlerAbortedError(request, isRouteRequest, future);
         // Process and commit output from loaders
         let activeDeferreds = new Map();
@@ -30346,8 +29446,8 @@ function createStaticHandler(routes, opts) {
     }
     // Utility wrapper for calling dataStrategy server-side without having to
     // pass around the manifest, mapRouteProperties, etc.
-    async function callDataStrategy(type, request, matchesToLoad, matches, isRouteRequest, requestContext, unstable_dataStrategy) {
-        let results = await callDataStrategyImpl(unstable_dataStrategy || defaultDataStrategy, type, null, request, matchesToLoad, matches, null, manifest, mapRouteProperties, requestContext);
+    async function callDataStrategy(type, request, matchesToLoad, matches, isRouteRequest, requestContext, dataStrategy) {
+        let results = await callDataStrategyImpl(dataStrategy || defaultDataStrategy, type, null, request, matchesToLoad, matches, null, manifest, mapRouteProperties, requestContext);
         let dataResults = {};
         await Promise.all(matches.map(async (match)=>{
             if (!(match.route.id in results)) return;
@@ -30421,8 +29521,21 @@ function normalizeTo(location, matches, basename, prependBasename, to, v7_relati
         path.search = location.search;
         path.hash = location.hash;
     }
-    // Add an ?index param for matched index routes if we don't already have one
-    if ((to == null || to === "" || to === ".") && activeRouteMatch && activeRouteMatch.route.index && !hasNakedIndexQuery(path.search)) path.search = path.search ? path.search.replace(/^\?/, "?index&") : "?index";
+    // Account for `?index` params when routing to the current location
+    if ((to == null || to === "" || to === ".") && activeRouteMatch) {
+        let nakedIndex = hasNakedIndexQuery(path.search);
+        if (activeRouteMatch.route.index && !nakedIndex) // Add one when we're targeting an index route
+        path.search = path.search ? path.search.replace(/^\?/, "?index&") : "?index";
+        else if (!activeRouteMatch.route.index && nakedIndex) {
+            // Remove existing ones when we're not
+            let params = new URLSearchParams(path.search);
+            let indexValues = params.getAll("index");
+            params.delete("index");
+            indexValues.filter((v)=>v).forEach((v)=>params.append("index", v));
+            let qs = params.toString();
+            path.search = qs ? "?" + qs : "";
+        }
+    }
     // If we're operating within a basename, prepend it to the pathname.  If
     // this is a root navigation, then just use the raw basename which allows
     // the basename to have full control over the presence of a trailing slash
@@ -30461,8 +29574,8 @@ function normalizeNavigateOptions(normalizeFormMethod, isFetcher, path, opts) {
             // text only support POST/PUT/PATCH/DELETE submissions
             if (!isMutationMethod(formMethod)) return getInvalidBodyError();
             let text = typeof opts.body === "string" ? opts.body : opts.body instanceof FormData || opts.body instanceof URLSearchParams ? // https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#plain-text-form-data
-            Array.from(opts.body.entries()).reduce((acc, _ref5)=>{
-                let [name, value] = _ref5;
+            Array.from(opts.body.entries()).reduce((acc, _ref3)=>{
+                let [name, value] = _ref3;
                 return "" + acc + name + "=" + value + "\n";
             }, "") : String(opts.body);
             return {
@@ -30542,23 +29655,29 @@ function normalizeNavigateOptions(normalizeFormMethod, isFetcher, path, opts) {
         submission
     };
 }
-// Filter out all routes below any caught error as they aren't going to
+// Filter out all routes at/below any caught error as they aren't going to
 // render so we don't need to load them
-function getLoaderMatchesUntilBoundary(matches, boundaryId) {
-    let boundaryMatches = matches;
-    if (boundaryId) {
-        let index = matches.findIndex((m)=>m.route.id === boundaryId);
-        if (index >= 0) boundaryMatches = matches.slice(0, index);
-    }
-    return boundaryMatches;
+function getLoaderMatchesUntilBoundary(matches, boundaryId, includeBoundary) {
+    if (includeBoundary === void 0) includeBoundary = false;
+    let index = matches.findIndex((m)=>m.route.id === boundaryId);
+    if (index >= 0) return matches.slice(0, includeBoundary ? index + 1 : index);
+    return matches;
 }
-function getMatchesToLoad(history, state, matches, submission, location, isInitialLoad, skipActionErrorRevalidation, isRevalidationRequired, cancelledDeferredRoutes, cancelledFetcherLoads, deletedFetchers, fetchLoadMatches, fetchRedirectIds, routesToUse, basename, pendingActionResult) {
+function getMatchesToLoad(history, state, matches, submission, location, initialHydration, skipActionErrorRevalidation, isRevalidationRequired, cancelledDeferredRoutes, cancelledFetcherLoads, deletedFetchers, fetchLoadMatches, fetchRedirectIds, routesToUse, basename, pendingActionResult) {
     let actionResult = pendingActionResult ? isErrorResult(pendingActionResult[1]) ? pendingActionResult[1].error : pendingActionResult[1].data : undefined;
     let currentUrl = history.createURL(state.location);
     let nextUrl = history.createURL(location);
     // Pick navigation matches that are net-new or qualify for revalidation
-    let boundaryId = pendingActionResult && isErrorResult(pendingActionResult[1]) ? pendingActionResult[0] : undefined;
-    let boundaryMatches = boundaryId ? getLoaderMatchesUntilBoundary(matches, boundaryId) : matches;
+    let boundaryMatches = matches;
+    if (initialHydration && state.errors) // On initial hydration, only consider matches up to _and including_ the boundary.
+    // This is inclusive to handle cases where a server loader ran successfully,
+    // a child server loader bubbled up to this route, but this route has
+    // `clientLoader.hydrate` so we want to still run the `clientLoader` so that
+    // we have a complete version of `loaderData`
+    boundaryMatches = getLoaderMatchesUntilBoundary(matches, Object.keys(state.errors)[0], true);
+    else if (pendingActionResult && isErrorResult(pendingActionResult[1])) // If an action threw an error, we call loaders up to, but not including the
+    // boundary
+    boundaryMatches = getLoaderMatchesUntilBoundary(matches, pendingActionResult[0]);
     // Don't revalidate loaders by default after action 4xx/5xx responses
     // when the flag is enabled.  They can still opt-into revalidation via
     // `shouldRevalidate` via `actionResult`
@@ -30569,11 +29688,7 @@ function getMatchesToLoad(history, state, matches, submission, location, isIniti
         if (route.lazy) // We haven't loaded this route yet so we don't know if it's got a loader!
         return true;
         if (route.loader == null) return false;
-        if (isInitialLoad) {
-            if (typeof route.loader !== "function" || route.loader.hydrate) return true;
-            return state.loaderData[route.id] === undefined && // Don't re-run if the loader ran and threw an error
-            (!state.errors || state.errors[route.id] === undefined);
-        }
+        if (initialHydration) return shouldLoadRouteOnHydration(route, state.loaderData, state.errors);
         // Always call the loader on new route instances and pending defer cancellations
         if (isNewLoader(state.loaderData, state.matches[index], match) || cancelledDeferredRoutes.some((id)=>id === match.route.id)) return true;
         // This is the default implementation for when we revalidate.  If the route
@@ -30599,11 +29714,11 @@ function getMatchesToLoad(history, state, matches, submission, location, isIniti
     let revalidatingFetchers = [];
     fetchLoadMatches.forEach((f, key)=>{
         // Don't revalidate:
-        //  - on initial load (shouldn't be any fetchers then anyway)
+        //  - on initial hydration (shouldn't be any fetchers then anyway)
         //  - if fetcher won't be present in the subsequent render
         //    - no longer matches the URL (v7_fetcherPersist=false)
         //    - was unmounted but persisted due to v7_fetcherPersist=true
-        if (isInitialLoad || !matches.some((m)=>m.route.id === f.routeId) || deletedFetchers.has(key)) return;
+        if (initialHydration || !matches.some((m)=>m.route.id === f.routeId) || deletedFetchers.has(key)) return;
         let fetcherMatches = matchRoutes(routesToUse, f.path, basename);
         // If the fetcher path no longer matches, push it in with null matches so
         // we can trigger a 404 in callLoadersAndMaybeResolveData.  Note this is
@@ -30662,6 +29777,20 @@ function getMatchesToLoad(history, state, matches, submission, location, isIniti
         revalidatingFetchers
     ];
 }
+function shouldLoadRouteOnHydration(route, loaderData, errors) {
+    // We dunno if we have a loader - gotta find out!
+    if (route.lazy) return true;
+    // No loader, nothing to initialize
+    if (!route.loader) return false;
+    let hasData = loaderData != null && loaderData[route.id] !== undefined;
+    let hasError = errors != null && errors[route.id] !== undefined;
+    // Don't run if we error'd during SSR
+    if (!hasData && hasError) return false;
+    // Explicitly opting-in to running on hydration
+    if (typeof route.loader === "function" && route.loader.hydrate === true) return true;
+    // Otherwise, run if we're not yet initialized with anything
+    return !hasData && !hasError;
+}
 function isNewLoader(currentLoaderData, currentMatch, match) {
     let isNew = // [a] -> [a, b]
     !currentMatch || // [a, b] -> [a, c]
@@ -30686,50 +29815,40 @@ function shouldRevalidateLoader(loaderMatch, arg) {
     }
     return arg.defaultShouldRevalidate;
 }
-/**
- * Idempotent utility to execute patchRoutesOnNavigation() to lazily load route
- * definitions and update the routes/routeManifest
- */ async function loadLazyRouteChildren(patchRoutesOnNavigationImpl, path, matches, routes, manifest, mapRouteProperties, pendingRouteChildren, signal) {
-    let key = [
-        path,
-        ...matches.map((m)=>m.route.id)
-    ].join("-");
-    try {
-        let pending = pendingRouteChildren.get(key);
-        if (!pending) {
-            pending = patchRoutesOnNavigationImpl({
-                path,
-                matches,
-                patch: (routeId, children)=>{
-                    if (!signal.aborted) patchRoutesImpl(routeId, children, routes, manifest, mapRouteProperties);
-                }
-            });
-            pendingRouteChildren.set(key, pending);
-        }
-        if (pending && isPromise(pending)) await pending;
-    } finally{
-        pendingRouteChildren.delete(key);
-    }
-}
 function patchRoutesImpl(routeId, children, routesToUse, manifest, mapRouteProperties) {
+    var _childrenToPatch;
+    let childrenToPatch;
     if (routeId) {
-        var _route$children;
         let route = manifest[routeId];
         invariant(route, "No route found to patch children into: routeId = " + routeId);
-        let dataChildren = convertRoutesToDataRoutes(children, mapRouteProperties, [
-            routeId,
-            "patch",
-            String(((_route$children = route.children) == null ? void 0 : _route$children.length) || "0")
-        ], manifest);
-        if (route.children) route.children.push(...dataChildren);
-        else route.children = dataChildren;
-    } else {
-        let dataChildren = convertRoutesToDataRoutes(children, mapRouteProperties, [
-            "patch",
-            String(routesToUse.length || "0")
-        ], manifest);
-        routesToUse.push(...dataChildren);
-    }
+        if (!route.children) route.children = [];
+        childrenToPatch = route.children;
+    } else childrenToPatch = routesToUse;
+    // Don't patch in routes we already know about so that `patch` is idempotent
+    // to simplify user-land code. This is useful because we re-call the
+    // `patchRoutesOnNavigation` function for matched routes with params.
+    let uniqueChildren = children.filter((newRoute)=>!childrenToPatch.some((existingRoute)=>isSameRoute(newRoute, existingRoute)));
+    let newRoutes = convertRoutesToDataRoutes(uniqueChildren, mapRouteProperties, [
+        routeId || "_",
+        "patch",
+        String(((_childrenToPatch = childrenToPatch) == null ? void 0 : _childrenToPatch.length) || "0")
+    ], manifest);
+    childrenToPatch.push(...newRoutes);
+}
+function isSameRoute(newRoute, existingRoute) {
+    // Most optimal check is by id
+    if ("id" in newRoute && "id" in existingRoute && newRoute.id === existingRoute.id) return true;
+    // Second is by pathing differences
+    if (!(newRoute.index === existingRoute.index && newRoute.path === existingRoute.path && newRoute.caseSensitive === existingRoute.caseSensitive)) return false;
+    // Pathless layout routes are trickier since we need to check children.
+    // If they have no children then they're the same as far as we can tell
+    if ((!newRoute.children || newRoute.children.length === 0) && (!existingRoute.children || existingRoute.children.length === 0)) return true;
+    // Otherwise, we look to see if every child in the new route is already
+    // represented in the existing route's children
+    return newRoute.children.every((aChild, i)=>{
+        var _existingRoute$childr;
+        return (_existingRoute$childr = existingRoute.children) == null ? void 0 : _existingRoute$childr.some((bChild)=>isSameRoute(aChild, bChild));
+    });
 }
 /**
  * Execute route.lazy() methods to lazily load route modules (loader, action,
@@ -30772,8 +29891,8 @@ function patchRoutesImpl(routeId, children, routesToUse, manifest, mapRoutePrope
     }));
 }
 // Default implementation of `dataStrategy` which fetches all loaders in parallel
-async function defaultDataStrategy(_ref6) {
-    let { matches } = _ref6;
+async function defaultDataStrategy(_ref4) {
+    let { matches } = _ref4;
     let matchesToLoad = matches.filter((m)=>m.shouldLoad);
     let results = await Promise.all(matchesToLoad.map((m)=>m.resolve()));
     return results.reduce((acc, result, i)=>Object.assign(acc, {
@@ -30957,17 +30076,23 @@ async function convertDataStrategyResultToDataResult(dataStrategyResult) {
     }
     if (type === ResultType.error) {
         if (isDataWithResponseInit(result)) {
-            var _result$init2;
+            var _result$init3, _result$init4;
             if (result.data instanceof Error) {
-                var _result$init;
+                var _result$init, _result$init2;
                 return {
                     type: ResultType.error,
                     error: result.data,
-                    statusCode: (_result$init = result.init) == null ? void 0 : _result$init.status
+                    statusCode: (_result$init = result.init) == null ? void 0 : _result$init.status,
+                    headers: (_result$init2 = result.init) != null && _result$init2.headers ? new Headers(result.init.headers) : undefined
                 };
             }
-            // Convert thrown unstable_data() to ErrorResponse instances
-            result = new ErrorResponseImpl(((_result$init2 = result.init) == null ? void 0 : _result$init2.status) || 500, undefined, result.data);
+            // Convert thrown data() to ErrorResponse instances
+            return {
+                type: ResultType.error,
+                error: new ErrorResponseImpl(((_result$init3 = result.init) == null ? void 0 : _result$init3.status) || 500, undefined, result.data),
+                statusCode: isRouteErrorResponse(result) ? result.status : undefined,
+                headers: (_result$init4 = result.init) != null && _result$init4.headers ? new Headers(result.init.headers) : undefined
+            };
         }
         return {
             type: ResultType.error,
@@ -30976,21 +30101,21 @@ async function convertDataStrategyResultToDataResult(dataStrategyResult) {
         };
     }
     if (isDeferredData(result)) {
-        var _result$init3, _result$init4;
+        var _result$init5, _result$init6;
         return {
             type: ResultType.deferred,
             deferredData: result,
-            statusCode: (_result$init3 = result.init) == null ? void 0 : _result$init3.status,
-            headers: ((_result$init4 = result.init) == null ? void 0 : _result$init4.headers) && new Headers(result.init.headers)
+            statusCode: (_result$init5 = result.init) == null ? void 0 : _result$init5.status,
+            headers: ((_result$init6 = result.init) == null ? void 0 : _result$init6.headers) && new Headers(result.init.headers)
         };
     }
     if (isDataWithResponseInit(result)) {
-        var _result$init5, _result$init6;
+        var _result$init7, _result$init8;
         return {
             type: ResultType.data,
             data: result.data,
-            statusCode: (_result$init5 = result.init) == null ? void 0 : _result$init5.status,
-            headers: (_result$init6 = result.init) != null && _result$init6.headers ? new Headers(result.init.headers) : undefined
+            statusCode: (_result$init7 = result.init) == null ? void 0 : _result$init7.status,
+            headers: (_result$init8 = result.init) != null && _result$init8.headers ? new Headers(result.init.headers) : undefined
         };
     }
     return {
@@ -31130,7 +30255,7 @@ function processRouteLoaderData(matches, results, pendingActionResult, activeDef
         loaderHeaders
     };
 }
-function processLoaderData(state, matches, matchesToLoad, results, pendingActionResult, revalidatingFetchers, fetcherResults, activeDeferreds) {
+function processLoaderData(state, matches, results, pendingActionResult, revalidatingFetchers, fetcherResults, activeDeferreds) {
     let { loaderData, errors } = processRouteLoaderData(matches, results, pendingActionResult, activeDeferreds, false // This method is only called client side so we always want to bubble
     );
     // Process results from our revalidating fetchers
@@ -31219,8 +30344,7 @@ function getInternalRouterError(status, _temp5) {
     let errorMessage = "Unknown @remix-run/router error";
     if (status === 400) {
         statusText = "Bad Request";
-        if (type === "route-discovery") errorMessage = "Unable to match URL \"" + pathname + "\" - the `unstable_patchRoutesOnNavigation()` " + ("function threw the following error:\n" + message);
-        else if (method && pathname && routeId) errorMessage = "You made a " + method + " request to \"" + pathname + "\" but " + ("did not provide a `loader` for route \"" + routeId + "\", ") + "so there is no way to handle the request.";
+        if (method && pathname && routeId) errorMessage = "You made a " + method + " request to \"" + pathname + "\" but " + ("did not provide a `loader` for route \"" + routeId + "\", ") + "so there is no way to handle the request.";
         else if (type === "defer-action") errorMessage = "defer() is not supported in actions";
         else if (type === "invalid-body") errorMessage = "Unable to encode submission body";
     } else if (status === 403) {
@@ -31264,9 +30388,6 @@ function isHashChangeOnly(a, b) {
     // If the hash is removed the browser will re-perform a request to the server
     // /page#hash -> /page
     return false;
-}
-function isPromise(val) {
-    return typeof val === "object" && val != null && "then" in val;
 }
 function isDataStrategyResult(result) {
     return result != null && typeof result === "object" && "type" in result && "result" in result && (result.type === ResultType.data || result.type === ResultType.error);
@@ -31523,7 +30644,7 @@ function persistAppliedTransitions(_window, transitions) {
     }
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"i5LP7":[function() {},{}],"lJZlQ":[function() {},{}],"7h6Pi":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"lJZlQ":[function() {},{}],"7h6Pi":[function(require,module,exports,__globalThis) {
 "use strict";
 var Refresh = require("7422ead32dcc1e6b");
 function debounce(func, delay) {
@@ -33801,6 +32922,830 @@ function $da9882e673ac146b$var$ErrorOverlay() {
     return null;
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}]},["hiyDA","gYcKb"], "gYcKb", "parcelRequireaec4", {}, null, null, "http://localhost:1234")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"8ru9P":[function(require,module,exports,__globalThis) {
+var $parcel$ReactRefreshHelpers$500a = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+$parcel$ReactRefreshHelpers$500a.init();
+var prevRefreshReg = globalThis.$RefreshReg$;
+var prevRefreshSig = globalThis.$RefreshSig$;
+$parcel$ReactRefreshHelpers$500a.prelude(module);
+
+try {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "LoginView", ()=>LoginView);
+var _jsxDevRuntime = require("react/jsx-dev-runtime");
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _propTypes = require("prop-types");
+var _propTypesDefault = parcelHelpers.interopDefault(_propTypes);
+var _axios = require("axios");
+var _axiosDefault = parcelHelpers.interopDefault(_axios);
+var _reactRouterDom = require("react-router-dom");
+var _s = $RefreshSig$();
+const LoginView = ({ AUTH_BASE, onLoggedIn, onAfterLogin })=>{
+    _s();
+    const nav = (0, _reactRouterDom.useNavigate)();
+    const [form, setForm] = (0, _react.useState)({
+        email: "",
+        password: ""
+    });
+    const [err, setErr] = (0, _react.useState)("");
+    const [busy, setBusy] = (0, _react.useState)(false);
+    const validate = ()=>{
+        const emailOK = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email);
+        const pwOK = form.password.trim().length >= 6;
+        if (!emailOK) return "Please enter a valid email.";
+        if (!pwOK) return "Password must be at least 6 characters.";
+        return "";
+    };
+    const submit = async (e)=>{
+        e.preventDefault();
+        const v = validate();
+        if (v) {
+            setErr(v);
+            return;
+        }
+        setErr("");
+        setBusy(true);
+        try {
+            const { data } = await (0, _axiosDefault.default).post(`${AUTH_BASE}/login`, form);
+            const token = data?.token;
+            if (!token) throw new Error("No token returned from server.");
+            localStorage.setItem("token", token);
+            // Optionally fetch /users/me in parent
+            onLoggedIn && onLoggedIn(null);
+            onAfterLogin && await onAfterLogin();
+            nav("/");
+        } catch (e) {
+            const apiMsg = e?.response?.data?.message || (Array.isArray(e?.response?.data?.errors) ? e.response.data.errors.map((er)=>er.msg || er).join(", ") : null) || (typeof e?.response?.data === "string" ? e.response.data : null) || e.message;
+            setErr(apiMsg || "Login failed. Check your credentials.");
+        } finally{
+            setBusy(false);
+        }
+    };
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        className: "container py-5",
+        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+            className: "row justify-content-center",
+            children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                className: "col-sm-10 col-md-6 col-lg-4",
+                children: [
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
+                        className: "mb-3",
+                        children: "Log in"
+                    }, void 0, false, {
+                        fileName: "src/components/login-view/login-view.jsx",
+                        lineNumber: 56,
+                        columnNumber: 11
+                    }, undefined),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("form", {
+                        onSubmit: submit,
+                        className: "card card-body",
+                        children: [
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                className: "mb-3",
+                                children: [
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
+                                        className: "form-label",
+                                        children: "Email"
+                                    }, void 0, false, {
+                                        fileName: "src/components/login-view/login-view.jsx",
+                                        lineNumber: 59,
+                                        columnNumber: 15
+                                    }, undefined),
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
+                                        className: "form-control",
+                                        type: "email",
+                                        placeholder: "you@example.com",
+                                        value: form.email,
+                                        onChange: (e)=>setForm((f)=>({
+                                                    ...f,
+                                                    email: e.target.value
+                                                })),
+                                        required: true
+                                    }, void 0, false, {
+                                        fileName: "src/components/login-view/login-view.jsx",
+                                        lineNumber: 60,
+                                        columnNumber: 15
+                                    }, undefined)
+                                ]
+                            }, void 0, true, {
+                                fileName: "src/components/login-view/login-view.jsx",
+                                lineNumber: 58,
+                                columnNumber: 13
+                            }, undefined),
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                className: "mb-3",
+                                children: [
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
+                                        className: "form-label",
+                                        children: "Password"
+                                    }, void 0, false, {
+                                        fileName: "src/components/login-view/login-view.jsx",
+                                        lineNumber: 71,
+                                        columnNumber: 15
+                                    }, undefined),
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
+                                        className: "form-control",
+                                        type: "password",
+                                        placeholder: "Your password",
+                                        value: form.password,
+                                        onChange: (e)=>setForm((f)=>({
+                                                    ...f,
+                                                    password: e.target.value
+                                                })),
+                                        required: true,
+                                        minLength: 6
+                                    }, void 0, false, {
+                                        fileName: "src/components/login-view/login-view.jsx",
+                                        lineNumber: 72,
+                                        columnNumber: 15
+                                    }, undefined)
+                                ]
+                            }, void 0, true, {
+                                fileName: "src/components/login-view/login-view.jsx",
+                                lineNumber: 70,
+                                columnNumber: 13
+                            }, undefined),
+                            err && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                className: "alert alert-danger py-2",
+                                children: err
+                            }, void 0, false, {
+                                fileName: "src/components/login-view/login-view.jsx",
+                                lineNumber: 83,
+                                columnNumber: 21
+                            }, undefined),
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
+                                className: "btn btn-primary",
+                                disabled: busy,
+                                children: busy ? "Logging in\u2026" : "Log in"
+                            }, void 0, false, {
+                                fileName: "src/components/login-view/login-view.jsx",
+                                lineNumber: 85,
+                                columnNumber: 13
+                            }, undefined),
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                                className: "small mt-3 mb-0",
+                                children: [
+                                    "New here?",
+                                    " ",
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Link), {
+                                        to: "/signup",
+                                        className: "link-light",
+                                        children: "Create an account"
+                                    }, void 0, false, {
+                                        fileName: "src/components/login-view/login-view.jsx",
+                                        lineNumber: 91,
+                                        columnNumber: 15
+                                    }, undefined)
+                                ]
+                            }, void 0, true, {
+                                fileName: "src/components/login-view/login-view.jsx",
+                                lineNumber: 89,
+                                columnNumber: 13
+                            }, undefined)
+                        ]
+                    }, void 0, true, {
+                        fileName: "src/components/login-view/login-view.jsx",
+                        lineNumber: 57,
+                        columnNumber: 11
+                    }, undefined)
+                ]
+            }, void 0, true, {
+                fileName: "src/components/login-view/login-view.jsx",
+                lineNumber: 55,
+                columnNumber: 9
+            }, undefined)
+        }, void 0, false, {
+            fileName: "src/components/login-view/login-view.jsx",
+            lineNumber: 54,
+            columnNumber: 7
+        }, undefined)
+    }, void 0, false, {
+        fileName: "src/components/login-view/login-view.jsx",
+        lineNumber: 53,
+        columnNumber: 5
+    }, undefined);
+};
+_s(LoginView, "yFBoQkwqP5IsLW+DEUgHpunUfWg=", false, function() {
+    return [
+        (0, _reactRouterDom.useNavigate)
+    ];
+});
+_c = LoginView;
+LoginView.propTypes = {
+    AUTH_BASE: (0, _propTypesDefault.default).string.isRequired,
+    onLoggedIn: (0, _propTypesDefault.default).func,
+    onAfterLogin: (0, _propTypesDefault.default).func
+};
+var _c;
+$RefreshReg$(_c, "LoginView");
+
+  $parcel$ReactRefreshHelpers$500a.postlude(module);
+} finally {
+  globalThis.$RefreshReg$ = prevRefreshReg;
+  globalThis.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","prop-types":"GNqOQ","axios":"kooH4","react-router-dom":"61z4w","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"nAl3Z":[function(require,module,exports,__globalThis) {
+var $parcel$ReactRefreshHelpers$69e4 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+$parcel$ReactRefreshHelpers$69e4.init();
+var prevRefreshReg = globalThis.$RefreshReg$;
+var prevRefreshSig = globalThis.$RefreshSig$;
+$parcel$ReactRefreshHelpers$69e4.prelude(module);
+
+try {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "SignupView", ()=>SignupView);
+var _jsxDevRuntime = require("react/jsx-dev-runtime");
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _propTypes = require("prop-types");
+var _propTypesDefault = parcelHelpers.interopDefault(_propTypes);
+var _axios = require("axios");
+var _axiosDefault = parcelHelpers.interopDefault(_axios);
+var _reactRouterDom = require("react-router-dom");
+var _s = $RefreshSig$();
+const SignupView = ({ AUTH_BASE })=>{
+    _s();
+    const [form, setForm] = (0, _react.useState)({
+        name: "",
+        email: "",
+        password: "",
+        birthday: ""
+    });
+    const [ok, setOk] = (0, _react.useState)("");
+    const [err, setErr] = (0, _react.useState)("");
+    const [busy, setBusy] = (0, _react.useState)(false);
+    const validate = ()=>{
+        if (!form.name.trim()) return "Name is required.";
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) return "Please enter a valid email.";
+        if (form.password.length < 6) return "Password must be at least 6 characters.";
+        if (!form.birthday) return "Birthday is required.";
+        return "";
+    };
+    const submit = async (e)=>{
+        e.preventDefault();
+        const v = validate();
+        if (v) {
+            setErr(v);
+            setOk("");
+            return;
+        }
+        setErr("");
+        setOk("");
+        setBusy(true);
+        try {
+            // Create account; API also returns a token, but we keep UX to log in explicitly
+            await (0, _axiosDefault.default).post(`${AUTH_BASE}/register`, form);
+            setOk("Account created! You can now log in.");
+        } catch (e) {
+            const apiMsg = e?.response?.data?.message || (Array.isArray(e?.response?.data?.errors) ? e.response.data.errors.map((er)=>er.msg || er).join(", ") : null) || (typeof e?.response?.data === "string" ? e.response.data : null) || e.message;
+            setErr(apiMsg || "Signup failed. Please check your inputs.");
+        } finally{
+            setBusy(false);
+        }
+    };
+    const input = (key, label, type = "text", props = {})=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+            className: "mb-3",
+            children: [
+                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
+                    className: "form-label",
+                    children: label
+                }, void 0, false, {
+                    fileName: "src/components/signup-view/signup-view.jsx",
+                    lineNumber: 56,
+                    columnNumber: 7
+                }, undefined),
+                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
+                    type: type,
+                    className: "form-control",
+                    value: form[key],
+                    onChange: (e)=>setForm((f)=>({
+                                ...f,
+                                [key]: e.target.value
+                            })),
+                    required: true,
+                    ...props
+                }, void 0, false, {
+                    fileName: "src/components/signup-view/signup-view.jsx",
+                    lineNumber: 57,
+                    columnNumber: 7
+                }, undefined)
+            ]
+        }, key, true, {
+            fileName: "src/components/signup-view/signup-view.jsx",
+            lineNumber: 55,
+            columnNumber: 5
+        }, undefined);
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        className: "container py-5",
+        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+            className: "row justify-content-center",
+            children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                className: "col-sm-10 col-md-7 col-lg-5",
+                children: [
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
+                        className: "mb-3",
+                        children: "Create your account"
+                    }, void 0, false, {
+                        fileName: "src/components/signup-view/signup-view.jsx",
+                        lineNumber: 72,
+                        columnNumber: 11
+                    }, undefined),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("form", {
+                        onSubmit: submit,
+                        className: "card card-body",
+                        children: [
+                            input("name", "Name"),
+                            input("email", "Email", "email"),
+                            input("password", "Password", "password", {
+                                minLength: 6,
+                                placeholder: "Min 6 characters"
+                            }),
+                            input("birthday", "Birthday", "date", {
+                                required: true
+                            }),
+                            ok && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                className: "alert alert-success py-2",
+                                children: ok
+                            }, void 0, false, {
+                                fileName: "src/components/signup-view/signup-view.jsx",
+                                lineNumber: 79,
+                                columnNumber: 20
+                            }, undefined),
+                            err && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                                className: "alert alert-danger py-2",
+                                children: err
+                            }, void 0, false, {
+                                fileName: "src/components/signup-view/signup-view.jsx",
+                                lineNumber: 80,
+                                columnNumber: 21
+                            }, undefined),
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
+                                className: "btn btn-success",
+                                disabled: busy,
+                                children: busy ? "Creating\u2026" : "Sign up"
+                            }, void 0, false, {
+                                fileName: "src/components/signup-view/signup-view.jsx",
+                                lineNumber: 82,
+                                columnNumber: 13
+                            }, undefined),
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                                className: "small mt-3 mb-0",
+                                children: [
+                                    "Already have an account?",
+                                    " ",
+                                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Link), {
+                                        to: "/login",
+                                        className: "link-light",
+                                        children: "Log in"
+                                    }, void 0, false, {
+                                        fileName: "src/components/signup-view/signup-view.jsx",
+                                        lineNumber: 88,
+                                        columnNumber: 15
+                                    }, undefined)
+                                ]
+                            }, void 0, true, {
+                                fileName: "src/components/signup-view/signup-view.jsx",
+                                lineNumber: 86,
+                                columnNumber: 13
+                            }, undefined)
+                        ]
+                    }, void 0, true, {
+                        fileName: "src/components/signup-view/signup-view.jsx",
+                        lineNumber: 73,
+                        columnNumber: 11
+                    }, undefined)
+                ]
+            }, void 0, true, {
+                fileName: "src/components/signup-view/signup-view.jsx",
+                lineNumber: 71,
+                columnNumber: 9
+            }, undefined)
+        }, void 0, false, {
+            fileName: "src/components/signup-view/signup-view.jsx",
+            lineNumber: 70,
+            columnNumber: 7
+        }, undefined)
+    }, void 0, false, {
+        fileName: "src/components/signup-view/signup-view.jsx",
+        lineNumber: 69,
+        columnNumber: 5
+    }, undefined);
+};
+_s(SignupView, "13mWyh8/clhtMM0IgEEWHXVA+o0=");
+_c = SignupView;
+SignupView.propTypes = {
+    AUTH_BASE: (0, _propTypesDefault.default).string.isRequired
+};
+var _c;
+$RefreshReg$(_c, "SignupView");
+
+  $parcel$ReactRefreshHelpers$69e4.postlude(module);
+} finally {
+  globalThis.$RefreshReg$ = prevRefreshReg;
+  globalThis.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","prop-types":"GNqOQ","axios":"kooH4","react-router-dom":"61z4w","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"etjHZ":[function(require,module,exports,__globalThis) {
+var $parcel$ReactRefreshHelpers$53bb = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+$parcel$ReactRefreshHelpers$53bb.init();
+var prevRefreshReg = globalThis.$RefreshReg$;
+var prevRefreshSig = globalThis.$RefreshSig$;
+$parcel$ReactRefreshHelpers$53bb.prelude(module);
+
+try {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "MainView", ()=>MainView);
+var _jsxDevRuntime = require("react/jsx-dev-runtime");
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _propTypes = require("prop-types");
+var _propTypesDefault = parcelHelpers.interopDefault(_propTypes);
+var _movieCardJsx = require("../movie-card/movie-card.jsx");
+const MainView = ({ movies, isLoading, query, onQuery, onLogout })=>{
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        className: "container py-4",
+        children: [
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                className: "d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3",
+                children: [
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h1", {
+                        className: "h3 mb-0",
+                        children: "Movies"
+                    }, void 0, false, {
+                        fileName: "src/components/main-view/main-view.jsx",
+                        lineNumber: 9,
+                        columnNumber: 9
+                    }, undefined),
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                        className: "d-flex gap-2",
+                        children: [
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
+                                className: "form-control",
+                                style: {
+                                    minWidth: 260
+                                },
+                                placeholder: "Search by title or genre\u2026",
+                                value: query,
+                                onChange: (e)=>onQuery(e.target.value)
+                            }, void 0, false, {
+                                fileName: "src/components/main-view/main-view.jsx",
+                                lineNumber: 11,
+                                columnNumber: 11
+                            }, undefined),
+                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
+                                className: "btn btn-outline-light",
+                                onClick: onLogout,
+                                children: "Log out"
+                            }, void 0, false, {
+                                fileName: "src/components/main-view/main-view.jsx",
+                                lineNumber: 18,
+                                columnNumber: 11
+                            }, undefined)
+                        ]
+                    }, void 0, true, {
+                        fileName: "src/components/main-view/main-view.jsx",
+                        lineNumber: 10,
+                        columnNumber: 9
+                    }, undefined)
+                ]
+            }, void 0, true, {
+                fileName: "src/components/main-view/main-view.jsx",
+                lineNumber: 8,
+                columnNumber: 7
+            }, undefined),
+            isLoading ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                className: "text-muted",
+                children: "Loading movies\u2026"
+            }, void 0, false, {
+                fileName: "src/components/main-view/main-view.jsx",
+                lineNumber: 23,
+                columnNumber: 9
+            }, undefined) : movies.length === 0 ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                className: "alert alert-warning",
+                children: "No movies found."
+            }, void 0, false, {
+                fileName: "src/components/main-view/main-view.jsx",
+                lineNumber: 25,
+                columnNumber: 9
+            }, undefined) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                className: "row",
+                children: movies.map((m)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _movieCardJsx.MovieCard), {
+                        movie: m
+                    }, m._id, false, {
+                        fileName: "src/components/main-view/main-view.jsx",
+                        lineNumber: 29,
+                        columnNumber: 13
+                    }, undefined))
+            }, void 0, false, {
+                fileName: "src/components/main-view/main-view.jsx",
+                lineNumber: 27,
+                columnNumber: 9
+            }, undefined)
+        ]
+    }, void 0, true, {
+        fileName: "src/components/main-view/main-view.jsx",
+        lineNumber: 7,
+        columnNumber: 5
+    }, undefined);
+};
+_c = MainView;
+MainView.propTypes = {
+    movies: (0, _propTypesDefault.default).arrayOf((0, _propTypesDefault.default).shape({
+        _id: (0, _propTypesDefault.default).string.isRequired,
+        title: (0, _propTypesDefault.default).string.isRequired
+    })).isRequired,
+    isLoading: (0, _propTypesDefault.default).bool,
+    query: (0, _propTypesDefault.default).string.isRequired,
+    onQuery: (0, _propTypesDefault.default).func.isRequired,
+    onLogout: (0, _propTypesDefault.default).func.isRequired
+};
+var _c;
+$RefreshReg$(_c, "MainView");
+
+  $parcel$ReactRefreshHelpers$53bb.postlude(module);
+} finally {
+  globalThis.$RefreshReg$ = prevRefreshReg;
+  globalThis.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","prop-types":"GNqOQ","../movie-card/movie-card.jsx":"6BY1s","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"6BY1s":[function(require,module,exports,__globalThis) {
+var $parcel$ReactRefreshHelpers$f387 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+$parcel$ReactRefreshHelpers$f387.init();
+var prevRefreshReg = globalThis.$RefreshReg$;
+var prevRefreshSig = globalThis.$RefreshSig$;
+$parcel$ReactRefreshHelpers$f387.prelude(module);
+
+try {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "MovieCard", ()=>MovieCard);
+var _jsxDevRuntime = require("react/jsx-dev-runtime");
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _propTypes = require("prop-types");
+var _propTypesDefault = parcelHelpers.interopDefault(_propTypes);
+var _reactRouterDom = require("react-router-dom");
+const MovieCard = ({ movie })=>{
+    const poster = movie.imageURL || "https://via.placeholder.com/300x450?text=No+Image";
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        className: "col-sm-6 col-md-4 col-lg-3 d-flex",
+        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Link), {
+            to: `/movies/${movie._id}`,
+            className: "card mb-4 text-decoration-none flex-fill shadow-sm",
+            children: [
+                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
+                    src: poster,
+                    className: "card-img-top",
+                    alt: movie.title
+                }, void 0, false, {
+                    fileName: "src/components/movie-card/movie-card.jsx",
+                    lineNumber: 11,
+                    columnNumber: 9
+                }, undefined),
+                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                    className: "card-body",
+                    children: [
+                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h5", {
+                            className: "card-title text-white",
+                            children: movie.title
+                        }, void 0, false, {
+                            fileName: "src/components/movie-card/movie-card.jsx",
+                            lineNumber: 13,
+                            columnNumber: 11
+                        }, undefined),
+                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                            className: "card-text small text-muted mb-0",
+                            children: movie.genre?.name
+                        }, void 0, false, {
+                            fileName: "src/components/movie-card/movie-card.jsx",
+                            lineNumber: 14,
+                            columnNumber: 11
+                        }, undefined)
+                    ]
+                }, void 0, true, {
+                    fileName: "src/components/movie-card/movie-card.jsx",
+                    lineNumber: 12,
+                    columnNumber: 9
+                }, undefined)
+            ]
+        }, void 0, true, {
+            fileName: "src/components/movie-card/movie-card.jsx",
+            lineNumber: 10,
+            columnNumber: 7
+        }, undefined)
+    }, void 0, false, {
+        fileName: "src/components/movie-card/movie-card.jsx",
+        lineNumber: 9,
+        columnNumber: 5
+    }, undefined);
+};
+_c = MovieCard;
+MovieCard.propTypes = {
+    movie: (0, _propTypesDefault.default).shape({
+        _id: (0, _propTypesDefault.default).string.isRequired,
+        title: (0, _propTypesDefault.default).string.isRequired,
+        description: (0, _propTypesDefault.default).string,
+        imageURL: (0, _propTypesDefault.default).string,
+        genre: (0, _propTypesDefault.default).shape({
+            name: (0, _propTypesDefault.default).string,
+            description: (0, _propTypesDefault.default).string
+        }),
+        director: (0, _propTypesDefault.default).shape({
+            name: (0, _propTypesDefault.default).string,
+            bio: (0, _propTypesDefault.default).string,
+            birthYear: (0, _propTypesDefault.default).number
+        }),
+        releaseYear: (0, _propTypesDefault.default).number
+    }).isRequired
+};
+var _c;
+$RefreshReg$(_c, "MovieCard");
+
+  $parcel$ReactRefreshHelpers$f387.postlude(module);
+} finally {
+  globalThis.$RefreshReg$ = prevRefreshReg;
+  globalThis.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","prop-types":"GNqOQ","react-router-dom":"61z4w","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"dkfGy":[function(require,module,exports,__globalThis) {
+var $parcel$ReactRefreshHelpers$2262 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+$parcel$ReactRefreshHelpers$2262.init();
+var prevRefreshReg = globalThis.$RefreshReg$;
+var prevRefreshSig = globalThis.$RefreshSig$;
+$parcel$ReactRefreshHelpers$2262.prelude(module);
+
+try {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "MovieView", ()=>MovieView);
+var _jsxDevRuntime = require("react/jsx-dev-runtime");
+var _react = require("react");
+var _reactDefault = parcelHelpers.interopDefault(_react);
+var _propTypes = require("prop-types");
+var _propTypesDefault = parcelHelpers.interopDefault(_propTypes);
+var _reactRouterDom = require("react-router-dom");
+var _s = $RefreshSig$();
+const MovieView = ({ movies })=>{
+    _s();
+    const { id } = (0, _reactRouterDom.useParams)();
+    const movie = movies.find((m)=>m._id === id);
+    if (!movie) return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        className: "container py-4",
+        children: [
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                className: "alert alert-warning",
+                children: "Movie not found."
+            }, void 0, false, {
+                fileName: "src/components/movie-view/movie-view.jsx",
+                lineNumber: 12,
+                columnNumber: 9
+            }, undefined),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Link), {
+                to: "/",
+                className: "btn btn-outline-secondary",
+                children: "Back"
+            }, void 0, false, {
+                fileName: "src/components/movie-view/movie-view.jsx",
+                lineNumber: 13,
+                columnNumber: 9
+            }, undefined)
+        ]
+    }, void 0, true, {
+        fileName: "src/components/movie-view/movie-view.jsx",
+        lineNumber: 11,
+        columnNumber: 7
+    }, undefined);
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        className: "container py-4",
+        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+            className: "row g-4",
+            children: [
+                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                    className: "col-md-4",
+                    children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
+                        src: movie.imageURL || "https://via.placeholder.com/500x750?text=No+Image",
+                        alt: movie.title,
+                        className: "img-fluid rounded shadow-sm"
+                    }, void 0, false, {
+                        fileName: "src/components/movie-view/movie-view.jsx",
+                        lineNumber: 22,
+                        columnNumber: 11
+                    }, undefined)
+                }, void 0, false, {
+                    fileName: "src/components/movie-view/movie-view.jsx",
+                    lineNumber: 21,
+                    columnNumber: 9
+                }, undefined),
+                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                    className: "col-md-8",
+                    children: [
+                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
+                            className: "mb-3",
+                            children: movie.title
+                        }, void 0, false, {
+                            fileName: "src/components/movie-view/movie-view.jsx",
+                            lineNumber: 29,
+                            columnNumber: 11
+                        }, undefined),
+                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                            className: "text-light",
+                            children: movie.description
+                        }, void 0, false, {
+                            fileName: "src/components/movie-view/movie-view.jsx",
+                            lineNumber: 30,
+                            columnNumber: 11
+                        }, undefined),
+                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                            className: "mb-3",
+                            children: [
+                                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
+                                    className: "badge text-bg-primary me-2",
+                                    children: movie.genre?.name || "Genre"
+                                }, void 0, false, {
+                                    fileName: "src/components/movie-view/movie-view.jsx",
+                                    lineNumber: 33,
+                                    columnNumber: 13
+                                }, undefined),
+                                /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
+                                    className: "badge text-bg-secondary",
+                                    children: movie.director?.name || "Director"
+                                }, void 0, false, {
+                                    fileName: "src/components/movie-view/movie-view.jsx",
+                                    lineNumber: 36,
+                                    columnNumber: 13
+                                }, undefined)
+                            ]
+                        }, void 0, true, {
+                            fileName: "src/components/movie-view/movie-view.jsx",
+                            lineNumber: 32,
+                            columnNumber: 11
+                        }, undefined),
+                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Link), {
+                            to: "/",
+                            className: "btn btn-outline-secondary",
+                            children: "Back"
+                        }, void 0, false, {
+                            fileName: "src/components/movie-view/movie-view.jsx",
+                            lineNumber: 41,
+                            columnNumber: 11
+                        }, undefined)
+                    ]
+                }, void 0, true, {
+                    fileName: "src/components/movie-view/movie-view.jsx",
+                    lineNumber: 28,
+                    columnNumber: 9
+                }, undefined)
+            ]
+        }, void 0, true, {
+            fileName: "src/components/movie-view/movie-view.jsx",
+            lineNumber: 20,
+            columnNumber: 7
+        }, undefined)
+    }, void 0, false, {
+        fileName: "src/components/movie-view/movie-view.jsx",
+        lineNumber: 19,
+        columnNumber: 5
+    }, undefined);
+};
+_s(MovieView, "yQgCIz/jJfqV1l9s2yoba81MT5A=", false, function() {
+    return [
+        (0, _reactRouterDom.useParams)
+    ];
+});
+_c = MovieView;
+MovieView.propTypes = {
+    movies: (0, _propTypesDefault.default).arrayOf(MovieProp()).isRequired
+};
+// helper to reuse shape
+function MovieProp() {
+    return (0, _propTypesDefault.default).shape({
+        _id: (0, _propTypesDefault.default).string.isRequired,
+        title: (0, _propTypesDefault.default).string.isRequired,
+        description: (0, _propTypesDefault.default).string,
+        imageURL: (0, _propTypesDefault.default).string,
+        genre: (0, _propTypesDefault.default).shape({
+            name: (0, _propTypesDefault.default).string,
+            description: (0, _propTypesDefault.default).string
+        }),
+        director: (0, _propTypesDefault.default).shape({
+            name: (0, _propTypesDefault.default).string,
+            bio: (0, _propTypesDefault.default).string,
+            birthYear: (0, _propTypesDefault.default).number
+        }),
+        releaseYear: (0, _propTypesDefault.default).number
+    });
+}
+_c1 = MovieProp;
+var _c, _c1;
+$RefreshReg$(_c, "MovieView");
+$RefreshReg$(_c1, "MovieProp");
+
+  $parcel$ReactRefreshHelpers$2262.postlude(module);
+} finally {
+  globalThis.$RefreshReg$ = prevRefreshReg;
+  globalThis.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","prop-types":"GNqOQ","react-router-dom":"61z4w","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi"}],"i5LP7":[function() {},{}]},["hiyDA","gYcKb"], "gYcKb", "parcelRequireaec4", {}, null, null, "http://localhost:1234")
 
 //# sourceMappingURL=myFlix-client.ad93b51f.js.map
