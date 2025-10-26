@@ -10,8 +10,17 @@ import {
 } from "react-router-dom";
 import PropTypes from "prop-types";
 import axios from "axios";
-import "bootstrap/dist/css/bootstrap.min.css";
+
+// Import Bootstrap theming + overrides
 import "./index.scss";
+
+// React-Bootstrap components
+import {
+  Container,
+  Navbar,
+  Nav,
+  Button
+} from "react-bootstrap";
 
 /** =======================
  *  API config
@@ -31,57 +40,43 @@ api.interceptors.request.use((config) => {
 /** =======================
  *  UI: NavBar
  *  ======================= */
-const NavBar = ({ isAuthed, onLogout, username }) => (
-  <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-    <div className="container">
-      <Link className="navbar-brand fw-bold" to="/">myFlix</Link>
-      <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
-        <span className="navbar-toggler-icon"></span>
-      </button>
-      <div id="nav" className="collapse navbar-collapse show">
-        <ul className="navbar-nav me-auto">
+const AppNavBar = ({ isAuthed, onLogout, username }) => (
+  <Navbar bg="dark" variant="dark" expand="lg" className="shadow-sm">
+    <Container>
+      <Navbar.Brand as={Link} to="/" className="fw-bold">myFlix</Navbar.Brand>
+      <Navbar.Toggle aria-controls="main-nav" />
+      <Navbar.Collapse id="main-nav">
+        <Nav className="me-auto">
           {isAuthed && (
             <>
-              <li className="nav-item">
-                <Link className="nav-link" to="/">Movies</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/profile">Profile</Link>
-              </li>
+              <Nav.Link as={Link} to="/">Movies</Nav.Link>
+              <Nav.Link as={Link} to="/profile">Profile</Nav.Link>
             </>
           )}
-        </ul>
-        <ul className="navbar-nav ms-auto align-items-center">
+        </Nav>
+        <Nav className="ms-auto align-items-center">
           {!isAuthed ? (
             <>
-              <li className="nav-item">
-                <Link className="nav-link" to="/login">Log in</Link>
-              </li>
-              <li className="nav-item ms-1">
-                <Link className="btn btn-primary btn-sm" to="/signup">Sign up</Link>
-              </li>
+              <Nav.Link as={Link} to="/login">Log in</Nav.Link>
+              <Button as={Link} to="/signup" size="sm" className="ms-1">Sign up</Button>
             </>
           ) : (
             <>
-              <li className="nav-item">
-                <span className="navbar-text me-3">Hi, {username}</span>
-              </li>
-              <li className="nav-item">
-                <button className="btn btn-outline-light btn-sm" onClick={onLogout}>
-                  Log out
-                </button>
-              </li>
+              <Navbar.Text className="me-3">Hi, {username}</Navbar.Text>
+              <Button variant="outline-light" size="sm" onClick={onLogout}>
+                Log out
+              </Button>
             </>
           )}
-        </ul>
-      </div>
-    </div>
-  </nav>
+        </Nav>
+      </Navbar.Collapse>
+    </Container>
+  </Navbar>
 );
-NavBar.propTypes = {
+AppNavBar.propTypes = {
   isAuthed: PropTypes.bool.isRequired,
   onLogout: PropTypes.func.isRequired,
-  username: PropTypes.string,
+  username: PropTypes.string
 };
 
 /** =======================
@@ -176,66 +171,69 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      <NavBar
+      <AppNavBar
         isAuthed={isAuthed}
         onLogout={handleLogout}
         username={user?.username || user?.email || user?.name || ""}
       />
 
-      {!isAuthed ? (
-        <Routes>
-          <Route path="/login" element={
-            <LoginView
-              AUTH_BASE={AUTH_BASE}
-              onLoggedIn={setUser}
-              onAfterLogin={() => {
-                fetchMe().then(fetchMovies);
-              }}
+      {/* App-wide Container per brief */}
+      <Container className="py-4">
+        {!isAuthed ? (
+          <Routes>
+            <Route path="/login" element={
+              <LoginView
+                AUTH_BASE={AUTH_BASE}
+                onLoggedIn={setUser}
+                onAfterLogin={() => {
+                  fetchMe().then(fetchMovies);
+                }}
+              />
+            }/>
+            <Route path="/signup" element={<SignupView AUTH_BASE={AUTH_BASE} />} />
+            <Route path="*" element={<Navigate to="/login" replace />} />
+          </Routes>
+        ) : (
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <MainView
+                  movies={loading ? [] : filtered}
+                  isLoading={loading}
+                  query={query}
+                  onQuery={setQuery}
+                  onLogout={handleLogout}
+                />
+              }
             />
-          }/>
-          <Route path="/signup" element={<SignupView AUTH_BASE={AUTH_BASE} />} />
-          <Route path="*" element={<Navigate to="/login" replace />} />
-        </Routes>
-      ) : (
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <MainView
-                movies={loading ? [] : filtered}
-                isLoading={loading}
-                query={query}
-                onQuery={setQuery}
-                onLogout={handleLogout}
-              />
-            }
-          />
-          <Route
-            path="/movies/:id"
-            element={
-              <MovieView
-                movies={movies}
-                user={user}
-                onToggleFavorite={toggleFavorite}
-              />
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <ProfileView
-                user={user}
-                movies={movies}
-                onUserChange={setUser}
-                onLogout={handleLogout}
-              />
-            }
-          />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      )}
+            <Route
+              path="/movies/:id"
+              element={
+                <MovieView
+                  movies={movies}
+                  user={user}
+                  onToggleFavorite={toggleFavorite}
+                />
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProfileView
+                  user={user}
+                  movies={movies}
+                  onUserChange={setUser}
+                  onLogout={handleLogout}
+                />
+              }
+            />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        )}
 
-      <footer className="text-center text-muted small py-4">myFlix • MERN</footer>
+        <footer className="text-center text-muted small py-4">myFlix • MERN</footer>
+      </Container>
     </BrowserRouter>
   );
 };

@@ -2,6 +2,15 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import {
+  Row,
+  Col,
+  Card,
+  Form,
+  Button,
+  Alert,
+  Spinner
+} from "react-bootstrap";
 
 export const LoginView = ({ AUTH_BASE, onLoggedIn, onAfterLogin }) => {
   const nav = useNavigate();
@@ -31,7 +40,6 @@ export const LoginView = ({ AUTH_BASE, onLoggedIn, onAfterLogin }) => {
       const token = data?.token;
       if (!token) throw new Error("No token returned from server.");
       localStorage.setItem("token", token);
-      // Optionally fetch /users/me in parent
       onLoggedIn && onLoggedIn(null);
       onAfterLogin && (await onAfterLogin());
       nav("/");
@@ -50,52 +58,52 @@ export const LoginView = ({ AUTH_BASE, onLoggedIn, onAfterLogin }) => {
   };
 
   return (
-    <div className="container py-5">
-      <div className="row justify-content-center">
-        <div className="col-sm-10 col-md-6 col-lg-4">
-          <h2 className="mb-3">Log in</h2>
-          <form onSubmit={submit} className="card card-body">
-            <div className="mb-3">
-              <label className="form-label">Email</label>
-              <input
-                className="form-control"
-                type="email"
-                placeholder="you@example.com"
-                value={form.email}
-                onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-                required
-              />
-            </div>
+    <Row className="justify-content-center py-5">
+      <Col sm={10} md={6} lg={4}>
+        <h2 className="mb-3">Log in</h2>
+        <Card className="shadow-sm">
+          <Card.Body>
+            <Form onSubmit={submit}>
+              <Form.Group className="mb-3" controlId="login-email">
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type="email"
+                  placeholder="you@example.com"
+                  value={form.email}
+                  onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+                  required
+                />
+              </Form.Group>
 
-            <div className="mb-3">
-              <label className="form-label">Password</label>
-              <input
-                className="form-control"
-                type="password"
-                placeholder="Your password"
-                value={form.password}
-                onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
-                required
-                minLength={6}
-              />
-            </div>
+              <Form.Group className="mb-3" controlId="login-password">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  placeholder="Your password"
+                  value={form.password}
+                  onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
+                  required
+                  minLength={6}
+                />
+              </Form.Group>
 
-            {err && <div className="alert alert-danger py-2">{err}</div>}
+              {err && <Alert variant="danger" className="py-2">{err}</Alert>}
 
-            <button className="btn btn-primary" disabled={busy}>
-              {busy ? "Logging in…" : "Log in"}
-            </button>
+              <Button variant="primary" type="submit" disabled={busy}>
+                {busy ? (<><Spinner as="span" animation="border" size="sm" className="me-2" />Logging in…</>) : "Log in"}
+              </Button>
 
-            <p className="small mt-3 mb-0">
-              New here?{" "}
-              <Link to="/signup" className="link-light">
-                Create an account
-              </Link>
-            </p>
-          </form>
-        </div>
-      </div>
-    </div>
+              <p className="small mt-3 mb-0">
+                New here?{" "}
+                <Link to="/signup" className="link-light">
+                  Create an account
+                </Link>
+              </p>
+            </Form>
+          </Card.Body>
+        </Card>
+      </Col>
+    </Row>
   );
 };
 
