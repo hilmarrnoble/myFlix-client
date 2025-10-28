@@ -2,6 +2,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useParams, Link } from "react-router-dom";
+import {
+  Row,
+  Col,
+  Button,
+  Badge,
+  Alert
+} from "react-bootstrap";
 
 export const MovieView = ({ movies, user, onToggleFavorite }) => {
   const { id } = useParams();
@@ -9,10 +16,10 @@ export const MovieView = ({ movies, user, onToggleFavorite }) => {
 
   if (!movie) {
     return (
-      <div className="container py-4">
-        <div className="alert alert-warning">Movie not found.</div>
-        <Link to="/" className="btn btn-outline-secondary">Back</Link>
-      </div>
+      <>
+        <Alert variant="warning">Movie not found.</Alert>
+        <Button as={Link} to="/" variant="outline-secondary">Back</Button>
+      </>
     );
   }
 
@@ -26,40 +33,38 @@ export const MovieView = ({ movies, user, onToggleFavorite }) => {
   };
 
   return (
-    <div className="container py-4">
-      <div className="row g-4">
-        <div className="col-md-4">
-          <img
-            src={movie.imageURL || "https://via.placeholder.com/500x750?text=No+Image"}
-            alt={movie.title}
-            className="img-fluid rounded shadow-sm"
-          />
-        </div>
-        <div className="col-md-8">
-          <h2 className="mb-3">{movie.title}</h2>
-          <p className="text-light">{movie.description}</p>
+    <Row className="g-4">
+      <Col md={4}>
+        <img
+          src={movie.imageURL || "https://via.placeholder.com/500x750?text=No+Image"}
+          alt={movie.title}
+          className="img-fluid movie-poster"
+        />
+      </Col>
+      <Col md={8}>
+        <h2 className="mb-3">{movie.title}</h2>
+        <p className="text-light">{movie.description}</p>
 
-          <div className="mb-3">
-            <span className="badge text-bg-primary me-2">
-              {movie.genre?.name || "Genre"}
-            </span>
-            <span className="badge text-bg-secondary">
-              {movie.director?.name || "Director"}
-            </span>
-          </div>
-
-          <div className="d-flex gap-2 mb-3">
-            <button
-              className={`btn ${isFav ? "btn-danger" : "btn-success"}`}
-              onClick={toggle}
-            >
-              {isFav ? "Remove from Favorites" : "Add to Favorites"}
-            </button>
-            <Link to="/" className="btn btn-outline-secondary">Back</Link>
-          </div>
+        <div className="mb-3">
+          <Badge bg="primary" className="me-2">
+            {movie.genre?.name || "Genre"}
+          </Badge>
+          <Badge bg="secondary">
+            {movie.director?.name || "Director"}
+          </Badge>
         </div>
-      </div>
-    </div>
+
+        <div className="d-flex gap-2 mb-3">
+          <Button
+            variant={isFav ? "danger" : "success"}
+            onClick={toggle}
+          >
+            {isFav ? "Remove from Favorites" : "Add to Favorites"}
+          </Button>
+          <Button as={Link} to="/" variant="outline-secondary">Back</Button>
+        </div>
+      </Col>
+    </Row>
   );
 };
 

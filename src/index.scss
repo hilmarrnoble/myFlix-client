@@ -1,10 +1,22 @@
+// === Theme variables (must be BEFORE Bootstrap import) ===
+$primary: #0d6efd;
+$body-bg: #0b0c10;
+$body-color: #e5e7eb;
+$navbar-dark-color: #e5e7eb;
+$navbar-dark-brand-color: #e5e7eb;
+$navbar-dark-hover-color: #ffffff;
+$card-bg: #111217;
+$card-border-color: rgba(255, 255, 255, 0.06);
+$border-radius: 0.6rem;
+$border-radius-sm: 0.6rem;
+$border-radius-lg: 0.8rem;
+
+// Import full Bootstrap (SCSS)
+@import "bootstrap/scss/bootstrap";
+
+// === Custom overrides/utilities ===
 :root {
   --brand: #0d6efd;
-}
-
-body {
-  background: #0b0c10;
-  color: #e5e7eb;
 }
 
 a,
@@ -13,15 +25,22 @@ a,
   color: #e5e7eb !important;
 }
 
-.card {
-  background: #111217;
-  border: 1px solid rgba(255,255,255,.06);
-}
-
-.form-control, .btn, .badge {
-  border-radius: .6rem;
+.card,
+.form-control,
+.btn,
+.badge {
+  border-radius: 0.6rem;
 }
 
 footer {
-  opacity: .7;
+  opacity: 0.7;
+}
+
+.card {
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,.25);
+}
+
+.movie-poster {
+  border-radius: 0.6rem;
+  box-shadow: 0 .25rem .75rem rgba(0,0,0,.4);
 }
