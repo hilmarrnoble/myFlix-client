@@ -19,7 +19,8 @@ import {
   Container,
   Navbar,
   Nav,
-  Button
+  Button,
+  Alert,
 } from "react-bootstrap";
 
 /** =======================
@@ -30,7 +31,9 @@ const API_BASE =
   "http://localhost:5000/api";
 const AUTH_BASE = API_BASE.replace(/\/api$/, "") + "/auth";
 
+// one axios instance for the API
 export const api = axios.create({ baseURL: API_BASE });
+// attach Authorization header from localStorage on every request
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) config.headers.Authorization = `Bearer ${token}`;
@@ -92,6 +95,10 @@ import { ProfileView } from "./components/profile-view/profile-view.jsx";
  *  App
  *  ======================= */
 const App = () => {
+  // Keep token in React state so the app reliably re-renders when auth changes
+  const [token, setToken] = useState(() => localStorage.getItem("token") || "");
+  const isAuthed = !!token;
+
   const [user, setUser] = useState(() => {
     const raw = localStorage.getItem("user");
     return raw ? JSON.parse(raw) : null;
@@ -99,8 +106,7 @@ const App = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState("");
-
-  const isAuthed = !!localStorage.getItem("token");
+  const [apiError, setApiError] = useState("");
 
   const fetchMe = async () => {
     try {
@@ -109,35 +115,50 @@ const App = () => {
       setUser(data);
     } catch (e) {
       console.warn("fetchMe failed:", e?.response?.status, e?.message);
+      // If token invalid, force logout
+      if (e?.response?.status === 401) handleLogout();
     }
   };
 
   const fetchMovies = async () => {
     setLoading(true);
+    setApiError("");
     try {
       const { data } = await api.get("/movies");
-      setMovies(data || []);
+      setMovies(Array.isArray(data) ? data : []);
+      if (Array.isArray(data) && data.length === 0) {
+        setApiError("No movies were returned by the API.");
+      }
     } catch (e) {
-      console.error("Error fetching movies:", e?.response?.status, e?.message);
+      const msg =
+        e?.response?.data?.message ||
+        e?.message ||
+        "Failed to load movies.";
+      setApiError(msg);
       setMovies([]);
     } finally {
       setLoading(false);
     }
   };
 
+  // React to auth state transitions in a single, reliable place
+  useEffect(() => {
+    if (isAuthed) {
+      fetchMe().then(fetchMovies);
+    } else {
+      setUser(null);
+      setMovies([]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthed]);
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    setToken("");
     setUser(null);
     setMovies([]);
   };
-
-  useEffect(() => {
-    if (isAuthed) {
-      fetchMe();
-      fetchMovies();
-    }
-  }, [isAuthed]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -181,15 +202,19 @@ const App = () => {
       <Container className="py-4">
         {!isAuthed ? (
           <Routes>
-            <Route path="/login" element={
-              <LoginView
-                AUTH_BASE={AUTH_BASE}
-                onLoggedIn={setUser}
-                onAfterLogin={() => {
-                  fetchMe().then(fetchMovies);
-                }}
-              />
-            }/>
+            <Route
+              path="/login"
+              element={
+                <LoginView
+                  AUTH_BASE={AUTH_BASE}
+                  onLoggedIn={(tok) => {
+                    // Persist, then update state to trigger re-render and data fetch
+                    if (tok) localStorage.setItem("token", tok);
+                    setToken(tok || "");
+                  }}
+                />
+              }
+            />
             <Route path="/signup" element={<SignupView AUTH_BASE={AUTH_BASE} />} />
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
@@ -198,13 +223,20 @@ const App = () => {
             <Route
               path="/"
               element={
-                <MainView
-                  movies={loading ? [] : filtered}
-                  isLoading={loading}
-                  query={query}
-                  onQuery={setQuery}
-                  onLogout={handleLogout}
-                />
+                <>
+                  {apiError && (
+                    <Alert variant="warning" className="mb-3 py-2">
+                      {apiError}
+                    </Alert>
+                  )}
+                  <MainView
+                    movies={loading ? [] : filtered}
+                    isLoading={loading}
+                    query={query}
+                    onQuery={setQuery}
+                    onLogout={handleLogout}
+                  />
+                </>
               }
             />
             <Route
