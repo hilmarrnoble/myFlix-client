@@ -207,11 +207,11 @@
       });
     }
   }
-})({"6WbHI":[function(require,module,exports,__globalThis) {
+})({"fzFW9":[function(require,module,exports,__globalThis) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
-var HMR_SERVER_PORT = 3001;
+var HMR_SERVER_PORT = 7591;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "439701173a9199ea";
 var HMR_USE_SSE = false;
@@ -753,6 +753,7 @@ const AUTH_BASE = API_BASE.replace(/\/api$/, "") + "/auth";
 const api = (0, _axiosDefault.default).create({
     baseURL: API_BASE
 });
+// attach Authorization header from localStorage on every request
 api.interceptors.request.use((config)=>{
     const token = localStorage.getItem("token");
     if (token) config.headers.Authorization = `Bearer ${token}`;
@@ -774,14 +775,14 @@ api.interceptors.request.use((config)=>{
                     children: "myFlix"
                 }, void 0, false, {
                     fileName: "src/index.jsx",
-                    lineNumber: 46,
+                    lineNumber: 49,
                     columnNumber: 7
                 }, undefined),
                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Navbar).Toggle, {
                     "aria-controls": "main-nav"
                 }, void 0, false, {
                     fileName: "src/index.jsx",
-                    lineNumber: 47,
+                    lineNumber: 50,
                     columnNumber: 7
                 }, undefined),
                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Navbar).Collapse, {
@@ -797,7 +798,7 @@ api.interceptors.request.use((config)=>{
                                         children: "Movies"
                                     }, void 0, false, {
                                         fileName: "src/index.jsx",
-                                        lineNumber: 52,
+                                        lineNumber: 55,
                                         columnNumber: 15
                                     }, undefined),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Nav).Link, {
@@ -806,14 +807,14 @@ api.interceptors.request.use((config)=>{
                                         children: "Profile"
                                     }, void 0, false, {
                                         fileName: "src/index.jsx",
-                                        lineNumber: 53,
+                                        lineNumber: 56,
                                         columnNumber: 15
                                     }, undefined)
                                 ]
                             }, void 0, true)
                         }, void 0, false, {
                             fileName: "src/index.jsx",
-                            lineNumber: 49,
+                            lineNumber: 52,
                             columnNumber: 9
                         }, undefined),
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Nav), {
@@ -826,7 +827,7 @@ api.interceptors.request.use((config)=>{
                                         children: "Log in"
                                     }, void 0, false, {
                                         fileName: "src/index.jsx",
-                                        lineNumber: 60,
+                                        lineNumber: 63,
                                         columnNumber: 15
                                     }, undefined),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Button), {
@@ -837,7 +838,7 @@ api.interceptors.request.use((config)=>{
                                         children: "Sign up"
                                     }, void 0, false, {
                                         fileName: "src/index.jsx",
-                                        lineNumber: 61,
+                                        lineNumber: 64,
                                         columnNumber: 15
                                     }, undefined)
                                 ]
@@ -851,7 +852,7 @@ api.interceptors.request.use((config)=>{
                                         ]
                                     }, void 0, true, {
                                         fileName: "src/index.jsx",
-                                        lineNumber: 65,
+                                        lineNumber: 68,
                                         columnNumber: 15
                                     }, undefined),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Button), {
@@ -861,31 +862,31 @@ api.interceptors.request.use((config)=>{
                                         children: "Log out"
                                     }, void 0, false, {
                                         fileName: "src/index.jsx",
-                                        lineNumber: 66,
+                                        lineNumber: 69,
                                         columnNumber: 15
                                     }, undefined)
                                 ]
                             }, void 0, true)
                         }, void 0, false, {
                             fileName: "src/index.jsx",
-                            lineNumber: 57,
+                            lineNumber: 60,
                             columnNumber: 9
                         }, undefined)
                     ]
                 }, void 0, true, {
                     fileName: "src/index.jsx",
-                    lineNumber: 48,
+                    lineNumber: 51,
                     columnNumber: 7
                 }, undefined)
             ]
         }, void 0, true, {
             fileName: "src/index.jsx",
-            lineNumber: 45,
+            lineNumber: 48,
             columnNumber: 5
         }, undefined)
     }, void 0, false, {
         fileName: "src/index.jsx",
-        lineNumber: 44,
+        lineNumber: 47,
         columnNumber: 3
     }, undefined);
 _c = AppNavBar;
@@ -898,6 +899,9 @@ AppNavBar.propTypes = {
  *  App
  *  ======================= */ const App = ()=>{
     _s();
+    // Keep token in React state so the app reliably re-renders when auth changes
+    const [token, setToken] = (0, _react.useState)(()=>localStorage.getItem("token") || "");
+    const isAuthed = !!token;
     const [user, setUser] = (0, _react.useState)(()=>{
         const raw = localStorage.getItem("user");
         return raw ? JSON.parse(raw) : null;
@@ -905,7 +909,7 @@ AppNavBar.propTypes = {
     const [movies, setMovies] = (0, _react.useState)([]);
     const [loading, setLoading] = (0, _react.useState)(false);
     const [query, setQuery] = (0, _react.useState)("");
-    const isAuthed = !!localStorage.getItem("token");
+    const [apiError, setApiError] = (0, _react.useState)("");
     const fetchMe = async ()=>{
         try {
             const { data } = await api.get("/users/me");
@@ -913,34 +917,43 @@ AppNavBar.propTypes = {
             setUser(data);
         } catch (e) {
             console.warn("fetchMe failed:", e?.response?.status, e?.message);
+            // If token invalid, force logout
+            if (e?.response?.status === 401) handleLogout();
         }
     };
     const fetchMovies = async ()=>{
         setLoading(true);
+        setApiError("");
         try {
             const { data } = await api.get("/movies");
-            setMovies(data || []);
+            setMovies(Array.isArray(data) ? data : []);
+            if (Array.isArray(data) && data.length === 0) setApiError("No movies were returned by the API.");
         } catch (e) {
-            console.error("Error fetching movies:", e?.response?.status, e?.message);
+            const msg = e?.response?.data?.message || e?.message || "Failed to load movies.";
+            setApiError(msg);
             setMovies([]);
         } finally{
             setLoading(false);
         }
     };
-    const handleLogout = ()=>{
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        setUser(null);
-        setMovies([]);
-    };
+    // React to auth state transitions in a single, reliable place
     (0, _react.useEffect)(()=>{
-        if (isAuthed) {
-            fetchMe();
-            fetchMovies();
+        if (isAuthed) fetchMe().then(fetchMovies);
+        else {
+            setUser(null);
+            setMovies([]);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         isAuthed
     ]);
+    const handleLogout = ()=>{
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        setToken("");
+        setUser(null);
+        setMovies([]);
+    };
     const filtered = (0, _react.useMemo)(()=>{
         const q = query.trim().toLowerCase();
         if (!q) return movies;
@@ -969,7 +982,7 @@ AppNavBar.propTypes = {
                 username: user?.username || user?.email || user?.name || ""
             }, void 0, false, {
                 fileName: "src/index.jsx",
-                lineNumber: 174,
+                lineNumber: 195,
                 columnNumber: 7
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Container), {
@@ -981,18 +994,19 @@ AppNavBar.propTypes = {
                                 path: "/login",
                                 element: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _loginViewJsx.LoginView), {
                                     AUTH_BASE: AUTH_BASE,
-                                    onLoggedIn: setUser,
-                                    onAfterLogin: ()=>{
-                                        fetchMe().then(fetchMovies);
+                                    onLoggedIn: (tok)=>{
+                                        // Persist, then update state to trigger re-render and data fetch
+                                        if (tok) localStorage.setItem("token", tok);
+                                        setToken(tok || "");
                                     }
                                 }, void 0, false, {
                                     fileName: "src/index.jsx",
-                                    lineNumber: 185,
-                                    columnNumber: 15
+                                    lineNumber: 208,
+                                    columnNumber: 17
                                 }, void 0)
                             }, void 0, false, {
                                 fileName: "src/index.jsx",
-                                lineNumber: 184,
+                                lineNumber: 205,
                                 columnNumber: 13
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
@@ -1001,12 +1015,12 @@ AppNavBar.propTypes = {
                                     AUTH_BASE: AUTH_BASE
                                 }, void 0, false, {
                                     fileName: "src/index.jsx",
-                                    lineNumber: 193,
+                                    lineNumber: 218,
                                     columnNumber: 44
                                 }, void 0)
                             }, void 0, false, {
                                 fileName: "src/index.jsx",
-                                lineNumber: 193,
+                                lineNumber: 218,
                                 columnNumber: 13
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
@@ -1016,37 +1030,50 @@ AppNavBar.propTypes = {
                                     replace: true
                                 }, void 0, false, {
                                     fileName: "src/index.jsx",
-                                    lineNumber: 194,
+                                    lineNumber: 219,
                                     columnNumber: 38
                                 }, void 0)
                             }, void 0, false, {
                                 fileName: "src/index.jsx",
-                                lineNumber: 194,
+                                lineNumber: 219,
                                 columnNumber: 13
                             }, undefined)
                         ]
                     }, void 0, true, {
                         fileName: "src/index.jsx",
-                        lineNumber: 183,
+                        lineNumber: 204,
                         columnNumber: 11
                     }, undefined) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Routes), {
                         children: [
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
                                 path: "/",
-                                element: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _mainViewJsx.MainView), {
-                                    movies: loading ? [] : filtered,
-                                    isLoading: loading,
-                                    query: query,
-                                    onQuery: setQuery,
-                                    onLogout: handleLogout
-                                }, void 0, false, {
-                                    fileName: "src/index.jsx",
-                                    lineNumber: 201,
-                                    columnNumber: 17
-                                }, void 0)
+                                element: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxDevRuntime.Fragment), {
+                                    children: [
+                                        apiError && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Alert), {
+                                            variant: "warning",
+                                            className: "mb-3 py-2",
+                                            children: apiError
+                                        }, void 0, false, {
+                                            fileName: "src/index.jsx",
+                                            lineNumber: 228,
+                                            columnNumber: 21
+                                        }, void 0),
+                                        /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _mainViewJsx.MainView), {
+                                            movies: loading ? [] : filtered,
+                                            isLoading: loading,
+                                            query: query,
+                                            onQuery: setQuery,
+                                            onLogout: handleLogout
+                                        }, void 0, false, {
+                                            fileName: "src/index.jsx",
+                                            lineNumber: 232,
+                                            columnNumber: 19
+                                        }, void 0)
+                                    ]
+                                }, void 0, true)
                             }, void 0, false, {
                                 fileName: "src/index.jsx",
-                                lineNumber: 198,
+                                lineNumber: 223,
                                 columnNumber: 13
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
@@ -1057,12 +1084,12 @@ AppNavBar.propTypes = {
                                     onToggleFavorite: toggleFavorite
                                 }, void 0, false, {
                                     fileName: "src/index.jsx",
-                                    lineNumber: 213,
+                                    lineNumber: 245,
                                     columnNumber: 17
                                 }, void 0)
                             }, void 0, false, {
                                 fileName: "src/index.jsx",
-                                lineNumber: 210,
+                                lineNumber: 242,
                                 columnNumber: 13
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
@@ -1074,12 +1101,12 @@ AppNavBar.propTypes = {
                                     onLogout: handleLogout
                                 }, void 0, false, {
                                     fileName: "src/index.jsx",
-                                    lineNumber: 223,
+                                    lineNumber: 255,
                                     columnNumber: 17
                                 }, void 0)
                             }, void 0, false, {
                                 fileName: "src/index.jsx",
-                                lineNumber: 220,
+                                lineNumber: 252,
                                 columnNumber: 13
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
@@ -1089,18 +1116,18 @@ AppNavBar.propTypes = {
                                     replace: true
                                 }, void 0, false, {
                                     fileName: "src/index.jsx",
-                                    lineNumber: 231,
+                                    lineNumber: 263,
                                     columnNumber: 38
                                 }, void 0)
                             }, void 0, false, {
                                 fileName: "src/index.jsx",
-                                lineNumber: 231,
+                                lineNumber: 263,
                                 columnNumber: 13
                             }, undefined)
                         ]
                     }, void 0, true, {
                         fileName: "src/index.jsx",
-                        lineNumber: 197,
+                        lineNumber: 222,
                         columnNumber: 11
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("footer", {
@@ -1108,29 +1135,29 @@ AppNavBar.propTypes = {
                         children: "myFlix \u2022 MERN"
                     }, void 0, false, {
                         fileName: "src/index.jsx",
-                        lineNumber: 235,
+                        lineNumber: 267,
                         columnNumber: 9
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "src/index.jsx",
-                lineNumber: 181,
+                lineNumber: 202,
                 columnNumber: 7
             }, undefined)
         ]
     }, void 0, true, {
         fileName: "src/index.jsx",
-        lineNumber: 173,
+        lineNumber: 194,
         columnNumber: 5
     }, undefined);
 };
-_s(App, "7mqNTYjv74xQ7+8Emz/j25D7voc=");
+_s(App, "ra2dOo1jk767mVCJtx6G9OKiaeU=");
 _c1 = App;
 // Root
 const root = (0, _client.createRoot)(document.getElementById("root"));
 root.render(/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(App, {}, void 0, false, {
     fileName: "src/index.jsx",
-    lineNumber: 243,
+    lineNumber: 275,
     columnNumber: 13
 }, undefined));
 var _c, _c1;
@@ -32946,6 +32973,7 @@ var prevRefreshSig = globalThis.$RefreshSig$;
 $parcel$ReactRefreshHelpers$500a.prelude(module);
 
 try {
+// src/components/login-view/login-view.jsx
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "LoginView", ()=>LoginView);
@@ -32959,7 +32987,7 @@ var _axiosDefault = parcelHelpers.interopDefault(_axios);
 var _reactRouterDom = require("react-router-dom");
 var _reactBootstrap = require("react-bootstrap");
 var _s = $RefreshSig$();
-const LoginView = ({ AUTH_BASE, onLoggedIn, onAfterLogin })=>{
+const LoginView = ({ AUTH_BASE, onLoggedIn })=>{
     _s();
     const nav = (0, _reactRouterDom.useNavigate)();
     const [form, setForm] = (0, _react.useState)({
@@ -32988,9 +33016,8 @@ const LoginView = ({ AUTH_BASE, onLoggedIn, onAfterLogin })=>{
             const { data } = await (0, _axiosDefault.default).post(`${AUTH_BASE}/login`, form);
             const token = data?.token;
             if (!token) throw new Error("No token returned from server.");
-            localStorage.setItem("token", token);
-            onLoggedIn && onLoggedIn(null);
-            onAfterLogin && await onAfterLogin();
+            // signal up to the App so it flips auth state and triggers data fetch
+            onLoggedIn && onLoggedIn(token);
             nav("/");
         } catch (e) {
             const apiMsg = e?.response?.data?.message || (Array.isArray(e?.response?.data?.errors) ? e.response.data.errors.map((er)=>er.msg || er).join(", ") : null) || (typeof e?.response?.data === "string" ? e.response.data : null) || e.message;
@@ -33172,8 +33199,7 @@ _s(LoginView, "yFBoQkwqP5IsLW+DEUgHpunUfWg=", false, function() {
 _c = LoginView;
 LoginView.propTypes = {
     AUTH_BASE: (0, _propTypesDefault.default).string.isRequired,
-    onLoggedIn: (0, _propTypesDefault.default).func,
-    onAfterLogin: (0, _propTypesDefault.default).func
+    onLoggedIn: (0, _propTypesDefault.default).func
 };
 var _c;
 $RefreshReg$(_c, "LoginView");
@@ -40320,6 +40346,6 @@ $RefreshReg$(_c, "ProfileView");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","prop-types":"GNqOQ","../../index.jsx":"gYcKb","react-router-dom":"61z4w","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","react-bootstrap":"ctEhb"}]},["6WbHI","gYcKb"], "gYcKb", "parcelRequireaec4", {}, null, null, "http://localhost:3001")
+},{"react/jsx-dev-runtime":"dVPUn","react":"jMk1U","prop-types":"GNqOQ","../../index.jsx":"gYcKb","react-router-dom":"61z4w","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"7h6Pi","react-bootstrap":"ctEhb"}]},["fzFW9","gYcKb"], "gYcKb", "parcelRequireaec4", {}, null, null, "http://localhost:7591")
 
 //# sourceMappingURL=myFlix-client.ad93b51f.js.map

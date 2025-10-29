@@ -4,7 +4,7 @@
   "scripts": {
     "start": "parcel src/index.html",
     "build": "parcel build src/index.html",
-    "dev": "parcel src/index.html --port 1234",
+    "dev": "parcel src/index.html --port 7591",
     "preview": "serve dist -l 5001"
   },
   "repository": {

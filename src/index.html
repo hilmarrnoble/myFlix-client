@@ -1,3 +1,4 @@
+<!-- src/index.html -->
 <!DOCTYPE html>
 <html>
   <head>
@@ -8,7 +9,9 @@
   <body>
     <div id="root"></div>
     <script>
-  window._API_BASE = "https://my-movie-api-hilma-20251015-5c2f5b72eedc.herokuapp.com/api";
+      // Point the client at your local API for development
+      window._API_BASE = "http://localhost:5000/api";
+      // For production builds, swap this to your deployed API URL.
     </script>
     <script type="module" src="index.jsx"></script>
   </body>

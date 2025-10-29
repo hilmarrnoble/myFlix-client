@@ -1,3 +1,4 @@
+// src/components/login-view/login-view.jsx
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
@@ -12,7 +13,7 @@ import {
   Spinner
 } from "react-bootstrap";
 
-export const LoginView = ({ AUTH_BASE, onLoggedIn, onAfterLogin }) => {
+export const LoginView = ({ AUTH_BASE, onLoggedIn }) => {
   const nav = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
   const [err, setErr] = useState("");
@@ -39,9 +40,8 @@ export const LoginView = ({ AUTH_BASE, onLoggedIn, onAfterLogin }) => {
       const { data } = await axios.post(`${AUTH_BASE}/login`, form);
       const token = data?.token;
       if (!token) throw new Error("No token returned from server.");
-      localStorage.setItem("token", token);
-      onLoggedIn && onLoggedIn(null);
-      onAfterLogin && (await onAfterLogin());
+      // signal up to the App so it flips auth state and triggers data fetch
+      onLoggedIn && onLoggedIn(token);
       nav("/");
     } catch (e) {
       const apiMsg =
@@ -109,6 +109,5 @@ export const LoginView = ({ AUTH_BASE, onLoggedIn, onAfterLogin }) => {
 
 LoginView.propTypes = {
   AUTH_BASE: PropTypes.string.isRequired,
-  onLoggedIn: PropTypes.func,
-  onAfterLogin: PropTypes.func
+  onLoggedIn: PropTypes.func
 };
