@@ -108,6 +108,14 @@ const App = () => {
   const [query, setQuery] = useState("");
   const [apiError, setApiError] = useState("");
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setToken("");
+    setUser(null);
+    setMovies([]);
+  };
+
   const fetchMe = async () => {
     try {
       const { data } = await api.get("/users/me");
@@ -151,14 +159,6 @@ const App = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthed]);
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setToken("");
-    setUser(null);
-    setMovies([]);
-  };
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -234,7 +234,6 @@ const App = () => {
                     isLoading={loading}
                     query={query}
                     onQuery={setQuery}
-                    onLogout={handleLogout}
                   />
                 </>
               }

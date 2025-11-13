@@ -1,3 +1,4 @@
+// src/components/main-view/main-view.jsx
 import React from "react";
 import PropTypes from "prop-types";
 import { MovieCard } from "../movie-card/movie-card.jsx";
@@ -5,12 +6,11 @@ import {
   Row,
   Col,
   Form,
-  Button,
   Spinner,
   Alert
 } from "react-bootstrap";
 
-export const MainView = ({ movies, isLoading, query, onQuery, onLogout }) => {
+export const MainView = ({ movies, isLoading, query, onQuery }) => {
   return (
     <>
       <Row className="align-items-center gy-2 mb-3">
@@ -24,9 +24,6 @@ export const MainView = ({ movies, isLoading, query, onQuery, onLogout }) => {
             value={query}
             onChange={(e) => onQuery(e.target.value)}
           />
-        </Col>
-        <Col xs="auto">
-          <Button variant="outline-light" onClick={onLogout}>Log out</Button>
         </Col>
       </Row>
 
@@ -60,6 +57,5 @@ MainView.propTypes = {
   ).isRequired,
   isLoading: PropTypes.bool,
   query: PropTypes.string.isRequired,
-  onQuery: PropTypes.func.isRequired,
-  onLogout: PropTypes.func.isRequired
+  onQuery: PropTypes.func.isRequired
 };
